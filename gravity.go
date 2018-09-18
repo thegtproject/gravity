@@ -1,6 +1,8 @@
 package gravity
 
 import (
+	"fmt"
+
 	"github.com/go-gl/mathgl/mgl32"
 	"github.com/thegtproject/gravity/internal/platform"
 )
@@ -10,6 +12,7 @@ var Platform platform.Platform
 
 // Init ...
 func Init(title string, width, height int) {
+	fmt.Print("Gravity - ", Version, "\n\n")
 	println("Gravity.Init()")
 	Platform = platform.New(title, width, height)
 }

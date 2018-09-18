@@ -111,11 +111,6 @@ func (dt *platformDesktop) Running() bool {
 	return !dt.win.ShouldClose()
 }
 
-func init() {
-	println("Platform<Desktop>.init()")
-	runtime.LockOSThread()
-}
-
 func (dt *platformDesktop) defaults() {
 	// TODO: Find a better spot for this. This is temporary.
 	gravitygl.Enable(opengl.DEPTH_TEST)
@@ -183,4 +178,8 @@ func (dt *platformDesktop) _mousePositionCallbackHandler() {
 			dt.win.SetCursorPosCallback(input.MousePositionHandler)
 		}
 	}()
+}
+
+func init() {
+	runtime.LockOSThread()
 }

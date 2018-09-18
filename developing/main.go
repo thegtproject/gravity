@@ -11,12 +11,8 @@ func run() {
 	currentcol := mgl32.Vec4{0, 0.85, 0, 1}
 	gravity.SetClearColor(currentcol)
 
-	{
-		geom := gravity.GeometryBuilders.TesselatedPlane()
-		fmt.Println("Geom:\n", geom)
-	}
-
-	gravity.Stop()
+	geom := gravity.GeometryBuilders.TesselatedPlane()
+	fmt.Println("Geom:\n", geom)
 
 	for gravity.Running() {
 		if gravity.Pressed(gravity.KeyEscape) {

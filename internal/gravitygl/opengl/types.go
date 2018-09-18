@@ -6,5 +6,5 @@ type (
 	ProgramLoc   = uint32
 	AttributeLoc = uint32
 	UniformLoc   = uint32
-	BufferLoc    = uint32
+	ObjectID     = uint32
 )

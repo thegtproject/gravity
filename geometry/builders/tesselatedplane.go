@@ -1,4 +1,4 @@
-package builders
+package geometrybuilders
 
 import (
 	"github.com/thegtproject/gravity/geometry"

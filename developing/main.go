@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 
 	"github.com/go-gl/mathgl/mgl32"
@@ -10,6 +11,9 @@ import (
 func run() {
 	currentcol := mgl32.Vec4{0, 0.85, 0, 1}
 	gravity.SetClearColor(currentcol)
+
+	plane := gravity.GeometryBuilders.TesselatedPlane()
+	fmt.Println(plane)
 
 	for gravity.Running() {
 		if gravity.Pressed(gravity.KeyEscape) {

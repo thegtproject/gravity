@@ -7,4 +7,4 @@ For consistent tooling purposes across platforms all common Gravity development 
 Currently available GDT commands:  
    **apitrace**   -  trace full opengl state and opens qapitrace gui (requires apitrace)  
    **depgraph**   -  graphs package dependency relationships of Gravity (requires graphiz)  
-   **genversion** -  generate the version.go source file for Gravity
+   **genversion** -  generate the version.go source file for Gravity (requires git)

@@ -19,5 +19,6 @@ func New(title string, width int, height int) Platform {
 	println("Platform.New()")
 	platform := newPlatform(title, width, height)
 	gravitygl.Init()
+	println("OpenGL version " + gravitygl.GetGLVersion())
 	return platform
 }

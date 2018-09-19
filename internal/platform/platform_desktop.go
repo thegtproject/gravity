@@ -11,19 +11,11 @@ import (
 	"github.com/thegtproject/gravity/internal/gravitygl"
 	"github.com/thegtproject/gravity/internal/gravitygl/opengl"
 	"github.com/thegtproject/gravity/internal/input"
+	"github.com/thegtproject/gravity/internal/schedulers/mtx"
 )
 
 type platformDesktop struct {
-	win                 *glfw.Window
-	mainThreadCallQueue chan func()
-	cnt                 int
-}
-
-const maxQueuedCalls = 8
-
-func (dt *platformDesktop) getMainThreadCallQueue() chan func() {
-	println("Platform<Desktop>.getMainThreadCallQueue()")
-	return dt.mainThreadCallQueue
+	win *glfw.Window
 }
 
 func newPlatform(title string, width int, height int) *platformDesktop {
@@ -34,7 +26,7 @@ func newPlatform(title string, width int, height int) *platformDesktop {
 	initGLFW()
 	win := createWindow(title, width, height)
 
-	platform := &platformDesktop{win: win, mainThreadCallQueue: make(chan func(), maxQueuedCalls)}
+	platform := &platformDesktop{win: win}
 	platform._keyCallbackHandler()
 	platform._mousePositionCallbackHandler()
 	platform._mouseButtonCallbackHandler()
@@ -88,11 +80,11 @@ func (dt *platformDesktop) OnResize(f func(width, height int)) {
 
 // Update ...
 func (dt *platformDesktop) Update() {
-	dt.mainThreadCallQueue <- func() {
+	mtx.Call(func() {
 		dt.win.SwapBuffers()
 		glfw.PollEvents()
 		gl.Clear(gl.COLOR_BUFFER_BIT)
-	}
+	})
 }
 
 // SetClearColor ...
@@ -120,64 +112,43 @@ func (dt *platformDesktop) defaults() {
 	println("Platform<Desktop>.defaults() executed")
 }
 
-func (dt *platformDesktop) Run(run func()) {
-	println("Platform<Desktop>.Run()")
-
-	println("Platform<Desktop>.defaults() queued")
-	dt.defaults()
-
-	done := make(chan struct{}, 1)
-	go func() {
-		run()
-		done <- struct{}{}
-	}()
-
-	running := true
-	for running == true {
-		select {
-		case mtcall := <-dt.mainThreadCallQueue:
-			mtcall()
-		case <-done:
-			running = false
-		}
-	}
-
-	println("Platform<Desktop>.Run() Finished!")
-}
-
 func (dt *platformDesktop) Stop() {
 	println("Platform<Desktop>.Stop()")
-	dt.win.SetShouldClose(true)
+	mtx.Call(func() { dt.win.SetShouldClose(true) })
 }
 
 func (dt *platformDesktop) _keyCallbackHandler() {
 	println("Platform<Desktop>._keyCallbackHandler() queued")
-	go func() {
-		dt.mainThreadCallQueue <- func() {
-			println("Platform<Desktop>._keyCallbackHandler() executed")
-			dt.win.SetKeyCallback(input.KeyCallbackHandler)
-		}
-	}()
+
+	mtx.Call(func() {
+		println("Platform<Desktop>._keyCallbackHandler() executed")
+		dt.win.SetKeyCallback(input.KeyCallbackHandler)
+	})
+
 }
 
 func (dt *platformDesktop) _mouseButtonCallbackHandler() {
 	println("Platform<Desktop>._mouseButtonCallbackHandler() queued")
-	go func() {
-		dt.mainThreadCallQueue <- func() {
-			println("Platform<Desktop>._mouseButtonCallbackHandler() executed")
-			dt.win.SetMouseButtonCallback(input.MouseButtonCallbackHandler)
-		}
-	}()
+
+	mtx.Call(func() {
+		println("Platform<Desktop>._mouseButtonCallbackHandler() executed")
+		dt.win.SetMouseButtonCallback(input.MouseButtonCallbackHandler)
+	})
+
 }
 
 func (dt *platformDesktop) _mousePositionCallbackHandler() {
 	println("Platform<Desktop>._mousePositionCallbackHandler() queued")
-	go func() {
-		dt.mainThreadCallQueue <- func() {
-			println("Platform<Desktop>._mousePositionCallbackHandler() executed")
-			dt.win.SetCursorPosCallback(input.MousePositionHandler)
-		}
-	}()
+	mtx.Call(func() {
+		println("Platform<Desktop>._mousePositionCallbackHandler() executed")
+		dt.win.SetCursorPosCallback(input.MousePositionHandler)
+	})
+
+}
+
+// Run ...
+func (dt *platformDesktop) Run(f func()) {
+	mtx.Run(f)
 }
 
 func init() {

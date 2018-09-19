@@ -7,7 +7,7 @@ import (
 
 // Platform ...
 type Platform interface {
-	Run(run func())
+	Run(f func())
 	Running() bool
 	Update()
 	SetClearColor(mgl32.Vec4)
@@ -18,6 +18,6 @@ type Platform interface {
 func New(title string, width int, height int) Platform {
 	println("Platform.New()")
 	platform := newPlatform(title, width, height)
-	gravitygl.Init(platform.getMainThreadCallQueue())
+	gravitygl.Init()
 	return platform
 }

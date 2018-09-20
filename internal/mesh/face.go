@@ -1,4 +1,4 @@
-package geometry
+package mesh
 
 // Face ...
 type Face struct {

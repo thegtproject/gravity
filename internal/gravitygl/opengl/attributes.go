@@ -8,38 +8,50 @@ type Uniforms struct{ data map[string]Uniform }
 
 // Attribute ...
 type Attribute struct {
-	name string
-	loc  AttributeLoc
-	ty   Enum
-	size int
+	Name string
+	Loc  AttributeLoc
+	Type Enum
+	Size int
 }
 
 // Uniform ...
 type Uniform struct {
-	name string
-	loc  UniformLoc
-	ty   Enum
-	size int
+	Name string
+	Loc  UniformLoc
+	Type Enum
+	Size int
 }
 
 // Add ...
-func (attr *Attributes) Add(name string, loc AttributeLoc, ty Enum, size int) {
-	attr.data[name] = Attribute{
-		name: name,
-		loc:  loc,
-		ty:   ty,
-		size: size,
+func (attr *Attributes) Add(Name string, Loc AttributeLoc, Type Enum, Size int) {
+	attr.data[Name] = Attribute{
+		Name: Name,
+		Loc:  Loc,
+		Type: Type,
+		Size: Size,
 	}
 }
 
+// Get ...
+func (attr *Attributes) Get(Name string) (val Attribute, ok bool) {
+	val, ok = attr.data[Name]
+	return
+}
+
 // Add ...
-func (unif *Uniforms) Add(name string, loc UniformLoc, ty Enum, size int) {
-	unif.data[name] = Uniform{
-		name: name,
-		loc:  loc,
-		ty:   ty,
-		size: size,
+func (unif *Uniforms) Add(Name string, Loc UniformLoc, Type Enum, Size int) {
+	unif.data[Name] = Uniform{
+		Name: Name,
+		Loc:  Loc,
+		Type: Type,
+		Size: Size,
 	}
+}
+
+// Get ...
+func (unif *Uniforms) Get(Name string) (val Uniform, ok bool) {
+	val, ok = unif.data[Name]
+	return
 }
 
 // NewAttributesMap ...

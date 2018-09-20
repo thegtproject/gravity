@@ -80,6 +80,12 @@ func CallBlock(f CallFunc) {
 		done <- struct{}{}
 	}
 	<-done
+	incTotal()
+	if cnt := incCurrent(); cnt > 0 {
+		if i := uint64(cnt); i > getMax() {
+			setMax(i)
+		}
+	}
 	fmt.Println("current:", atomic.LoadInt64(&current))
 }
 

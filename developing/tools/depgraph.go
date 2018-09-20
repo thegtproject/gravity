@@ -4,14 +4,15 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 func depgraph() {
-	const (
+	var (
 		godepgraphCmdName = "godepgraph"
 		dotCmdName        = "dot"
 		target            = "github.com/thegtproject/gravity"
-		outfile           = "../out/depgraph.png"
+		outfile           = filepath.Join(gravitypath, "developing", "out", "depgraph.png")
 	)
 
 	fmt.Println("godepgraph running...")

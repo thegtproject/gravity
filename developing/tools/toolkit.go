@@ -5,8 +5,17 @@ import (
 	"os"
 )
 
+var gravitypath string
+
 func main() {
 	fmt.Println("Gravity Development Toolkit")
+
+	path, err := resolveGravityPath()
+	if err != nil {
+		fmt.Println("unable to resolve gravity directory:", err)
+		os.Exit(1)
+	}
+	gravitypath = path
 
 	if !(len(os.Args) > 1) {
 		fmt.Println("no command specified")

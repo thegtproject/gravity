@@ -1,5 +1,3 @@
-//+build debug
-
 package gravitygl
 
 import (

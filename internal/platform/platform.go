@@ -12,12 +12,13 @@ type Platform interface {
 	Update()
 	SetClearColor(mgl32.Vec4)
 	Stop()
+	SetTitle(val string)
 }
 
 // New ...
-func New(title string, width int, height int) Platform {
+func New(title string, width int, height int, vsync bool) Platform {
 	println("Platform.New()")
-	platform := newPlatform(title, width, height)
+	platform := newPlatform(title, width, height, vsync)
 	gravitygl.Init()
 	println("OpenGL version " + gravitygl.GetGLVersion())
 	return platform

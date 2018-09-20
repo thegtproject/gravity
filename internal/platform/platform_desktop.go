@@ -15,10 +15,11 @@ import (
 )
 
 type platformDesktop struct {
-	win *glfw.Window
+	win   *glfw.Window
+	vsync bool
 }
 
-func newPlatform(title string, width int, height int) *platformDesktop {
+func newPlatform(title string, width int, height int, vsync bool) *platformDesktop {
 	println("Platform<Desktop>.newPlatform()")
 	if err := glfw.Init(); err != nil {
 		panic("failed to initialize glfw: " + err.Error())
@@ -26,10 +27,13 @@ func newPlatform(title string, width int, height int) *platformDesktop {
 	initGLFW()
 	win := createWindow(title, width, height)
 
-	platform := &platformDesktop{win: win}
+	platform := &platformDesktop{win: win, vsync: vsync}
 	platform._keyCallbackHandler()
 	platform._mousePositionCallbackHandler()
 	platform._mouseButtonCallbackHandler()
+	if vsync {
+		glfw.SwapInterval(1)
+	}
 	return platform
 }
 
@@ -68,6 +72,11 @@ func (dt *platformDesktop) SetKeyCallbackFunction(f func(w *glfw.Window, key glf
 	dt.win.SetKeyCallback(f)
 }
 
+// SetTitle ...
+func (dt *platformDesktop) SetTitle(val string) {
+	dt.win.SetTitle(val)
+}
+
 // OnResize ...
 func (dt *platformDesktop) OnResize(f func(width, height int)) {
 	println("Platform<Desktop>.OnResize()")
@@ -81,6 +90,7 @@ func (dt *platformDesktop) OnResize(f func(width, height int)) {
 // Update ...
 func (dt *platformDesktop) Update() {
 	mtx.Call(func() {
+
 		dt.win.SwapBuffers()
 		glfw.PollEvents()
 		gl.Clear(gl.COLOR_BUFFER_BIT)

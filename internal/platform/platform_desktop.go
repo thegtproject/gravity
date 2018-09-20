@@ -89,7 +89,7 @@ func (dt *platformDesktop) OnResize(f func(width, height int)) {
 
 // Update ...
 func (dt *platformDesktop) Update() {
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 
 		dt.win.SwapBuffers()
 		glfw.PollEvents()
@@ -124,13 +124,13 @@ func (dt *platformDesktop) defaults() {
 
 func (dt *platformDesktop) Stop() {
 	println("Platform<Desktop>.Stop()")
-	mtx.Call(func() { dt.win.SetShouldClose(true) })
+	mtx.CallNoneBlocking(func() { dt.win.SetShouldClose(true) })
 }
 
 func (dt *platformDesktop) _keyCallbackHandler() {
 	println("Platform<Desktop>._keyCallbackHandler() queued")
 
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 		println("Platform<Desktop>._keyCallbackHandler() executed")
 		dt.win.SetKeyCallback(input.KeyCallbackHandler)
 	})
@@ -140,7 +140,7 @@ func (dt *platformDesktop) _keyCallbackHandler() {
 func (dt *platformDesktop) _mouseButtonCallbackHandler() {
 	println("Platform<Desktop>._mouseButtonCallbackHandler() queued")
 
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 		println("Platform<Desktop>._mouseButtonCallbackHandler() executed")
 		dt.win.SetMouseButtonCallback(input.MouseButtonCallbackHandler)
 	})
@@ -149,7 +149,7 @@ func (dt *platformDesktop) _mouseButtonCallbackHandler() {
 
 func (dt *platformDesktop) _mousePositionCallbackHandler() {
 	println("Platform<Desktop>._mousePositionCallbackHandler() queued")
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 		println("Platform<Desktop>._mousePositionCallbackHandler() executed")
 		dt.win.SetCursorPosCallback(input.MousePositionHandler)
 	})

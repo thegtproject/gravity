@@ -18,7 +18,7 @@ func Init() {
 
 // SetClearColor ...
 func SetClearColor(col mgl32.Vec4) {
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 		gl.ClearColor(col[0], col[1], col[2], col[3])
 	})
 }
@@ -26,7 +26,7 @@ func SetClearColor(col mgl32.Vec4) {
 // Enable ...
 func Enable(option uint32) {
 	println("GravityGL.Enable()")
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 		gl.Enable(option)
 	})
 }
@@ -34,7 +34,7 @@ func Enable(option uint32) {
 // Disable ...
 func Disable(option uint32) {
 	println("GravityGL.Disable()")
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 		gl.Disable(option)
 	})
 }
@@ -42,7 +42,7 @@ func Disable(option uint32) {
 // DepthFunc ...
 func DepthFunc(xfunc uint32) {
 	println("GravityGL.DepthFunc()")
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 		gl.DepthFunc(xfunc)
 	})
 }
@@ -50,7 +50,7 @@ func DepthFunc(xfunc uint32) {
 // BlendFunc ...
 func BlendFunc(sfactor, dfactor uint32) {
 	println("GravityGL.BlendFunc()")
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 		gl.BlendFunc(sfactor, dfactor)
 	})
 }
@@ -58,7 +58,7 @@ func BlendFunc(sfactor, dfactor uint32) {
 // ViewPort ...
 func ViewPort(x, y, width, height int32) {
 	println("GravityGL.ViewPort()")
-	mtx.Call(func() {
+	mtx.CallNoneBlocking(func() {
 		gl.Viewport(x, y, width, height)
 	})
 }

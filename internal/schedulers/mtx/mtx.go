@@ -50,8 +50,8 @@ func handler() {
 	}
 }
 
-// Call (none-blocking) queues the callfunc
-func Call(f CallFunc) {
+// CallNoneBlocking (none-blocking) queues the callfunc on MTX and proceeds
+func CallNoneBlocking(f CallFunc) {
 	queue <- f
 	incTotal()
 	if cnt := incCurrent(); cnt > 0 {
@@ -61,8 +61,8 @@ func Call(f CallFunc) {
 	}
 }
 
-// CallBlock blocks until it has been processed
-func CallBlock(f CallFunc) {
+// Call blocks until it has been processed
+func Call(f CallFunc) {
 	done := make(chan struct{})
 	queue <- func() {
 		f()

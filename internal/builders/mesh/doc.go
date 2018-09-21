@@ -1,6 +1,6 @@
-package mesh
+package meshbuilder
 
-// Gravity's mesh format
+// Gravity's polygon format
 
 // Triangle
 //

@@ -1,4 +1,4 @@
-package meshbuilders
+package meshbuilder
 
 import (
 	"github.com/thegtproject/gravity/internal/mesh"
@@ -6,7 +6,7 @@ import (
 
 // TesselatedPlane ...
 func TesselatedPlane() *mesh.Mesh {
-	m := mesh.New()
+	mb := New()
 
-	return m
+	return mb.Build()
 }

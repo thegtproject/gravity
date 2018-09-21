@@ -2,33 +2,36 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
+	"time"
 
 	"github.com/go-gl/mathgl/mgl32"
 	"github.com/thegtproject/gravity"
 )
 
 func run() {
-	currentcol := mgl32.Vec4{0, 0.85, 0, 1}
+	currentcol := mgl32.Vec4{0, 0.55, 0, 1}
 	gravity.SetClearColor(currentcol)
 
-	plane := gravity.GeometryBuilders.TesselatedPlane()
-	fmt.Println(plane)
-
+	var frames uint64
+	start := time.Now()
+	lastfpscheck := time.Now()
 	for gravity.Running() {
+
 		if gravity.Pressed(gravity.KeyEscape) {
 			gravity.Stop()
 		}
 
-		// Hold space to generate a bunch of MTX calls for profiling
-		if gravity.Pressed(gravity.KeySpace) {
-			currentcol[0] = rand.Float32()
-			currentcol[1] = rand.Float32()
-			currentcol[2] = rand.Float32()
-			gravity.SetClearColor(currentcol)
-		}
-
 		gravity.Update()
+		frames++
+		if time.Since(lastfpscheck).Seconds() >= 1 {
+			x := time.Since(start).Seconds()
+			gravity.SetTitle(
+				fmt.Sprintf("Gravity Development - FPS: %d",
+					uint(frames/uint64(x)),
+				),
+			)
+			lastfpscheck = time.Now()
+		}
 	}
 }
 
@@ -37,6 +40,7 @@ func main() {
 		Title: "Gravity Developing Application",
 		Width: 800, Height: 600,
 		MTXCallQueueCap: 3,
+		VSync:           true,
 	}
 	gravity.Init(cfg)
 	gravity.Run(run)

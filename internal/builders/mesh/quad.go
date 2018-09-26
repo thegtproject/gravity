@@ -1,6 +1,10 @@
 package meshbuilder
 
-import "github.com/thegtproject/gravity/internal/mesh"
+import (
+	"fmt"
+
+	"github.com/thegtproject/gravity/internal/mesh"
+)
 
 // Quad ...
 func Quad(width, height float32) *mesh.Mesh {
@@ -15,8 +19,19 @@ func Quad(width, height float32) *mesh.Mesh {
 	F1 := F(A, B, C)
 	F2 := F(C, B, D)
 
+	println(mb.indexer.Add(A.Position))
+	println(mb.indexer.Add(B.Position))
+	println(mb.indexer.Add(C.Position))
+	println(mb.indexer.Add(D.Position))
+	println(mb.indexer.Add(B.Position))
+	println(mb.indexer.Add(B.Position))
+	println(mb.indexer.Add(D.Position))
+	println(mb.indexer.Add(D.Position))
+
 	mb.AddVertex(A, B, C, D)
 	mb.AddFace(F1, F2)
+
+	fmt.Println("Indexer:\n", mb.indexer.table)
 
 	return mb.Build()
 }

@@ -12,6 +12,10 @@ func run() {
 	currentcol := mgl32.Vec4{0, 0.55, 0, 1}
 	gravity.SetClearColor(currentcol)
 
+	quad := gravity.MeshBuilders.Quad(1, 1)
+
+	fmt.Println(*quad)
+
 	var frames uint64
 	start := time.Now()
 	lastfpscheck := time.Now()

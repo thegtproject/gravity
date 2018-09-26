@@ -13,18 +13,54 @@ import (
 type MeshBuilder struct {
 	Faces    []*Face
 	Vertices []*Vertex
-	id       id.GUID
+
+	indexer Indexer
+	id      id.GUID
 }
 
 // Build ...
 func (mb *MeshBuilder) Build() *mesh.Mesh {
 	m := mesh.NewMesh()
+
+	var (
+		positions []float32
+		// normals   []float32
+		texcoords []float32
+		indices   []uint16
+	)
+
+	for i := 0; i < len(mb.Faces); i++ {
+		fverts := mb.Faces[i].Vertices
+		for j := 0; j < len(fverts); j++ {
+			v := *fverts[j]
+			positions = append(positions,
+				v.Position[0], v.Position[1], v.Position[2],
+			)
+			texcoords = append(texcoords,
+				v.TexCoord[0], v.TexCoord[1],
+			)
+		}
+		indices = append(indices, uint16(i*3))
+	}
+
+	m.Position = make([]float32, len(positions))
+	m.TexCoords = make([]float32, len(texcoords))
+	m.Indices = make([]uint16, len(indices))
+	copy(m.Position, positions)
+	copy(m.TexCoords, texcoords)
+	copy(m.Indices, indices)
+
 	return m
 }
 
 // New ...
 func New() *MeshBuilder {
-	return &MeshBuilder{id: id.NextID()}
+	return &MeshBuilder{
+		id: id.NextID(),
+		indexer: Indexer{
+			table: make(map[geometry.Vec3]int),
+		},
+	}
 }
 
 // AddVertex ...

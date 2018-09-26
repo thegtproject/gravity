@@ -1,167 +1,33 @@
 package gravity
 
-import (
-	"github.com/go-gl/mathgl/mgl32"
-	"github.com/thegtproject/gravity/internal/input"
+var (
+	// MousePosition ...
+	MousePosition = [2]float32{}
+
+	inputTable            = make(map[Button]bool)
+	inputJustPressedTable = make(map[Button]bool)
 )
 
 // Pressed ...
-func Pressed(button Button) bool {
-	return input.Pressed(input.Button(button))
+func Pressed(btn Button) bool {
+	return inputTable[btn]
 }
 
 // JustPressed ...
-func JustPressed(button Button) bool {
-	return input.JustPressed(input.Button(button))
+func JustPressed(btn Button) bool {
+	if Pressed(btn) && inputJustPressedTable[btn] {
+		inputJustPressedTable[btn] = false
+		return true
+	}
+	return false
 }
 
-// MousePosition ...
-func MousePosition() mgl32.Vec2 {
-	return input.MousePosition
+func onButtonPress(btn int) {
+	inputTable[Button(btn)] = true
+	inputJustPressedTable[Button(btn)] = true
 }
 
-// Button ...
-type Button int
-
-// List of all mouse buttons.
-// Thank you github.com/faiface for typing this all out for me :)
-const (
-	MouseButton1      = Button(input.MouseButton1)
-	MouseButton2      = Button(input.MouseButton2)
-	MouseButton3      = Button(input.MouseButton3)
-	MouseButton4      = Button(input.MouseButton4)
-	MouseButton5      = Button(input.MouseButton5)
-	MouseButton6      = Button(input.MouseButton6)
-	MouseButton7      = Button(input.MouseButton7)
-	MouseButton8      = Button(input.MouseButton8)
-	MouseButtonLast   = Button(input.MouseButtonLast)
-	MouseButtonLeft   = Button(input.MouseButtonLeft)
-	MouseButtonRight  = Button(input.MouseButtonRight)
-	MouseButtonMiddle = Button(input.MouseButtonMiddle)
-)
-
-// List of all keyboard buttons.
-const (
-	KeyUnknown      = Button(input.KeyUnknown)
-	KeySpace        = Button(input.KeySpace)
-	KeyApostrophe   = Button(input.KeyApostrophe)
-	KeyComma        = Button(input.KeyComma)
-	KeyMinus        = Button(input.KeyMinus)
-	KeyPeriod       = Button(input.KeyPeriod)
-	KeySlash        = Button(input.KeySlash)
-	Key0            = Button(input.Key0)
-	Key1            = Button(input.Key1)
-	Key2            = Button(input.Key2)
-	Key3            = Button(input.Key3)
-	Key4            = Button(input.Key4)
-	Key5            = Button(input.Key5)
-	Key6            = Button(input.Key6)
-	Key7            = Button(input.Key7)
-	Key8            = Button(input.Key8)
-	Key9            = Button(input.Key9)
-	KeySemicolon    = Button(input.KeySemicolon)
-	KeyEqual        = Button(input.KeyEqual)
-	KeyA            = Button(input.KeyA)
-	KeyB            = Button(input.KeyB)
-	KeyC            = Button(input.KeyC)
-	KeyD            = Button(input.KeyD)
-	KeyE            = Button(input.KeyE)
-	KeyF            = Button(input.KeyF)
-	KeyG            = Button(input.KeyG)
-	KeyH            = Button(input.KeyH)
-	KeyI            = Button(input.KeyI)
-	KeyJ            = Button(input.KeyJ)
-	KeyK            = Button(input.KeyK)
-	KeyL            = Button(input.KeyL)
-	KeyM            = Button(input.KeyM)
-	KeyN            = Button(input.KeyN)
-	KeyO            = Button(input.KeyO)
-	KeyP            = Button(input.KeyP)
-	KeyQ            = Button(input.KeyQ)
-	KeyR            = Button(input.KeyR)
-	KeyS            = Button(input.KeyS)
-	KeyT            = Button(input.KeyT)
-	KeyU            = Button(input.KeyU)
-	KeyV            = Button(input.KeyV)
-	KeyW            = Button(input.KeyW)
-	KeyX            = Button(input.KeyX)
-	KeyY            = Button(input.KeyY)
-	KeyZ            = Button(input.KeyZ)
-	KeyLeftBracket  = Button(input.KeyLeftBracket)
-	KeyBackslash    = Button(input.KeyBackslash)
-	KeyRightBracket = Button(input.KeyRightBracket)
-	KeyGraveAccent  = Button(input.KeyGraveAccent)
-	KeyWorld1       = Button(input.KeyWorld1)
-	KeyWorld2       = Button(input.KeyWorld2)
-	KeyEscape       = Button(input.KeyEscape)
-	KeyEnter        = Button(input.KeyEnter)
-	KeyTab          = Button(input.KeyTab)
-	KeyBackspace    = Button(input.KeyBackspace)
-	KeyInsert       = Button(input.KeyInsert)
-	KeyDelete       = Button(input.KeyDelete)
-	KeyRight        = Button(input.KeyRight)
-	KeyLeft         = Button(input.KeyLeft)
-	KeyDown         = Button(input.KeyDown)
-	KeyUp           = Button(input.KeyUp)
-	KeyPageUp       = Button(input.KeyPageUp)
-	KeyPageDown     = Button(input.KeyPageDown)
-	KeyHome         = Button(input.KeyHome)
-	KeyEnd          = Button(input.KeyEnd)
-	KeyCapsLock     = Button(input.KeyCapsLock)
-	KeyScrollLock   = Button(input.KeyScrollLock)
-	KeyNumLock      = Button(input.KeyNumLock)
-	KeyPrintScreen  = Button(input.KeyPrintScreen)
-	KeyPause        = Button(input.KeyPause)
-	KeyF1           = Button(input.KeyF1)
-	KeyF2           = Button(input.KeyF2)
-	KeyF3           = Button(input.KeyF3)
-	KeyF4           = Button(input.KeyF4)
-	KeyF5           = Button(input.KeyF5)
-	KeyF6           = Button(input.KeyF6)
-	KeyF7           = Button(input.KeyF7)
-	KeyF8           = Button(input.KeyF8)
-	KeyF9           = Button(input.KeyF9)
-	KeyF10          = Button(input.KeyF10)
-	KeyF11          = Button(input.KeyF11)
-	KeyF12          = Button(input.KeyF12)
-	KeyF13          = Button(input.KeyF13)
-	KeyF14          = Button(input.KeyF14)
-	KeyF15          = Button(input.KeyF15)
-	KeyF16          = Button(input.KeyF16)
-	KeyF17          = Button(input.KeyF17)
-	KeyF18          = Button(input.KeyF18)
-	KeyF19          = Button(input.KeyF19)
-	KeyF20          = Button(input.KeyF20)
-	KeyF21          = Button(input.KeyF21)
-	KeyF22          = Button(input.KeyF22)
-	KeyF23          = Button(input.KeyF23)
-	KeyF24          = Button(input.KeyF24)
-	KeyF25          = Button(input.KeyF25)
-	KeyKP0          = Button(input.KeyKP0)
-	KeyKP1          = Button(input.KeyKP1)
-	KeyKP2          = Button(input.KeyKP2)
-	KeyKP3          = Button(input.KeyKP3)
-	KeyKP4          = Button(input.KeyKP4)
-	KeyKP5          = Button(input.KeyKP5)
-	KeyKP6          = Button(input.KeyKP6)
-	KeyKP7          = Button(input.KeyKP7)
-	KeyKP8          = Button(input.KeyKP8)
-	KeyKP9          = Button(input.KeyKP9)
-	KeyKPDecimal    = Button(input.KeyKPDecimal)
-	KeyKPDivide     = Button(input.KeyKPDivide)
-	KeyKPMultiply   = Button(input.KeyKPMultiply)
-	KeyKPSubtract   = Button(input.KeyKPSubtract)
-	KeyKPAdd        = Button(input.KeyKPAdd)
-	KeyKPEnter      = Button(input.KeyKPEnter)
-	KeyKPEqual      = Button(input.KeyKPEqual)
-	KeyLeftShift    = Button(input.KeyLeftShift)
-	KeyLeftControl  = Button(input.KeyLeftControl)
-	KeyLeftAlt      = Button(input.KeyLeftAlt)
-	KeyLeftSuper    = Button(input.KeyLeftSuper)
-	KeyRightShift   = Button(input.KeyRightShift)
-	KeyRightControl = Button(input.KeyRightControl)
-	KeyRightAlt     = Button(input.KeyRightAlt)
-	KeyRightSuper   = Button(input.KeyRightSuper)
-	KeyMenu         = Button(input.KeyMenu)
-	KeyLast         = Button(input.KeyLast)
-)
+func onButtonRelease(btn int) {
+	inputTable[Button(btn)] = false
+	inputJustPressedTable[Button(btn)] = false
+}

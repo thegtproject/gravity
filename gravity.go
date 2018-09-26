@@ -3,37 +3,41 @@ package gravity
 import (
 	"fmt"
 
+	ggl "github.com/thegtproject/gravitygl"
+
 	"github.com/go-gl/mathgl/mgl32"
-	"github.com/thegtproject/gravity/internal/platform"
-	"github.com/thegtproject/gravity/internal/schedulers/mtx"
 )
 
-// Platform ...
-var Platform platform.Platform
+var (
+	Platform ggl.Platform
+)
 
-// Config ...
 type Config struct {
 	Title         string
 	Width, Height int
 	VSync         bool
-	// Limit the size of the MTX main thread scheduler queue
-	// Default is 3
-	MTXCallQueueCap int
 }
 
 // Init ...
 func Init(cfg Config) {
 	fmt.Print("Gravity - ", Version, "\n\n")
 	println("Gravity.Init()")
-	mtx.Init(cfg.MTXCallQueueCap)
-	Platform = platform.New(cfg.Title, cfg.Width, cfg.Height, cfg.VSync)
+
+	Platform = ggl.Init(ggl.Config{
+		Title:        cfg.Title,
+		Width:        cfg.Width,
+		Height:       cfg.Height,
+		VSync:        cfg.VSync,
+		OnKeyPress:   onButtonPress,
+		OnKeyRelease: onButtonRelease,
+	})
 }
 
 // Run ...
 func Run(run func()) {
 	println("Gravity.Run()")
 
-	Platform.Run(run)
+	Platform.Start(run)
 }
 
 // Running ...
@@ -48,15 +52,15 @@ func Stop() {
 
 // Update ...
 func Update() {
-	Platform.Update()
+	ggl.Update()
 }
 
 // SetClearColor ...
 func SetClearColor(color mgl32.Vec4) {
-	Platform.SetClearColor(color)
+	ggl.SetClearColor(color[0], color[1], color[2], color[3])
 }
 
 // SetTitle ...
 func SetTitle(val string) {
-	Platform.SetTitle(val)
+
 }

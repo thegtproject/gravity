@@ -13,7 +13,7 @@ package gravity
 //go:generate go run ./developing/tools genversion
 
 // Version ...
-const Version = "ep01-%s (expirimental/prototyping)"
+const Version = "ep02-%s (expirimental/prototyping)"
 `
 
 func genversion() {

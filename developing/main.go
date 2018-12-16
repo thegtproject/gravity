@@ -4,11 +4,12 @@ import (
 	"math/rand"
 
 	"github.com/thegtproject/gravity"
+	gl "github.com/thegtproject/gravitygl"
 )
 
 func run() {
 	currentcol := gravity.Vec4{0, 0.55, 0, 1}
-	gravity.SetClearColor(currentcol)
+	gl.SetClearColor(currentcol[0], currentcol[1], currentcol[2], currentcol[3])
 
 	for gravity.Running() {
 
@@ -17,7 +18,7 @@ func run() {
 		}
 
 		if gravity.Pressed(gravity.KeyUp) {
-			gravity.SetClearColor(gravity.Vec4{rand.Float32(), rand.Float32(), rand.Float32(), 1.0})
+			gl.SetClearColor(rand.Float32(), rand.Float32(), rand.Float32(), rand.Float32())
 		}
 
 		gravity.Update()
@@ -30,6 +31,7 @@ func main() {
 		Width: 800, Height: 600,
 		VSync: true,
 	}
+
 	gravity.Init(cfg)
 	gravity.Run(run)
 }

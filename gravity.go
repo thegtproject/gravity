@@ -3,14 +3,16 @@ package gravity
 import (
 	"fmt"
 
-	ggl "github.com/thegtproject/gravitygl"
+	"github.com/go-gl/glfw/v3.2/glfw"
 
-	"github.com/go-gl/mathgl/mgl32"
+	gl "github.com/thegtproject/gravitygl"
 )
 
 var (
-	Platform ggl.Platform
+	Window *glfw.Window
 )
+
+var running bool
 
 type Config struct {
 	Title         string
@@ -22,45 +24,82 @@ type Config struct {
 func Init(cfg Config) {
 	fmt.Print("Gravity - ", Version, "\n\n")
 	println("Gravity.Init()")
+	initglfw()
+	createWindow(cfg.Title, cfg.Width, cfg.Height)
+	initgl()
+	initCallbacks()
+}
 
-	Platform = ggl.Init(ggl.Config{
-		Title:        cfg.Title,
-		Width:        cfg.Width,
-		Height:       cfg.Height,
-		VSync:        cfg.VSync,
-		OnKeyPress:   onButtonPress,
-		OnKeyRelease: onButtonRelease,
-	})
+func initglfw() {
+	if err := glfw.Init(); err != nil {
+		panic("failed to initialize glfw: " + err.Error())
+	}
+	glfw.WindowHint(glfw.Resizable, glfw.False)
+	glfw.WindowHint(glfw.ContextVersionMajor, 4)
+	glfw.WindowHint(glfw.ContextVersionMinor, 3)
+	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCompatProfile)
+	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
+	glfw.WindowHint(glfw.OpenGLDebugContext, glfw.True)
+}
+
+func initgl() {
+	err := gl.Init()
+	if err != nil {
+		panic(err)
+	}
 }
 
 // Run ...
 func Run(run func()) {
 	println("Gravity.Run()")
-
-	Platform.Start(run)
+	run()
 }
 
 // Running ...
 func Running() bool {
-	return Platform.Running()
+	return !Window.ShouldClose()
 }
 
 // Stop ...
 func Stop() {
-	Platform.Stop()
+	Window.SetShouldClose(true)
 }
 
 // Update ...
 func Update() {
-	ggl.Update()
+	Window.SwapBuffers()
+	glfw.PollEvents()
+	gl.Clear(gl.COLOR_BUFFER_BIT)
+
 }
 
-// SetClearColor ...
-func SetClearColor(color mgl32.Vec4) {
-	ggl.SetClearColor(color[0], color[1], color[2], color[3])
+func initCallbacks() {
+
+	Window.SetKeyCallback(
+		func(_ *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mod glfw.ModifierKey) {
+			if key == glfw.KeyUnknown {
+				return
+			}
+			switch action {
+			case glfw.Press:
+				onButtonPress(int(key))
+			case glfw.Release:
+				onButtonRelease(int(key))
+			}
+		})
 }
+func createWindow(title string, width int, height int) {
+	win, err := glfw.CreateWindow(
+		width,
+		height,
+		title,
+		nil,
+		nil,
+	)
+	if err != nil {
+		panic(err)
+	}
 
-// SetTitle ...
-func SetTitle(val string) {
-
+	win.MakeContextCurrent()
+	Window = win
 }

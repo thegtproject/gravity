@@ -1,7 +1,7 @@
 package meshbuilder
 
 import (
-	"github.com/thegtproject/gravity/internal/mesh"
+	"github.com/thegtproject/gravity/mesh"
 )
 
 // TesselatedPlane ...

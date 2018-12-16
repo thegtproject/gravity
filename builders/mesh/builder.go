@@ -3,10 +3,10 @@ package meshbuilder
 import (
 	"fmt"
 
-	"github.com/thegtproject/gravity/internal/mesh"
+	"github.com/thegtproject/gravity/mesh"
 
-	"github.com/thegtproject/gravity/internal/geometry"
-	"github.com/thegtproject/gravity/internal/guid"
+	"github.com/thegtproject/gravity/geometry"
+	"github.com/thegtproject/gravity/guid"
 )
 
 // MeshBuilder ...

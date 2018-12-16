@@ -3,7 +3,7 @@ package meshbuilder
 import (
 	"fmt"
 
-	"github.com/thegtproject/gravity/internal/mesh"
+	"github.com/thegtproject/gravity/mesh"
 )
 
 // Quad ...

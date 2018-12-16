@@ -1,7 +1,7 @@
 package meshbuilder
 
 import (
-	"github.com/thegtproject/gravity/internal/geometry"
+	"github.com/thegtproject/gravity/geometry"
 )
 
 // Indexer ...

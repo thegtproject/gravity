@@ -1,6 +1,8 @@
 # Gravity
 3D OpenGL engine for Go
 
+![](gravityss1.png)
+
 ## Gravity Development Tools
 For consistent tooling purposes across platforms all common Gravity development tooling is being put into ./developing/tools as go source files. You can run these tools by using ```go run ./developing/tools <command>```
 

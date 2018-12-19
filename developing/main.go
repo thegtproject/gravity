@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"runtime"
 	"time"
 
@@ -23,8 +24,8 @@ func run() {
 	currentcol := gravity.Vec4{0, 0.55, 0, 1}
 	gl.SetClearColor(currentcol[0], currentcol[1], currentcol[2], currentcol[3])
 
-	indices := gl.NewUShortBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.STATIC_DRAW, cubeindices)
-	vertices := gl.NewFloatBuffer(gl.ARRAY_BUFFER, gl.STATIC_DRAW, cubevertices)
+	indices := gl.NewUShortBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.STATIC_DRAW, terrainindices)
+	vertices := gl.NewFloatBuffer(gl.ARRAY_BUFFER, gl.STATIC_DRAW, terrainverts)
 	cubevao := gl.NewVertexArrayObject(indices, vertices)
 
 	program, err := gl.MakeProgram(vsNormalShading, fsNormalShading)
@@ -36,8 +37,10 @@ func run() {
 	gl.DepthFunc(gl.LEQUAL)
 	gl.ClearDepth(1.0)
 	gl.ViewPort(0, 0, int32(800), int32(600))
-	showDemoWin := true
+	//showDemoWin := true
+	showCameraOverlay := true
 	// start := time.Now()
+
 	last := time.Now()
 	for gravity.Running() {
 		dt := float32(time.Since(last).Seconds())
@@ -60,7 +63,7 @@ func run() {
 
 		gl.BindVertexArray(cubevao.ID)
 
-		gl.DrawElements(gl.TRIANGLES, len(cubeindices), gl.UNSIGNED_SHORT, 0)
+		gl.DrawElements(gl.TRIANGLES, len(terrainindices), gl.UNSIGNED_SHORT, 0)
 
 		if gravity.Pressed(gravity.KeyEscape) {
 			gravity.Stop()
@@ -88,10 +91,36 @@ func run() {
 		}
 		if gravity.Pressed(gravity.KeyLeftControl) {
 			cam.MoveDown(dt)
-
 		}
+
+		if gravity.Pressed(gravity.KeyLeft) {
+			cam.Turn(dt)
+		}
+		if gravity.Pressed(gravity.KeyRight) {
+			cam.Turn(-dt)
+		}
+		if gravity.Pressed(gravity.KeyUp) {
+			cam.Roll(dt)
+		}
+		if gravity.Pressed(gravity.KeyDown) {
+			cam.Roll(-dt)
+		}
+
 		impl.NewFrame()
-		imgui.ShowDemoWindow(&showDemoWin)
+		imgui.SetNextWindowBgAlpha(0.5)
+		imgui.BeginV("Camera", &showCameraOverlay, imgui.WindowFlagsNoBringToFrontOnFocus|imgui.WindowFlagsNoCollapse|imgui.WindowFlagsNoResize|imgui.WindowFlagsNoTitleBar)
+		imgui.Text("Camera")
+		imgui.Text("Forward: " + fmt.Sprint(gravity.PrintVec3(cam.GetForward())))
+		imgui.Text("Left:    " + fmt.Sprint(gravity.PrintVec3(cam.GetLeft())))
+		imgui.Text("Up:      " + fmt.Sprint(gravity.PrintVec3(cam.GetUp())))
+		imgui.End()
+
+		imgui.SetNextWindowBgAlpha(0.5)
+		imgui.BeginV("Camera2", &showCameraOverlay, imgui.WindowFlagsNoBringToFrontOnFocus|imgui.WindowFlagsNoCollapse|imgui.WindowFlagsNoResize|imgui.WindowFlagsNoTitleBar)
+
+		imgui.Text("View Matrix\n" + fmt.Sprint(cam.ViewMatrix.Inv()))
+		imgui.End()
+
 		imgui.Render()
 		impl.Render(imgui.RenderedDrawData())
 		gravity.Update()

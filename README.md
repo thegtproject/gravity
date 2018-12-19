@@ -1,6 +1,7 @@
 # Gravity
 3D OpenGL engine for Go
 
+![](gravityss2.png)
 ![](gravityss1.png)
 
 ## Gravity Development Tools

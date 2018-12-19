@@ -4,6 +4,12 @@ import (
 	"github.com/go-gl/mathgl/mgl32"
 )
 
+var (
+	xaxis = mgl32.Vec3{1, 0, 0}
+	yaxis = mgl32.Vec3{0, 1, 0}
+	zaxis = mgl32.Vec3{0, 0, 1}
+)
+
 // Camera ...
 type Camera struct {
 	ProjectionMatrix mgl32.Mat4
@@ -14,19 +20,32 @@ type Camera struct {
 
 // NewCamera ...
 func NewCamera() *Camera {
-	return &Camera{
+	cam := &Camera{
 		ProjectionMatrix: mgl32.Perspective(mgl32.DegToRad(75), 1, 0.1, 1000),
 		ViewMatrix:       mgl32.Ident4(),
-		position:         mgl32.Vec3{0, 0, 2},
+		position:         mgl32.Vec3{0, 4, 0},
 		orientation:      mgl32.QuatIdent(),
 	}
+
+	cam.LookAt(mgl32.Vec3{0, 0, 0})
+
+	return cam
+}
+
+// LookAt ...
+func (cam *Camera) LookAt(v mgl32.Vec3) {
+	cam.orientation = mgl32.QuatLookAtV(cam.position, v, yaxis).Inverse()
+
 }
 
 // Update ...
 func (cam *Camera) Update() {
 	m := mgl32.Ident4()
+
+	qm := cam.orientation.Mat4()
 	translate(&m, cam.position)
-	cam.ViewMatrix = m
+
+	cam.ViewMatrix = m.Mul4(qm)
 }
 
 // GetForward ...
@@ -81,6 +100,36 @@ func (cam *Camera) MoveLeft(speed float32) {
 func (cam *Camera) MoveRight(speed float32) {
 	v := cam.GetLeft().Mul(speed)
 	cam.position = cam.position.Sub(v)
+}
+
+// Yaw ...
+func (cam *Camera) Yaw(rad float32) {
+	cam.Rotate(rad, yaxis)
+}
+
+// Roll ...
+func (cam *Camera) Roll(rad float32) {
+	cam.Rotate(rad, xaxis)
+}
+
+// Pitch ...
+func (cam *Camera) Pitch(rad float32) {
+	cam.Rotate(rad, zaxis)
+}
+
+// Turn ...
+func (cam *Camera) Turn(rad float32) {
+	cam.Rotate(rad, yaxis)
+}
+
+// Rotate ...
+func (cam *Camera) Rotate(rad float32, axis mgl32.Vec3) {
+	cam.RotateQ(mgl32.QuatRotate(rad, axis))
+}
+
+// RotateQ ...
+func (cam *Camera) RotateQ(rotation mgl32.Quat) {
+	cam.orientation = cam.orientation.Mul(rotation)
 }
 
 // Projection ...

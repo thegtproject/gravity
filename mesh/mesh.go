@@ -24,6 +24,14 @@ func FromGob(path string) (m *Mesh) {
 	return
 }
 
+// ToGob ...
+func ToGob(m *Mesh, path string) {
+	err := writeGob(path, *m)
+	if err != nil {
+		panic(err)
+	}
+}
+
 // GenerateBoundingBoxMeshSolid ...
 func (m *Mesh) GenerateBoundingBoxMeshSolid() *Mesh {
 	var (

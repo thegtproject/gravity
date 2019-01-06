@@ -48,6 +48,18 @@ func (cam *Camera) Update() {
 	cam.ViewMatrix = cam.CamMatrix.Inv()
 }
 
+// Position ...
+func (cam *Camera) Position() mgl32.Vec3 {
+	return cam.position
+}
+
+// SetPosition ...
+func (cam *Camera) SetPosition(x, y, z float32) {
+	cam.position[0] = x
+	cam.position[1] = y
+	cam.position[2] = z
+}
+
 // GetForward ...
 func (cam *Camera) GetForward() mgl32.Vec3 {
 	v := mgl32.Vec3{0, 0, -1}

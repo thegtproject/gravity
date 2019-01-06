@@ -20,8 +20,11 @@ func setupscene() {
 	}
 
 	cam = gravity.NewCamera()
+	cam.SetPosition(4, -13, 8)
+	cam.LookAt(mgl32.Vec3{0, 0, 0})
 
 	DefaultScene.Camera(cam)
+
 	terrain = DefaultScene.Import("terrain", mesh.FromGob("assets\\terrain.gmesh"), basicMaterial)
 
 	widget := DefaultScene.Import(

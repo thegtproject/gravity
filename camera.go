@@ -1,6 +1,8 @@
 package gravity
 
 import (
+	"math"
+
 	"github.com/go-gl/mathgl/mgl32"
 )
 
@@ -14,6 +16,7 @@ var (
 type Camera struct {
 	ProjectionMatrix mgl32.Mat4
 	ViewMatrix       mgl32.Mat4
+	CamMatrix        mgl32.Mat4
 	position         mgl32.Vec3
 	orientation      mgl32.Quat
 }
@@ -21,31 +24,28 @@ type Camera struct {
 // NewCamera ...
 func NewCamera() *Camera {
 	cam := &Camera{
-		ProjectionMatrix: mgl32.Perspective(mgl32.DegToRad(75), 1, 0.1, 1000),
-		ViewMatrix:       mgl32.Ident4(),
-		position:         mgl32.Vec3{0, 4, 0},
+		ProjectionMatrix: mgl32.Perspective(mgl32.DegToRad(80), 800/600, 0.1, 1000),
+		CamMatrix:        mgl32.Ident4(),
+		position:         mgl32.Vec3{0, 0, 5},
 		orientation:      mgl32.QuatIdent(),
 	}
 
-	cam.LookAt(mgl32.Vec3{0, 0, 0})
-
+	cam.LookAt(Vec3{0, 0, 0})
+	cam.Update()
 	return cam
 }
 
 // LookAt ...
 func (cam *Camera) LookAt(v mgl32.Vec3) {
-	cam.orientation = mgl32.QuatLookAtV(cam.position, v, yaxis).Inverse()
-
+	cam.orientation = mgl32.QuatLookAtV(cam.position, v, zaxis).Inverse()
+	cam.Update()
 }
 
 // Update ...
 func (cam *Camera) Update() {
-	m := mgl32.Ident4()
-
-	qm := cam.orientation.Mat4()
-	translate(&m, cam.position)
-
-	cam.ViewMatrix = m.Mul4(qm)
+	cam.CamMatrix = mgl32.Ident4()
+	fromRotationTranslation(&cam.CamMatrix, cam.orientation, cam.position)
+	cam.ViewMatrix = cam.CamMatrix.Inv()
 }
 
 // GetForward ...
@@ -56,7 +56,7 @@ func (cam *Camera) GetForward() mgl32.Vec3 {
 
 // GetLeft ...
 func (cam *Camera) GetLeft() mgl32.Vec3 {
-	v := mgl32.Vec3{-1, 0, 0}
+	v := mgl32.Vec3{1, 0, 0}
 	return cam.orientation.Rotate(v)
 }
 
@@ -68,13 +68,13 @@ func (cam *Camera) GetUp() mgl32.Vec3 {
 
 // MoveUp ...
 func (cam *Camera) MoveUp(speed float32) {
-	v := cam.GetUp().Mul(speed)
+	v := zaxis.Mul(speed)
 	cam.position = cam.position.Add(v)
 }
 
 // MoveDown ...
 func (cam *Camera) MoveDown(speed float32) {
-	v := cam.GetUp().Mul(speed)
+	v := zaxis.Mul(speed)
 	cam.position = cam.position.Sub(v)
 }
 
@@ -114,7 +114,7 @@ func (cam *Camera) Roll(rad float32) {
 
 // Pitch ...
 func (cam *Camera) Pitch(rad float32) {
-	cam.Rotate(rad, zaxis)
+	cam.Rotate(rad, cam.GetLeft())
 }
 
 // Turn ...
@@ -144,5 +144,25 @@ func translate(out *mgl32.Mat4, v mgl32.Vec3) {
 	out[13] = out[1]*x + out[5]*y + out[9]*z + out[13]
 	out[14] = out[2]*x + out[6]*y + out[10]*z + out[14]
 	out[15] = out[3]*x + out[7]*y + out[11]*z + out[15]
+
+}
+
+// Translate ...
+func Translate(out *mgl32.Mat4, v mgl32.Vec3) {
+	x, y, z := v[0], v[1], v[2]
+
+	out[12] = out[0]*x + out[4]*y + out[8]*z + out[12]
+	out[13] = out[1]*x + out[5]*y + out[9]*z + out[13]
+	out[14] = out[2]*x + out[6]*y + out[10]*z + out[14]
+	out[15] = out[3]*x + out[7]*y + out[11]*z + out[15]
+}
+
+func setAxisAngle(out *Quat, axis Vec3, rad float32) {
+	rad = rad * 0.5
+	s := float32(math.Sin(float64(rad)))
+	out.V[0] = s * axis[0]
+	out.V[1] = s * axis[1]
+	out.V[2] = s * axis[2]
+	out.W = float32(math.Cos(float64(rad)))
 
 }

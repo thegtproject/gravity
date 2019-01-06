@@ -38,8 +38,9 @@ func initglfw() {
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
 	glfw.WindowHint(glfw.ContextVersionMinor, 3)
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCompatProfile)
-	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 	glfw.WindowHint(glfw.OpenGLDebugContext, glfw.True)
+	glfw.WindowHint(glfw.Samples, 8)
+
 }
 
 func initgl() {
@@ -69,8 +70,6 @@ func Stop() {
 func Update() {
 	Window.SwapBuffers()
 	glfw.PollEvents()
-	gl.Clear(gl.COLOR_BUFFER_BIT)
-
 }
 
 func initCallbacks() {
@@ -101,5 +100,6 @@ func createWindow(title string, width int, height int) {
 	}
 
 	win.MakeContextCurrent()
+
 	Window = win
 }

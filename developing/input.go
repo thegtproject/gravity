@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/go-gl/mathgl/mgl32"
 	"github.com/thegtproject/gravity"
 )
 
@@ -10,15 +9,12 @@ func handleInput(dt float32) {
 		gravity.Stop()
 	}
 	if gravity.Pressed(gravity.Key1) {
-		terrainbb.Transform(
-			mgl32.Scale3D(1.1, 1.1, 1.1),
-		)
+		terrain.RotateZ(dt * 7)
 	}
 	if gravity.Pressed(gravity.Key2) {
-		terrainbb.Transform(
-			mgl32.Scale3D(0.9, 0.9, 0.9),
-		)
+		terrain.RotateZ(dt * -7)
 	}
+
 	if gravity.Pressed(gravity.KeyW) {
 		cam.MoveForward(dt * 10)
 	}

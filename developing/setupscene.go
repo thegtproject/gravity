@@ -22,25 +22,14 @@ func setupscene() {
 	cam = gravity.NewCamera()
 
 	DefaultScene.Camera(cam)
-	terrain := DefaultScene.Import("terrain", mesh.FromGob("assets\\terrain.gmesh"), basicMaterial)
+	terrain = DefaultScene.Import("terrain", mesh.FromGob("assets\\terrain.gmesh"), basicMaterial)
 
-	DefaultScene.Import(
+	widget := DefaultScene.Import(
 		"linewidget", mesh.FromGob("assets\\linewidget.gmesh"), basicMaterial,
-	).Primitive = gl.LINES
-
-	terrainBoundingBoxMesh := terrain.Mesh.GenerateBoundingBoxMeshWireframe()
-
-	// gravity.MapFloat4Array(
-	// 	&terrainBoundingBoxMesh.Colors,
-	// 	func(r, g, b, a *float32) {
-	// 		*a = 0.2
-	// 	},
-	// )
-
-	DefaultScene.Import("terrainBoundingBoxMesh", terrainBoundingBoxMesh, basicMaterial).Primitive = gl.LINES
-
-	terrainbb = DefaultScene.QueryObject("terrainBoundingBoxMesh")
-
+	)
+	widget.Primitive = gl.LINES
+	widget.Transform(mgl32.Scale3D(5.0, 5.0, 5.0))
+	widget.Transform(mgl32.Translate3D(0, 0, 1))
 	run()
 }
 

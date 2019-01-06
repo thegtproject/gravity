@@ -28,3 +28,8 @@ type Renderable struct {
 func (r *Renderable) Transform(m mgl32.Mat4) {
 	r.transform = r.transform.Mul4(m)
 }
+
+// RotateZ ...
+func (r *Renderable) RotateZ(angle float32) {
+	r.Transform(mgl32.HomogRotate3DZ(angle))
+}

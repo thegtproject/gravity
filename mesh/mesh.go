@@ -170,52 +170,33 @@ func (m *Mesh) GenerateBoundingBoxMeshWireframe() *Mesh {
 		}
 	}
 
-	positions := []float32{
-		minx, miny, minz,
-		minx, miny, maxz,
-		minx, maxy, minz,
-		minx, maxy, maxz,
-
-		maxx, miny, minz,
-		maxx, miny, maxz,
-		maxx, maxy, minz,
-		maxx, maxy, maxz,
-	}
-
-	indices := []uint16{
-		1, 2, 2, 0, 0, 1, 1, 3, 3, 2,
-		2, 6, 6, 0, 0, 4, 4, 6, 6, 7,
-		7, 3,
-		//6, 7,
-		//4, 6, 6, 7, 7, 4, 4, 5, 5, 7,
-	}
-
-	var colors []float32
-	total := len(positions) / 3
-	for i := 0; i < total; i++ {
-		colors = append(colors,
-			[]float32{float32(i) / float32(total), float32(i) / float32(total), float32(i) / float32(total), 1.0}...,
-		)
-	}
-	colors[7*4+0] = 1.0
-	colors[7*4+1] = 0.0
-	colors[7*4+2] = 0.0
-	colors[7*4+3] = 1.0
-
 	return &Mesh{
-		Position: positions,
+		Position: []float32{
+			minx, miny, minz,
+			maxx, miny, minz,
+			maxx, maxy, minz,
+			minx, maxy, minz,
 
-		// 2-----3
-		// | \   |
-		// |   \ |
-		// 0-----1
+			minx, miny, maxz,
+			maxx, miny, maxz,
+			maxx, maxy, maxz,
+			minx, maxy, maxz,
+		},
 
-		// 6-----7
-		// | \   |
-		// |   \ |
-		// 4-----5
-
-		Indices: indices,
-		Colors:  colors,
+		Indices: []uint16{
+			0, 1, 1, 2, 2, 3, 3, 0,
+			4, 5, 5, 6, 6, 7, 7, 4,
+			0, 4, 1, 5, 2, 6, 3, 7,
+		},
+		Colors: []float32{
+			0.1, 0.1, 0.7, 1.0,
+			0.1, 0.1, 0.7, 1.0,
+			0.1, 0.1, 0.7, 1.0,
+			0.1, 0.1, 0.7, 1.0,
+			0.1, 0.1, 0.7, 1.0,
+			0.1, 0.1, 0.7, 1.0,
+			0.1, 0.1, 0.7, 1.0,
+			0.1, 0.1, 0.7, 1.0,
+		},
 	}
 }

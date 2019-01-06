@@ -10,7 +10,7 @@ import (
 var (
 	cam *gravity.Camera
 
-	terrainbb *gravity.Renderable
+	terrain *gravity.Renderable
 )
 
 func run() {

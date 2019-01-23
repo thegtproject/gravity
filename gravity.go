@@ -24,6 +24,7 @@ type Config struct {
 func Init(cfg Config) {
 	fmt.Print("Gravity - ", Version, "\n\n")
 	println("Gravity.Init()")
+
 	initglfw()
 	createWindow(cfg.Title, cfg.Width, cfg.Height)
 	initgl()

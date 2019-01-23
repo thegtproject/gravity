@@ -2,8 +2,8 @@ package gravity
 
 import (
 	"github.com/go-gl/mathgl/mgl32"
-	"github.com/thegtproject/gravity/mesh"
 	gl "github.com/thegtproject/gravity/internal/gravitygl"
+	"github.com/thegtproject/gravity/mesh"
 )
 
 // Scene ...

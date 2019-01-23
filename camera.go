@@ -7,37 +7,37 @@ import (
 )
 
 var (
-	xaxis = mgl32.Vec3{1, 0, 0}
-	yaxis = mgl32.Vec3{0, 1, 0}
-	zaxis = mgl32.Vec3{0, 0, 1}
+	xaxis = Vec3{1, 0, 0}
+	yaxis = Vec3{0, 1, 0}
+	zaxis = Vec3{0, 0, 1}
 )
 
 // Camera ...
 type Camera struct {
-	ProjectionMatrix mgl32.Mat4
-	ViewMatrix       mgl32.Mat4
-	CamMatrix        mgl32.Mat4
-	position         mgl32.Vec3
-	orientation      mgl32.Quat
+	ProjectionMatrix Mat4
+	ViewMatrix       Mat4
+	CamMatrix        Mat4
+	position         Vec3
+	orientation      Quat
 }
 
 // NewCamera ...
 func NewCamera() *Camera {
 	cam := &Camera{
-		ProjectionMatrix: mgl32.Perspective(mgl32.DegToRad(80), 800/600, 0.1, 1000),
+		ProjectionMatrix: mgl32.Perspective(mgl32.DegToRad(80), 800/600, 0.1, 10000),
 		CamMatrix:        mgl32.Ident4(),
-		position:         mgl32.Vec3{0, 0, 5},
+		position:         Vec3{0, 0, 5},
 		orientation:      mgl32.QuatIdent(),
 	}
 
-	cam.LookAt(Vec3{0, 0, 0})
+	cam.LookAt(0, 0, 0)
 	cam.Update()
 	return cam
 }
 
 // LookAt ...
-func (cam *Camera) LookAt(v mgl32.Vec3) {
-	cam.orientation = mgl32.QuatLookAtV(cam.position, v, zaxis).Inverse()
+func (cam *Camera) LookAt(x, y, z float32) {
+	cam.orientation = mgl32.QuatLookAtV(cam.position, Vec3{x, y, z}, zaxis).Inverse()
 	cam.Update()
 }
 
@@ -49,7 +49,7 @@ func (cam *Camera) Update() {
 }
 
 // Position ...
-func (cam *Camera) Position() mgl32.Vec3 {
+func (cam *Camera) Position() Vec3 {
 	return cam.position
 }
 
@@ -61,20 +61,20 @@ func (cam *Camera) SetPosition(x, y, z float32) {
 }
 
 // GetForward ...
-func (cam *Camera) GetForward() mgl32.Vec3 {
-	v := mgl32.Vec3{0, 0, -1}
+func (cam *Camera) GetForward() Vec3 {
+	v := Vec3{0, 0, -1}
 	return cam.orientation.Rotate(v)
 }
 
 // GetLeft ...
-func (cam *Camera) GetLeft() mgl32.Vec3 {
-	v := mgl32.Vec3{1, 0, 0}
+func (cam *Camera) GetLeft() Vec3 {
+	v := Vec3{1, 0, 0}
 	return cam.orientation.Rotate(v)
 }
 
 // GetUp ...
-func (cam *Camera) GetUp() mgl32.Vec3 {
-	v := mgl32.Vec3{0, 1, 0}
+func (cam *Camera) GetUp() Vec3 {
+	v := Vec3{0, 1, 0}
 	return cam.orientation.Rotate(v)
 }
 
@@ -135,21 +135,21 @@ func (cam *Camera) Turn(rad float32) {
 }
 
 // Rotate ...
-func (cam *Camera) Rotate(rad float32, axis mgl32.Vec3) {
+func (cam *Camera) Rotate(rad float32, axis Vec3) {
 	cam.RotateQ(mgl32.QuatRotate(rad, axis))
 }
 
 // RotateQ ...
-func (cam *Camera) RotateQ(rotation mgl32.Quat) {
+func (cam *Camera) RotateQ(rotation Quat) {
 	cam.orientation = cam.orientation.Mul(rotation)
 }
 
 // Projection ...
-func (cam *Camera) Projection(mat mgl32.Mat4) {
+func (cam *Camera) Projection(mat Mat4) {
 	cam.ProjectionMatrix = mat
 }
 
-func translate(out *mgl32.Mat4, v mgl32.Vec3) {
+func translate(out *Mat4, v Vec3) {
 	x, y, z := v[0], v[1], v[2]
 
 	out[12] = out[0]*x + out[4]*y + out[8]*z + out[12]
@@ -160,7 +160,7 @@ func translate(out *mgl32.Mat4, v mgl32.Vec3) {
 }
 
 // Translate ...
-func Translate(out *mgl32.Mat4, v mgl32.Vec3) {
+func Translate(out *Mat4, v Vec3) {
 	x, y, z := v[0], v[1], v[2]
 
 	out[12] = out[0]*x + out[4]*y + out[8]*z + out[12]
@@ -176,5 +176,4 @@ func setAxisAngle(out *Quat, axis Vec3, rad float32) {
 	out.V[1] = s * axis[1]
 	out.V[2] = s * axis[2]
 	out.W = float32(math.Cos(float64(rad)))
-
 }

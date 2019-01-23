@@ -44,10 +44,10 @@ func (mb *MeshBuilder) Build() *mesh.Mesh {
 	}
 
 	m.Position = make([]float32, len(positions))
-	m.TexCoords = make([]float32, len(texcoords))
+	//m.TexCoords = make([]float32, len(texcoords))
 	m.Indices = make([]uint16, len(indices))
 	copy(m.Position, positions)
-	copy(m.TexCoords, texcoords)
+	//copy(m.TexCoords, texcoords)
 	copy(m.Indices, indices)
 
 	return m

@@ -8,6 +8,12 @@ var (
 	inputJustPressedTable = make(map[Button]bool)
 )
 
+// Unpress ...
+func Unpress(btn Button) {
+	inputTable[btn] = false
+	inputJustPressedTable[btn] = false
+}
+
 // Pressed ...
 func Pressed(btn Button) bool {
 	return inputTable[btn]

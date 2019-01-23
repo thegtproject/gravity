@@ -2,8 +2,8 @@ package gravity
 
 import (
 	"github.com/go-gl/mathgl/mgl32"
+	"github.com/thegtproject/gravity/internal/gravitygl"
 	"github.com/thegtproject/gravity/mesh"
-	"github.com/thegtproject/gravitygl"
 )
 
 // Renderable ...
@@ -14,19 +14,39 @@ type Renderable struct {
 	length    int
 	tag       string
 
-	transform mgl32.Mat4
+	transform Mat4
 
 	vao            uint32
 	indicesBuffer  *gravitygl.Buffer
 	positionBuffer *gravitygl.Buffer
 	colorBuffer    *gravitygl.Buffer
+	coordBuffer    *gravitygl.Buffer
 
 	m, v, p int32
 }
 
+// Position ...
+func (r *Renderable) Position() Vec3 {
+	return Vec3{r.transform[12], r.transform[13], r.transform[14]}
+}
+
 // Transform ...
-func (r *Renderable) Transform(m mgl32.Mat4) {
+func (r *Renderable) Transform(m Mat4) {
 	r.transform = r.transform.Mul4(m)
+}
+
+// Scale ...
+func (r *Renderable) Scale(x, y, z float32) {
+	r.transform = r.transform.Mul4(
+		mgl32.Scale3D(x, y, z),
+	)
+}
+
+// Translate ...
+func (r *Renderable) Translate(x, y, z float32) {
+	r.transform = r.transform.Mul4(
+		mgl32.Translate3D(x, y, z),
+	)
 }
 
 // RotateZ ...

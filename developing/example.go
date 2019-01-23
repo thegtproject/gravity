@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+
 	cfg := gravity.Config{
 		Title: "Gravity Developing Application",
 		Width: 800, Height: 600,

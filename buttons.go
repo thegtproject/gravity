@@ -142,6 +142,8 @@ const (
 	KeyRightAlt     = Button(346)
 	KeyRightSuper   = Button(347)
 	KeyMenu         = Button(348)
+
+	LastKey = KeyMenu
 )
 
 var buttonNames = map[Button]string{
@@ -263,4 +265,5 @@ var buttonNames = map[Button]string{
 	Button(346): "KeyRightAlt",
 	Button(347): "KeyRightSuper",
 	Button(348): "KeyMenu",
+	Button(349): "LastKey",
 }

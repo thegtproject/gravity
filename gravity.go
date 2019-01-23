@@ -5,15 +5,15 @@ import (
 
 	"github.com/go-gl/glfw/v3.2/glfw"
 
-	gl "github.com/thegtproject/gravitygl"
+	gl "github.com/thegtproject/gravity/internal/gravitygl"
 )
 
-var (
-	Window *glfw.Window
-)
+// Window ...
+var Window *glfw.Window
 
 var running bool
 
+// Config ...
 type Config struct {
 	Title         string
 	Width, Height int
@@ -28,6 +28,11 @@ func Init(cfg Config) {
 	createWindow(cfg.Title, cfg.Width, cfg.Height)
 	initgl()
 	initCallbacks()
+	if cfg.VSync {
+		glfw.SwapInterval(1)
+	} else {
+		glfw.SwapInterval(0)
+	}
 }
 
 func initglfw() {
@@ -39,7 +44,7 @@ func initglfw() {
 	glfw.WindowHint(glfw.ContextVersionMinor, 3)
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCompatProfile)
 	glfw.WindowHint(glfw.OpenGLDebugContext, glfw.True)
-	glfw.WindowHint(glfw.Samples, 8)
+	glfw.WindowHint(glfw.Samples, 1)
 
 }
 

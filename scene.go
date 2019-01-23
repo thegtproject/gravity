@@ -3,7 +3,7 @@ package gravity
 import (
 	"github.com/go-gl/mathgl/mgl32"
 	"github.com/thegtproject/gravity/mesh"
-	gl "github.com/thegtproject/gravitygl"
+	gl "github.com/thegtproject/gravity/internal/gravitygl"
 )
 
 // Scene ...
@@ -14,7 +14,8 @@ type Scene struct {
 
 // Render ...
 func (s *Scene) Render() {
-	for _, obj := range s.Objects {
+	for i, obj := range s.Objects {
+		_ = i
 		gl.BindVertexArray(obj.vao)
 		gl.UseProgram(obj.material)
 
@@ -22,12 +23,26 @@ func (s *Scene) Render() {
 		gl.UniformMatrix4fv(obj.v, s.cam.ViewMatrix)
 		gl.UniformMatrix4fv(obj.p, s.cam.ProjectionMatrix)
 
+		// if i == 2 {
+
+		// 	atlasLoc := gl.GetUniformLocation(obj.material, "atlas")
+
+		// 	gl.Uniform1i(atlasLoc, 0)
+		// 	gl.ActiveTexture(gl.TEXTURE0)
+		// 	gl.BindTexture(1)
+		// 	gl.Disable(gl.DEPTH_TEST)
+
+		// 	gl.DrawElements(obj.Primitive, obj.length, gl.UNSIGNED_SHORT, 0)
+		// 	gl.Enable(gl.DEPTH_TEST)
+		// 	continue
+		// }
+
 		gl.DrawElements(obj.Primitive, obj.length, gl.UNSIGNED_SHORT, 0)
 	}
 }
 
-// Camera ...
-func (s *Scene) Camera(c *Camera) {
+// SetCamera ...
+func (s *Scene) SetCamera(c *Camera) {
 	s.cam = c
 }
 
@@ -41,18 +56,32 @@ func (s *Scene) Import(tag string, m *mesh.Mesh, material uint32, mods ...func()
 	obj.p = gl.GetUniformLocation(obj.material, "uProjectionMatrix")
 
 	position := gl.GetAttribLocation(obj.material, "aPosition")
-	colors := gl.GetAttribLocation(obj.material, "aColor")
+	color := gl.GetAttribLocation(obj.material, "aColor")
+	coord := gl.GetAttribLocation(obj.material, "aCoord")
+
+	gl.ActiveTexture(gl.TEXTURE0)
+	gl.BindTexture(1)
 
 	vao := gl.CreateVertexArray()
 	gl.BindVertexArray(vao)
 
 	obj.indicesBuffer = gl.NewBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.STATIC_DRAW, obj.Mesh.Indices)
 	obj.positionBuffer = gl.NewBuffer(gl.ARRAY_BUFFER, gl.STATIC_DRAW, obj.Mesh.Position)
+
 	gl.VertexAttribPointer(position, 3, gl.FLOAT, false, 0, 0)
 	gl.EnableVertexAttribArray(position)
-	obj.colorBuffer = gl.NewBuffer(gl.ARRAY_BUFFER, gl.STATIC_DRAW, obj.Mesh.Colors)
-	gl.VertexAttribPointer(colors, 4, gl.FLOAT, false, 0, 0)
-	gl.EnableVertexAttribArray(colors)
+
+	if int32(color) > -1 {
+		obj.colorBuffer = gl.NewBuffer(gl.ARRAY_BUFFER, gl.STATIC_DRAW, obj.Mesh.Colors)
+		gl.VertexAttribPointer(color, 4, gl.FLOAT, false, 0, 0)
+		gl.EnableVertexAttribArray(color)
+	}
+
+	if int32(coord) > -1 {
+		obj.coordBuffer = gl.NewBuffer(gl.ARRAY_BUFFER, gl.STATIC_DRAW, obj.Mesh.Coords)
+		gl.VertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0)
+		gl.EnableVertexAttribArray(coord)
+	}
 
 	obj.vao = vao
 	gl.BindVertexArray(0)

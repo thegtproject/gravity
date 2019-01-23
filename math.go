@@ -5,11 +5,13 @@ import (
 )
 
 type (
+	// Vec3 type alias
 	Vec3 = mgl32.Vec3
+	// Vec4 type alias
 	Vec4 = mgl32.Vec4
-
+	// Mat4 type alias
 	Mat4 = mgl32.Mat4
-
+	// Quat type alias
 	Quat = mgl32.Quat
 )
 

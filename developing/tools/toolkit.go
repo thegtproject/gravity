@@ -25,6 +25,8 @@ func main() {
 	switch cmd := os.Args[1]; cmd {
 	case "apitrace":
 		apitrace()
+	case "rundevapp":
+		rundevapp()
 	case "depgraph":
 		depgraph()
 	case "genversion":

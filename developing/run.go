@@ -44,6 +44,10 @@ func run() {
 
 	stats := &debug.GCStats{}
 	debug.ReadGCStats(stats)
+
+	fmt.Println("")
+	fmt.Println("Run Stats:")
+	fmt.Println("-----------")
 	fmt.Println("NumGC:     ", stats.NumGC)
 	fmt.Println("PauseTotal:", stats.PauseTotal)
 	fmt.Println("Frames:    ", frames)

@@ -14,6 +14,8 @@ var DefaultScene gravity.Scene
 func setupscene() {
 	setgloptions()
 
+	gravity.LoadDefaultMaterialPrograms()
+
 	basicMaterial, err := gl.MakeProgram(vsBasicShader, fsBasicShader)
 	if err != nil {
 		panic(err)
@@ -24,6 +26,9 @@ func setupscene() {
 	cam.LookAt(0, 0, 0)
 
 	DefaultScene.SetCamera(cam)
+
+	// test quad
+	DefaultScene.Import("testquad1", mesh.NewQuad(), basicMaterial)
 
 	// pre generated terrain
 	terrain = DefaultScene.Import("terrain", mesh.FromGob("assets/terrain.gmesh"), basicMaterial)

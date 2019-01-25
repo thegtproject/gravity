@@ -4,18 +4,11 @@ import (
 	"sync/atomic"
 )
 
-// GUID ...
-type GUID = uint32
+var counter uint32
 
-type idgenerator struct {
-	counter GUID
-}
-
-var defaultGenerator = idgenerator{}
-
-// NextID ...
-func NextID() GUID {
+// Next ...
+func Next() uint32 {
 	return atomic.AddUint32(
-		&defaultGenerator.counter, 1,
+		&counter, 1,
 	)
 }

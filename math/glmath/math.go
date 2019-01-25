@@ -1,5 +1,7 @@
 package glmath
 
+import "math"
+
 // Epsilon ...
 const Epsilon float32 = 1.0E-8
 
@@ -34,4 +36,15 @@ func AlmostEqual(a, b, epsilon float32) bool {
 // Equal ...
 func Equal(a, b float32) bool {
 	return AlmostEqual(a, b, Epsilon)
+}
+
+// Perspective ...
+func Perspective(fovy, aspect, near, far float32) Mat4 {
+	nmf, f := near-far, float32(1./math.Tan(float64(fovy)/2.0))
+	return Mat4{
+		float32(f / aspect), 0, 0, 0,
+		0, float32(f), 0, 0,
+		0, 0, float32((near + far) / nmf), -1,
+		0, 0, float32((2. * far * near) / nmf), 0,
+	}
 }

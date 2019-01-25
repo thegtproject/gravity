@@ -1,11 +1,10 @@
 package main
 
 import (
-	"github.com/go-gl/mathgl/mgl32"
 	"github.com/thegtproject/gravity"
-
-	gl "github.com/thegtproject/gravity/internal/gravitygl"
+	"github.com/thegtproject/gravity/internal/gravitygl"
 	"github.com/thegtproject/gravity/materials"
+	"github.com/thegtproject/gravity/math/glmath"
 	"github.com/thegtproject/gravity/mesh"
 )
 
@@ -13,7 +12,12 @@ import (
 var DefaultScene gravity.Scene
 
 var cam *gravity.Camera
-var terrain gravity.Object
+
+// cheat variables for testing
+var terrain *gravity.Model
+var terrainb *gravity.BaseObject
+var linewidget *gravity.Model
+var linewidgetb *gravity.BaseObject
 
 func setupscene() {
 	setgloptions()
@@ -34,17 +38,19 @@ func setupscene() {
 		cam,
 	)
 
-	linewidget := gravity.NewModel(
+	linewidget = gravity.NewModel(
 		mesh.FromGob("assets/linewidget.gmesh"),
 		materials.NewNone(),
 		cam,
 	)
+	linewidgetb = linewidget.Base()
 
 	terrain = gravity.NewModel(
 		mesh.FromGob("assets/terrain.gmesh"),
 		materials.NewNone(),
 		cam,
 	)
+	terrainb = terrain.Base()
 
 	linewidget.Primitive = gravity.Lines
 
@@ -54,18 +60,19 @@ func setupscene() {
 
 	run()
 }
+
 func setgloptions() {
-	gl.ClearColor(mgl32.Vec4{0.05, 0.05, 0.05, 1})
-	gl.ClearDepth(5.0)
-	gl.ViewPort(0, 0, int32(800), int32(600))
-	gl.Scissor(0, 0, int32(800), int32(600))
-	gl.Enable(gl.GL_LINE_SMOOTH)
-	gl.Hint(gl.GL_LINE_SMOOTH_HINT, gl.NICEST)
-	gl.Enable(gl.DEPTH_TEST)
-	gl.DepthFunc(gl.LEQUAL)
-	gl.Enable(gl.BLEND)
-	gl.Enable(gl.SCISSOR_TEST)
-	gl.BlendEquation(gl.FUNC_ADD)
-	gl.BlendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
-	gl.LineWidth(2)
+	gravitygl.ClearColor(glmath.Vec4{0.05, 0.05, 0.05, 1})
+	gravitygl.ClearDepth(5.0)
+	gravitygl.ViewPort(0, 0, int32(800), int32(600))
+	gravitygl.Scissor(0, 0, int32(800), int32(600))
+	gravitygl.Enable(gravitygl.GL_LINE_SMOOTH)
+	gravitygl.Hint(gravitygl.GL_LINE_SMOOTH_HINT, gravitygl.NICEST)
+	gravitygl.Enable(gravitygl.DEPTH_TEST)
+	gravitygl.DepthFunc(gravitygl.LEQUAL)
+	gravitygl.Enable(gravitygl.BLEND)
+	gravitygl.Enable(gravitygl.SCISSOR_TEST)
+	gravitygl.BlendEquation(gravitygl.FUNC_ADD)
+	gravitygl.BlendFunc(gravitygl.ONE, gravitygl.ONE_MINUS_SRC_ALPHA)
+	gravitygl.LineWidth(2)
 }

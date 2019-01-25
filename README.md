@@ -28,6 +28,9 @@ This will work until I start implementing opengl 4.3 features in the future.
 
 (latest to oldest):
 
+![](images/gravityss4.png)
+---
+
 ![](images/gravityss3.png)
 ---
 
@@ -41,6 +44,9 @@ This will work until I start implementing opengl 4.3 features in the future.
 I'm still a novice programmer, so I thought it'd be fun to do additional things to track my progress on this project as naturally I'll learn to get better over time. For instance, every major refactor/restructure I do on the code, I create a graph image of my dependency relationships. You can already see it getting better over time:
 
 (latest to oldest)
+
+![](images/depgraph9.png)
+---
 
 ![](images/depgraph8.png)
 ---

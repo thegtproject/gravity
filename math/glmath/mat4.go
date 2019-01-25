@@ -10,8 +10,8 @@ import (
 type Mat4 [16]float32
 
 // M4 ...
-func M4() *Mat4 {
-	return &Mat4{
+func M4() Mat4 {
+	return Mat4{
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,

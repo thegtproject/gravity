@@ -1,8 +1,8 @@
 package gravity
 
 import (
-	"github.com/go-gl/mathgl/mgl32"
 	"github.com/thegtproject/gravity/components/transformer"
+	"github.com/thegtproject/gravity/math/glmath"
 )
 
 var (
@@ -20,17 +20,16 @@ type Camera struct {
 
 // NewCamera ...
 func NewCamera() *Camera {
-	cam := &Camera{
-		ProjectionMatrix: mgl32.Perspective(mgl32.DegToRad(80), 800/600, 0.1, 10000),
+	return &Camera{
+		ProjectionMatrix: glmath.Perspective(glmath.DegToRad(80), 800/600, 0.1, 10000),
 		Transformer:      transformer.NewTransformer(),
 	}
-	return cam
 }
 
 // Update ...
 func (cam *Camera) Update() {
 	cam.Transformer.Compose()
-	cam.ViewMatrix = cam.Transformer.Mat.Inv()
+	cam.ViewMatrix = *cam.Transformer.Mat.CreateInverse()
 }
 
 // Position ...
@@ -48,17 +47,17 @@ func (cam *Camera) SetPosition(x, y, z float32) {
 // GetForward ...
 func (cam *Camera) GetForward() Vec3 {
 	forward := Vec3{0, 0, -1}
-	return cam.Transformer.Orientation.Rotate(forward)
+	return cam.Transformer.Orientation.RotateVec3(forward)
 }
 
 // GetRight ...
 func (cam *Camera) GetRight() Vec3 {
-	return cam.Transformer.Orientation.Rotate(xAxis)
+	return cam.Transformer.Orientation.RotateVec3(xAxis)
 }
 
 // GetUp ...
 func (cam *Camera) GetUp() Vec3 {
-	return cam.Transformer.Orientation.Rotate(yAxis)
+	return cam.Transformer.Orientation.RotateVec3(yAxis)
 }
 
 // MoveUp ...
@@ -75,26 +74,30 @@ func (cam *Camera) MoveDown(speed float32) {
 
 // MoveForward ...
 func (cam *Camera) MoveForward(speed float32) {
-	v := cam.GetForward().Mul(speed)
-	cam.Transformer.TranslateV(v)
+	v := cam.GetForward()
+	v.Multiply(speed)
+	cam.Transformer.TranslateV(&v)
 }
 
 // MoveBackward ...
 func (cam *Camera) MoveBackward(speed float32) {
-	v := cam.GetForward().Mul(-speed)
-	cam.Transformer.TranslateV(v)
+	v := cam.GetForward()
+	v.Multiply(-speed)
+	cam.Transformer.TranslateV(&v)
 }
 
 // MoveLeft ...
 func (cam *Camera) MoveLeft(speed float32) {
-	v := cam.GetRight().Mul(-speed)
-	cam.Transformer.TranslateV(v)
+	v := cam.GetRight()
+	v.Multiply(-speed)
+	cam.Transformer.TranslateV(&v)
 }
 
 // MoveRight ...
 func (cam *Camera) MoveRight(speed float32) {
-	v := cam.GetRight().Mul(speed)
-	cam.Transformer.TranslateV(v)
+	v := cam.GetRight()
+	v.Multiply(speed)
+	cam.Transformer.TranslateV(&v)
 }
 
 // Yaw ...
@@ -118,16 +121,12 @@ func (cam *Camera) Turn(rad float32) {
 }
 
 // Rotate ...
-func (cam *Camera) Rotate(rad float32, axis Vec3) {
-	cam.RotateQ(mgl32.QuatRotate(rad, axis))
+func (cam *Camera) Rotate(angle float32, axis Vec3) {
+	rot := glmath.CreateQuatAngle(angle, axis)
+	cam.RotateQ(&rot)
 }
 
 // RotateQ ...
-func (cam *Camera) RotateQ(rotation Quat) {
-	cam.Transformer.Orientation = cam.Transformer.Orientation.Mul(rotation)
-}
-
-// SetProjection ...
-func (cam *Camera) SetProjection(mat Mat4) {
-	cam.ProjectionMatrix = mat
+func (cam *Camera) RotateQ(rotation *Quat) {
+	cam.Transformer.Orientation.Multiply(rotation)
 }

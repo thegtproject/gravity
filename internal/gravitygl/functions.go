@@ -5,13 +5,12 @@ package gravitygl
 import (
 	"errors"
 
-	"github.com/go-gl/mathgl/mgl32"
-
 	"github.com/go-gl/gl/v4.3-compatibility/gl"
+	"github.com/thegtproject/gravity/math/glmath"
 )
 
 // ClearColor ...
-func ClearColor(c mgl32.Vec4) {
+func ClearColor(c glmath.Vec4) {
 	gl.ClearColor(c[0], c[1], c[2], c[3])
 }
 

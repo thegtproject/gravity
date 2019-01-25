@@ -9,12 +9,6 @@ import (
 	gl "github.com/thegtproject/gravity/internal/gravitygl"
 )
 
-var (
-	cam *gravity.Camera
-
-	terrain *gravity.Renderable
-)
-
 func run() {
 
 	last := time.Now()

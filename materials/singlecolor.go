@@ -2,6 +2,7 @@ package materials
 
 import (
 	"github.com/thegtproject/gravity"
+	"github.com/thegtproject/gravity/internal/gravitygl"
 )
 
 // SingleColor ...
@@ -14,8 +15,10 @@ type SingleColor struct {
 	Emissive gravity.Vec3
 }
 
+var _ gravity.Material = &SingleColor{}
+
 // NewSingleColor ...
-func NewSingleColor(Ambient, Diffuse, Specular, Emissive gravity.Vec3) *SingleColor {
+func NewSingleColor(Ambient gravity.Vec3, Diffuse gravity.Vec3, Specular gravity.Vec3, Emissive gravity.Vec3) *SingleColor {
 	return &SingleColor{
 		BaseMaterial: gravity.NewBaseMaterial("singlecolor"),
 		Ambient:      Ambient,
@@ -32,7 +35,8 @@ func (mat *SingleColor) GetBaseMaterial() *gravity.BaseMaterial {
 
 // PreRender ...
 func (mat *SingleColor) PreRender() {
-
+	mat.Program.Use()
+	gravitygl.Uniform3fv(3, mat.Diffuse)
 }
 
 // Render ...

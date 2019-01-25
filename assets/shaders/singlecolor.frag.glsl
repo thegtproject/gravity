@@ -1,9 +1,9 @@
-#version 410 core
+#version 430 core
  
-in vec4 vDiffuse;
+layout(location = 3) uniform vec3 uDiffuse;
 
 out vec4 fragColor;
 
 void main() {
-	fragColor = vDiffuse;
+	fragColor = vec4(uDiffuse, 1.0);
 }

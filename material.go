@@ -51,10 +51,10 @@ func addMaterialProgram(name, vertexSource, fragmentSource string) {
 	materialPrograms[name] = gravitygl.NewProgram(vertexSource, fragmentSource)
 }
 
-// LoadDefaultMaterialPrograms ...
-func LoadDefaultMaterialPrograms() {
+func loadDefaultMaterialPrograms() {
 	defaultMaterialNames := []string{
 		"singlecolor",
+		"none",
 	}
 
 	fmt.Print("loading default material programs: ")

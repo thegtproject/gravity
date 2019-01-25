@@ -281,6 +281,11 @@ func Uniform1f(loc GLUniform, val float32) {
 	gl.Uniform1f(int32(loc), val)
 }
 
+// Uniform3fv ...
+func Uniform3fv(loc GLUniform, val [3]float32) {
+	gl.Uniform3fv(loc, 1, &val[0])
+}
+
 // Uniform4f ...
 func Uniform4f(loc GLUniform, val [4]float32) {
 	gl.Uniform4fv(loc, 1, &val[0])

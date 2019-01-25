@@ -1,15 +1,19 @@
 package gravitygl
 
+import "fmt"
+
 // MakeProgram ...
 func MakeProgram(vertexSrc, fragmentSrc string) (GLProgram, error) {
 	program := CreateProgram()
 
 	vs, err := MakeVertexShader(vertexSrc)
 	if err != nil {
+		fmt.Println("vertex shader error:")
 		return 0, err
 	}
 	fs, err := MakeFragmentShader(fragmentSrc)
 	if err != nil {
+		fmt.Println("fragment shader error:")
 		return 0, err
 	}
 	AttachShader(program, vs)

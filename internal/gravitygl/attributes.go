@@ -1,69 +1,49 @@
 package gravitygl
 
-// Attributes ...
-type Attributes struct{ data map[string]Attribute }
-
-// Uniforms ...
-type Uniforms struct{ data map[string]Uniform }
+import "fmt"
 
 // Attribute ...
 type Attribute struct {
-	Name string
-	Loc  GLAttribute
-	Type EnumType
-	Size int
+	buffer *Buffer
+	usage  uint32
+	data   *data
+	size   int32
 }
 
-// Uniform ...
-type Uniform struct {
-	Name string
-	Loc  GLUniform
-	Type EnumType
-	Size int
+type data struct {
+	data     interface{}
+	dataType DataType
 }
 
-// Add ...
-func (attr *Attributes) Add(Name string, Loc GLAttribute, Type EnumType, Size int) {
-	attr.data[Name] = Attribute{
-		Name: Name,
-		Loc:  Loc,
-		Type: Type,
-		Size: Size,
+// NewAttribute ...
+func NewAttribute(usage uint32, componentsPerElement int32, data interface{}) *Attribute {
+	return &Attribute{
+		usage: usage,
+		data:  validateDataInterface(data),
+		size:  componentsPerElement,
 	}
 }
 
-// Get ...
-func (attr *Attributes) Get(Name string) (val Attribute, ok bool) {
-	val, ok = attr.data[Name]
-	return
+// Dump ...
+func (attr *Attribute) Dump() {
+	fmt.Println("buffer:", attr.buffer)
+	fmt.Println("data:", attr.data)
 }
 
-// Add ...
-func (unif *Uniforms) Add(Name string, Loc GLUniform, Type EnumType, Size int) {
-	unif.data[Name] = Uniform{
-		Name: Name,
-		Loc:  Loc,
-		Type: Type,
-		Size: Size,
+func validateDataInterface(data interface{}) *data {
+	switch data.(type) {
+	case []float32:
+		return newData(data, GLFloat)
+	case []uint16:
+		return newData(data, GLUnsignedShort)
+	default:
+		panic("invalid data type for attribute")
 	}
 }
 
-// Get ...
-func (unif *Uniforms) Get(Name string) (val Uniform, ok bool) {
-	val, ok = unif.data[Name]
-	return
-}
-
-// NewAttributesMap ...
-func NewAttributesMap() *Attributes {
-	return &Attributes{
-		data: make(map[string]Attribute),
-	}
-}
-
-// NewUniformsMap ...
-func NewUniformsMap() *Uniforms {
-	return &Uniforms{
-		data: make(map[string]Uniform),
+func newData(d interface{}, dataType DataType) *data {
+	return &data{
+		data:     d,
+		dataType: dataType,
 	}
 }

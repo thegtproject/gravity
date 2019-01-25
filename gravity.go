@@ -34,6 +34,9 @@ func Init(cfg Config) {
 	} else {
 		glfw.SwapInterval(0)
 	}
+
+	loadDefaultMaterialPrograms()
+
 }
 
 func initglfw() {

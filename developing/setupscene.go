@@ -3,44 +3,57 @@ package main
 import (
 	"github.com/go-gl/mathgl/mgl32"
 	"github.com/thegtproject/gravity"
-	gl "github.com/thegtproject/gravity/internal/gravitygl"
 
+	gl "github.com/thegtproject/gravity/internal/gravitygl"
+	"github.com/thegtproject/gravity/materials"
 	"github.com/thegtproject/gravity/mesh"
 )
 
 // DefaultScene ...
 var DefaultScene gravity.Scene
 
+var cam *gravity.Camera
+var terrain gravity.Object
+
 func setupscene() {
 	setgloptions()
 
-	gravity.LoadDefaultMaterialPrograms()
-
-	basicMaterial, err := gl.MakeProgram(vsBasicShader, fsBasicShader)
-	if err != nil {
-		panic(err)
-	}
-
 	cam = gravity.NewCamera()
-	cam.SetPosition(4, -13, 8)
-	cam.LookAt(0, 0, 0)
+	cam.SetPosition(0, -13, 8)
 
 	DefaultScene.SetCamera(cam)
 
-	// test quad
-	DefaultScene.Import("testquad1", mesh.NewQuad(), basicMaterial)
+	testquad := gravity.NewModel(
+		mesh.NewQuad(),
+		materials.NewSingleColor(
+			gravity.Vec3{0, 0, 0},
+			gravity.Vec3{0.7, 0.1, 0.1},
+			gravity.Vec3{0, 0, 0},
+			gravity.Vec3{0, 0, 0},
+		),
+		cam,
+	)
 
-	// pre generated terrain
-	terrain = DefaultScene.Import("terrain", mesh.FromGob("assets/terrain.gmesh"), basicMaterial)
+	linewidget := gravity.NewModel(
+		mesh.FromGob("assets/linewidget.gmesh"),
+		materials.NewNone(),
+		cam,
+	)
 
-	// xyz line widget thing
-	widget := DefaultScene.Import("linewidget", mesh.FromGob("assets/linewidget.gmesh"), basicMaterial)
-	widget.Primitive = gl.LINES
-	widget.Translate(0, 0, 5)
+	terrain = gravity.NewModel(
+		mesh.FromGob("assets/terrain.gmesh"),
+		materials.NewNone(),
+		cam,
+	)
+
+	linewidget.Primitive = gravity.Lines
+
+	DefaultScene.Import(testquad)
+	DefaultScene.Import(linewidget)
+	DefaultScene.Import(terrain)
 
 	run()
 }
-
 func setgloptions() {
 	gl.ClearColor(mgl32.Vec4{0.05, 0.05, 0.05, 1})
 	gl.ClearDepth(5.0)

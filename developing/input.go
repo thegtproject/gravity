@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/go-gl/mathgl/mgl32"
 	"github.com/thegtproject/gravity"
 )
 
@@ -16,16 +15,16 @@ func handleInput(dt float32) {
 		gravity.Stop()
 	}
 	if gravity.Pressed(gravity.Key1) {
-		terrain.RotateZ(dt * 7)
+		terrain.Base().Transformer.RotateZ(dt * 7)
 	}
 	if gravity.Pressed(gravity.Key2) {
-		terrain.RotateZ(dt * -7)
+		terrain.Base().Transformer.RotateZ(dt * -7)
 	}
 	if gravity.Pressed(gravity.Key3) {
-		terrain.Transform(mgl32.Translate3D(0, 0, dt*20))
+		//terrain.Transform(mgl32.Translate3D(0, 0, dt*20))
 	}
 	if gravity.Pressed(gravity.Key4) {
-		terrain.Transform(mgl32.Translate3D(0, 0, -dt*20))
+		//terrain.Transform(mgl32.Translate3D(0, 0, -dt*20))
 	}
 
 	if gravity.Pressed(gravity.KeyW) {
@@ -47,6 +46,7 @@ func handleInput(dt float32) {
 	if gravity.Pressed(gravity.KeyLeftControl) {
 		cam.MoveDown(dt * 80)
 	}
+
 	if gravity.Pressed(gravity.KeyLeft) {
 		cam.Turn(dt * 30)
 	}
@@ -59,6 +59,19 @@ func handleInput(dt float32) {
 	if gravity.Pressed(gravity.KeyDown) {
 		cam.Roll(-dt * 30)
 	}
+
+	// if gravity.Pressed(gravity.KeyLeft) {
+	// 	terrain.Base().Transformer.RotateX(dt * 7)
+	// }
+	// if gravity.Pressed(gravity.KeyRight) {
+	// 	terrain.Base().Transformer.RotateX(dt * -7)
+	// }
+	// if gravity.Pressed(gravity.KeyUp) {
+	// 	terrain.Base().Transformer.RotateY(dt * 7)
+	// }
+	// if gravity.Pressed(gravity.KeyDown) {
+	// 	terrain.Base().Transformer.RotateY(dt * -7)
+	// }
 
 	if gravity.JustPressed(gravity.KeyGrave) {
 		debugCommandMode = true

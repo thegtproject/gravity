@@ -2,11 +2,11 @@ package mesh
 
 // Mesh ...
 type Mesh struct {
-	Position []float32
-	Normal   []float32
-	Coords   []float32
-	Colors   []float32
-	Indices  []uint16
+	Indices   []uint16
+	Positions []float32
+	Colors    []float32
+	Coords    []float32
+	Normals   []float32
 }
 
 // NewMesh ...
@@ -40,10 +40,10 @@ func (m *Mesh) GenerateBoundingBoxMeshSolid() *Mesh {
 		minz, maxz float32 = 0, 0
 	)
 
-	for i := 0; i < len(m.Position); i += 3 {
-		x := m.Position[i+0]
-		y := m.Position[i+1]
-		z := m.Position[i+2]
+	for i := 0; i < len(m.Positions); i += 3 {
+		x := m.Positions[i+0]
+		y := m.Positions[i+1]
+		z := m.Positions[i+2]
 
 		if x < minx {
 			minx = x
@@ -68,7 +68,7 @@ func (m *Mesh) GenerateBoundingBoxMeshSolid() *Mesh {
 	}
 
 	return &Mesh{
-		Position: []float32{
+		Positions: []float32{
 			minx, miny, minz,
 			minx, miny, maxz,
 			minx, maxy, minz,
@@ -151,10 +151,10 @@ func (m *Mesh) GenerateBoundingBoxMeshWireframe() *Mesh {
 		minz, maxz float32 = 0, 0
 	)
 
-	for i := 0; i < len(m.Position); i += 3 {
-		x := m.Position[i+0]
-		y := m.Position[i+1]
-		z := m.Position[i+2]
+	for i := 0; i < len(m.Positions); i += 3 {
+		x := m.Positions[i+0]
+		y := m.Positions[i+1]
+		z := m.Positions[i+2]
 
 		if x < minx {
 			minx = x
@@ -179,7 +179,7 @@ func (m *Mesh) GenerateBoundingBoxMeshWireframe() *Mesh {
 	}
 
 	return &Mesh{
-		Position: []float32{
+		Positions: []float32{
 			minx, miny, minz,
 			maxx, miny, minz,
 			maxx, maxy, minz,

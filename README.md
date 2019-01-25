@@ -28,16 +28,16 @@ This will work until I start implementing opengl 4.3 features in the future.
 
 (latest to oldest):
 
-![](doc/gravityss4.png)
+![](doc/images/gravityss4.png)
 ---
 
-![](doc/gravityss3.png)
+![](doc/images/gravityss3.png)
 ---
 
-![](doc/gravityss2.png)
+![](doc/images/gravityss2.png)
 ---
 
-![](doc/gravityss1.png)
+![](doc/images/gravityss1.png)
 ---
 
 ## Progress Tracking
@@ -45,29 +45,29 @@ I'm still a novice programmer, so I thought it'd be fun to do additional things 
 
 (latest to oldest)
 
-![](doc/depgraph9.png)
+![](doc/images/depgraph9.png)
 ---
 
-![](doc/depgraph8.png)
+![](doc/images/depgraph8.png)
 ---
 
-![](doc/depgraph7.png)
+![](doc/images/depgraph7.png)
 ---
 
-![](doc/depgraph6.png)
+![](doc/images/depgraph6.png)
 ---
 
-![](doc/depgraph5.png)
+![](doc/images/depgraph5.png)
 ---
 
-![](doc/depgraph4.png)
+![](doc/images/depgraph4.png)
 ---
 
-![](doc/depgraph3.png)
+![](doc/images/depgraph3.png)
 ---
 
-![](doc/depgraph2.png)
+![](doc/images/depgraph2.png)
 ---
 
-![](doc/depgraph1.png)
+![](doc/images/depgraph1.png)
 ---

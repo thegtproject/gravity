@@ -43,6 +43,7 @@ func setupscene() {
 		materials.NewNone(),
 		cam,
 	)
+	linewidget.Primitive = gravity.Lines
 	linewidgetb = linewidget.Base()
 
 	terrain = gravity.NewModel(
@@ -51,8 +52,6 @@ func setupscene() {
 		cam,
 	)
 	terrainb = terrain.Base()
-
-	linewidget.Primitive = gravity.Lines
 
 	DefaultScene.Import(testquad)
 	DefaultScene.Import(linewidget)

@@ -33,7 +33,7 @@ func NewModel(m *mesh.Mesh, material Material, cam *Camera) *Model {
 	model.vao = gravitygl.NewVertexArray()
 	model.vao.Triangles = &model.Mesh.Indices
 
-	model.vao.AddAttributes(attrib(model.Mesh.Position, gravitygl.STATIC_DRAW, 3))
+	model.vao.AddAttributes(attrib(model.Mesh.Positions, gravitygl.STATIC_DRAW, 3))
 
 	if len(model.Mesh.Colors) > 0 {
 		model.vao.AddAttributes(attrib(model.Mesh.Colors, gravitygl.STATIC_DRAW, 4))

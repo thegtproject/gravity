@@ -12,6 +12,7 @@ func apitrace() {
 		qapitraceCmdName = "qapitrace"
 		tracefile        = filepath.Join(gravitypath, "developing", "out", "developing.trace")
 		target           = filepath.Join(gravitypath, "developing", "developing")
+		runDir           = filepath.Join(gravitypath, "developing")
 	)
 
 	fmt.Println("apitrace running...")
@@ -21,7 +22,7 @@ func apitrace() {
 	{ // apitrace
 		cmdArgs := []string{"trace", "--api=gl", "--output=" + tracefile, target}
 		cmd := exec.Command(apitraceCmdName, cmdArgs...)
-
+		cmd.Dir = runDir
 		if log, err := cmd.CombinedOutput(); err != nil {
 			fmt.Println(apitraceCmdName, "errored with:\n", err, "\n", string(log))
 			return

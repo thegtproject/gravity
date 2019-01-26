@@ -1,5 +1,9 @@
 package mesh
 
+import (
+	"github.com/thegtproject/gravity/math/glmath"
+)
+
 // Mesh ...
 type Mesh struct {
 	Indices   []uint16
@@ -30,6 +34,14 @@ func ToGob(m *Mesh, path string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+// Scale ...
+func (m *Mesh) Scale(f float32) *Mesh {
+	for i := range m.Positions {
+		m.Positions[i] *= f
+	}
+	return m
 }
 
 // GenerateBoundingBoxMeshSolid ...
@@ -207,4 +219,41 @@ func (m *Mesh) GenerateBoundingBoxMeshWireframe() *Mesh {
 			0.1, 0.1, 0.7, 1.0,
 		},
 	}
+}
+
+// MinMaxPositions ...
+func (m *Mesh) MinMaxPositions() (min, max glmath.Vec3) {
+	var (
+		minx, maxx float32 = 0, 0
+		miny, maxy float32 = 0, 0
+		minz, maxz float32 = 0, 0
+	)
+
+	for i := 0; i < len(m.Positions); i += 3 {
+		x := m.Positions[i+0]
+		y := m.Positions[i+1]
+		z := m.Positions[i+2]
+
+		if x < minx {
+			minx = x
+		}
+		if x > maxx {
+			maxx = x
+		}
+
+		if y < miny {
+			miny = y
+		}
+		if y > maxy {
+			maxy = y
+		}
+
+		if z < minz {
+			minz = z
+		}
+		if z > maxz {
+			maxz = z
+		}
+	}
+	return glmath.Vec3{minx, miny, minz}, glmath.Vec3{maxx, maxy, maxz}
 }

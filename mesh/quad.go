@@ -6,26 +6,26 @@ func NewQuad() *Mesh {
 		Indices:   quadIndices,
 		Positions: quadPositions,
 		Colors:    quadColors,
-		// Coords:    quadCoords,
+		Coords:    quadCoords,
 	}
 }
 
 var quadIndices = []uint16{
-	0, 1, 2, 2, 1, 3,
+	0, 1, 2, 2, 3, 0,
 }
 
 var quadPositions = []float32{
 	-0.5, -0.5, 0.0,
 	0.5, -0.5, 0.0,
-	-0.5, 0.5, 0.0,
 	0.5, 0.5, 0.0,
+	-0.5, 0.5, 0.0,
 }
 
 var quadColors = []float32{
-	0.5, 0.5, 0.5, 1.0,
-	0.5, 0.5, 0.5, 1.0,
-	0.5, 0.5, 0.5, 1.0,
-	0.5, 0.5, 0.5, 1.0,
+	0.1, 0.8, 0.1, 1.0,
+	0.1, 0.8, 0.1, 1.0,
+	0.1, 0.8, 0.1, 1.0,
+	0.1, 0.8, 0.1, 1.0,
 }
 
 var quadCoords = []float32{

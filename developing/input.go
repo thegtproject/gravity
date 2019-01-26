@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/thegtproject/gravity/math/glmath"
+
 	"github.com/thegtproject/gravity"
 )
 
@@ -14,27 +16,27 @@ func handleInput(dt float32) {
 	if gravity.Pressed(gravity.KeyEscape) {
 		gravity.Stop()
 	}
+
+	if gravity.JustPressed(gravity.KeyE) {
+		m := cam.Transformer.Mat.TargetTo(cam.Transformer.Position, glmath.Vec3{0, 0, 0}, cam.GetUp())
+		q := glmath.QuatFromRotationMat4(m)
+		cam.Transformer.Orientation = q
+		cam.Transformer.Compose()
+	}
+
 	if gravity.Pressed(gravity.Key1) {
-		terrainb.Transformer.RotateZ(dt * 7)
+		cubeb.Transformer.RotateZ(dt * 7)
 	}
 	if gravity.Pressed(gravity.Key2) {
-		terrainb.Transformer.RotateZ(dt * -7)
+		cubeb.Transformer.RotateZ(dt * -7)
 	}
 	if gravity.Pressed(gravity.Key3) {
 		scaleDelta := gravity.Vec3{dt * 5, dt * 5, dt * 5}
-		terrainb.Transformer.Scale.Add(&scaleDelta)
+		cubeb.Transformer.Scale.Add(&scaleDelta)
 	}
 	if gravity.Pressed(gravity.Key4) {
 		scaleDelta := gravity.Vec3{dt * 5, dt * 5, dt * 5}
-		terrainb.Transformer.Scale.Sub(&scaleDelta)
-	}
-	if gravity.Pressed(gravity.Key5) {
-		scaleDelta := gravity.Vec3{dt * 15, dt * 15, dt * 15}
-		linewidgetb.Transformer.Scale.Add(&scaleDelta)
-	}
-	if gravity.Pressed(gravity.Key6) {
-		scaleDelta := gravity.Vec3{dt * 15, dt * 15, dt * 15}
-		linewidgetb.Transformer.Scale.Sub(&scaleDelta)
+		cubeb.Transformer.Scale.Sub(&scaleDelta)
 	}
 
 	if gravity.Pressed(gravity.KeyW) {
@@ -71,18 +73,17 @@ func handleInput(dt float32) {
 	}
 
 	if gravity.Pressed(gravity.KeyI) {
-		terrainb.Transformer.RotateX(dt * -7)
+		cubeb.Transformer.RotateX(dt * -7)
 	}
 	if gravity.Pressed(gravity.KeyK) {
-		terrainb.Transformer.RotateX(dt * 7)
+		cubeb.Transformer.RotateX(dt * 7)
 	}
 	if gravity.Pressed(gravity.KeyJ) {
-		terrainb.Transformer.RotateY(dt * -7)
+		cubeb.Transformer.RotateY(dt * -7)
 	}
 	if gravity.Pressed(gravity.KeyL) {
-		terrainb.Transformer.RotateY(dt * 7)
+		cubeb.Transformer.RotateY(dt * 7)
 	}
-
 	if gravity.JustPressed(gravity.KeyGrave) {
 		debugCommandMode = true
 		fmt.Print("debug command: ")

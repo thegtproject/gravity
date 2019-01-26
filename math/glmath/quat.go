@@ -50,3 +50,46 @@ func CreateQuatAngle(angle float32, axis Vec3) Quat {
 	q.W = float32(math.Cos(float64(angle / 2)))
 	return q
 }
+
+// QuatFromRotationMat4 ...
+func QuatFromRotationMat4(m Mat4) Quat {
+	q := Quat{}
+	m11 := m[0]
+	m12 := m[4]
+	m13 := m[8]
+	m21 := m[1]
+	m22 := m[5]
+	m23 := m[9]
+	m31 := m[2]
+	m32 := m[6]
+	m33 := m[10]
+	trace := m11 + m22 + m33
+
+	var s float32
+	if trace > 0 {
+		s = 0.5 / Sqrt(trace+1.0)
+		q.W = 0.25 / s
+		q.V[0] = (m32 - m23) * s
+		q.V[1] = (m13 - m31) * s
+		q.V[2] = (m21 - m12) * s
+	} else if m11 > m22 && m11 > m33 {
+		s = 2.0 * Sqrt(1.0+m11-m22-m33)
+		q.W = (m32 - m23) / s
+		q.V[0] = 0.25 * s
+		q.V[1] = (m12 + m21) / s
+		q.V[2] = (m13 + m31) / s
+	} else if m22 > m33 {
+		s = 2.0 * Sqrt(1.0+m22-m11-m33)
+		q.W = (m13 - m31) / s
+		q.V[0] = (m12 + m21) / s
+		q.V[1] = 0.25 * s
+		q.V[2] = (m23 + m32) / s
+	} else {
+		s = 2.0 * Sqrt(1.0+m33-m11-m22)
+		q.W = (m21 - m12) / s
+		q.V[0] = (m13 + m31) / s
+		q.V[1] = (m23 + m32) / s
+		q.V[2] = 0.25 * s
+	}
+	return q
+}

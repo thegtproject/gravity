@@ -48,3 +48,8 @@ func Perspective(fovy, aspect, near, far float32) Mat4 {
 		0, 0, float32((2. * far * near) / nmf), 0,
 	}
 }
+
+// Sqrt ...
+func Sqrt(v float32) float32 {
+	return float32(math.Sqrt(float64(v)))
+}

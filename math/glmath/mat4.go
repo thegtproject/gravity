@@ -3,6 +3,7 @@ package glmath
 import (
 	"bytes"
 	"fmt"
+	"math"
 	"text/tabwriter"
 )
 
@@ -20,70 +21,38 @@ func M4() Mat4 {
 }
 
 // TargetTo ...
-func (m *Mat4) TargetTo(target Mat4) *Mat4 {
+func (m *Mat4) TargetTo(eye, target, up Vec3) Mat4 {
+	x1, y1, z1 := eye[0], eye[1], eye[2]
+	x2, y2, z2 := target[0], target[1], target[2]
+	xUp, yUp, zUp := up[0], up[1], up[2]
+	z0, z1, z2 := x1-x2, y1-y2, z1-z2
+	length := z0*z0 + z1*z1 + z2*z2
+	if length > 0 {
+		length = 1 / float32(math.Sqrt(float64(length)))
+		z0 *= length
+		z1 *= length
+		z2 *= length
+	}
 
-	return m
+	a := yUp*z2 - zUp*z1
+	b := zUp*z0 - xUp*z2
+	c := xUp*z1 - yUp*z0
+
+	length = a*a + b*b + c*c
+	if length > 0 {
+		length = 1 / float32(math.Sqrt(float64(length)))
+		a *= length
+		b *= length
+		c *= length
+	}
+
+	return Mat4{
+		a, b, c, 0,
+		z1*b - z2*a, z2*a - z0*b, z0*b - z1*a, 0,
+		z0, z1, z2, 0,
+		x1, y1, z1, 1,
+	}
 }
-
-// /**
-//  * Generates a matrix that makes something look at something else.
-//  *
-//  * @param {mat4} out mat4 frustum matrix will be written into
-//  * @param {vec3} eye Position of the viewer
-//  * @param {vec3} center Point the viewer is looking at
-//  * @param {vec3} up vec3 pointing up
-//  * @returns {mat4} out
-//  */
-//  export function targetTo(out, eye, target, up) {
-// 	let eyex = eye[0],
-// 		eyey = eye[1],
-// 		eyez = eye[2],
-// 		upx = up[0],
-// 		upy = up[1],
-// 		upz = up[2];
-
-// 	let z0 = eyex - target[0],
-// 		z1 = eyey - target[1],
-// 		z2 = eyez - target[2];
-
-// 	let len = z0*z0 + z1*z1 + z2*z2;
-// 	if (len > 0) {
-// 	  len = 1 / Math.sqrt(len);
-// 	  z0 *= len;
-// 	  z1 *= len;
-// 	  z2 *= len;
-// 	}
-
-// 	let x0 = upy * z2 - upz * z1,
-// 		x1 = upz * z0 - upx * z2,
-// 		x2 = upx * z1 - upy * z0;
-
-// 	len = x0*x0 + x1*x1 + x2*x2;
-// 	if (len > 0) {
-// 	  len = 1 / Math.sqrt(len);
-// 	  x0 *= len;
-// 	  x1 *= len;
-// 	  x2 *= len;
-// 	}
-
-// 	out[0] = x0;
-// 	out[1] = x1;
-// 	out[2] = x2;
-// 	out[3] = 0;
-// 	out[4] = z1 * x2 - z2 * x1;
-// 	out[5] = z2 * x0 - z0 * x2;
-// 	out[6] = z0 * x1 - z1 * x0;
-// 	out[7] = 0;
-// 	out[8] = z0;
-// 	out[9] = z1;
-// 	out[10] = z2;
-// 	out[11] = 0;
-// 	out[12] = eyex;
-// 	out[13] = eyey;
-// 	out[14] = eyez;
-// 	out[15] = 1;
-// 	return out;
-//   };
 
 // CreateInverse ...
 func (m *Mat4) CreateInverse() *Mat4 {

@@ -55,6 +55,7 @@ func loadDefaultMaterialPrograms() {
 	defaultMaterialNames := []string{
 		"singlecolor",
 		"none",
+		"textest",
 	}
 
 	fmt.Print("loading default material programs: ")

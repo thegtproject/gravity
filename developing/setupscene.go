@@ -14,6 +14,8 @@ var DefaultScene gravity.Scene
 var cam *gravity.Camera
 
 // cheat variables for testing
+var cube *gravity.Model
+var cubeb *gravity.BaseObject
 var terrain *gravity.Model
 var terrainb *gravity.BaseObject
 var linewidget *gravity.Model
@@ -21,22 +23,9 @@ var linewidgetb *gravity.BaseObject
 
 func setupscene() {
 	setgloptions()
-
 	cam = gravity.NewCamera()
-	cam.SetPosition(0, -13, 8)
-
 	DefaultScene.SetCamera(cam)
-
-	testquad := gravity.NewModel(
-		mesh.NewQuad(),
-		materials.NewSingleColor(
-			gravity.Vec3{0, 0, 0},
-			gravity.Vec3{0.7, 0.1, 0.1},
-			gravity.Vec3{0, 0, 0},
-			gravity.Vec3{0, 0, 0},
-		),
-		cam,
-	)
+	cam.SetPosition(0, 0, 3)
 
 	linewidget = gravity.NewModel(
 		mesh.FromGob("assets/linewidget.gmesh"),
@@ -53,9 +42,14 @@ func setupscene() {
 	)
 	terrainb = terrain.Base()
 
-	DefaultScene.Import(testquad)
+	cube = gravity.NewModel(mesh.NewCube().Scale(15), materials.NewNone(), cam)
+	cubeb = cube.Base()
+
+	cube.Primitive = gravitygl.TRIANGLES
+
 	DefaultScene.Import(linewidget)
 	DefaultScene.Import(terrain)
+	DefaultScene.Import(cube)
 
 	run()
 }

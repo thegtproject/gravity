@@ -1,12 +1,52 @@
 package gravity
 
-var (
-	// MousePosition ...
-	MousePosition = [2]float32{}
+import (
+	"github.com/go-gl/glfw/v3.2/glfw"
+)
 
+var (
 	inputTable            = make(map[Button]bool)
 	inputJustPressedTable = make(map[Button]bool)
 )
+
+// Mouse ...
+var Mouse MouseInfo
+
+// MouseInfo ...
+type MouseInfo struct {
+	Position [2]float32
+	Delta    [2]float32
+	Scroll   [2]float32
+
+	capture bool
+}
+
+var _mouse MouseInfo
+
+// OnMouseMove ...
+var OnMouseMove = func(_ *glfw.Window, x, y float64) {
+	_x, _y := float32(x), window.Height-float32(y)
+
+	_mouse.Delta[0] = _x - Mouse.Position[0]
+	_mouse.Delta[1] = _y - Mouse.Position[1]
+
+	if Mouse.capture {
+		hx, hy := float64(window.Width)/2, float64(window.Height)/2
+		window.glfwWin.SetCursorPos(hx, hy)
+		_mouse.Position[0] = float32(hx)
+		_mouse.Position[1] = float32(hy)
+		return
+	}
+
+	_mouse.Position[0] = _x
+	_mouse.Position[1] = _y
+}
+
+// OnMouseScroll ...
+var OnMouseScroll = func(_ *glfw.Window, xoff float64, yoff float64) {
+	_mouse.Scroll[0] += float32(xoff)
+	_mouse.Scroll[1] += float32(yoff)
+}
 
 // Unpress ...
 func Unpress(btn Button) {
@@ -26,6 +66,13 @@ func JustPressed(btn Button) bool {
 		return true
 	}
 	return false
+}
+
+// UpdateInput ...
+func UpdateInput() {
+	Mouse = _mouse
+	_mouse.Delta[0], _mouse.Delta[1] = 0, 0
+	_mouse.Scroll[0], _mouse.Scroll[1] = 0, 0
 }
 
 func onButtonPress(btn int) {

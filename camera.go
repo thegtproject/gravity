@@ -1,8 +1,6 @@
 package gravity
 
 import (
-	"fmt"
-
 	"github.com/thegtproject/gravity/components/transformer"
 	"github.com/thegtproject/gravity/math/mgl32"
 )
@@ -24,29 +22,31 @@ type Camera struct {
 // NewCamera ...
 func NewCamera() *Camera {
 	cam := &Camera{
-		ProjectionMatrix: mgl32.Perspective(mgl32.DegToRad(45), 800/600, 0.1, 10000),
-		Transformer:      transformer.NewTransformer(),
-		pitch:            90.0,
-		yaw:              0.0,
-		up:               mgl32.Vec3{0, 1, 0},
-		worldUp:          mgl32.Vec3{0, 0, 1},
+		ProjectionMatrix: mgl32.Perspective(mgl32.DegToRad(55), 800/600, 0.1, 10000),
+		Transformer: transformer.NewTransformer(
+			mgl32.AnglesToQuat(mgl32.DegToRad(0), mgl32.DegToRad(90), 0, mgl32.ZXY),
+		),
+		pitch:   0.0,
+		yaw:     0.0,
+		up:      mgl32.Vec3{0, 1, 0},
+		worldUp: mgl32.Vec3{0, 0, 1},
 	}
+
 	return cam
+}
+
+// ChangePerspective ...
+func (cam *Camera) ChangePerspective(fovy, aspect, near, far float32) {
+	cam.ProjectionMatrix = mgl32.Perspective(mgl32.DegToRad(fovy), aspect, near, far)
 }
 
 // Update ...
 func (cam *Camera) Update() {
 	cam.updateVectors()
 	cam.updateDirection()
-	cam.Transformer.Orientation = mgl32.AnglesToQuat(mgl32.DegToRad(cam.yaw), mgl32.DegToRad(cam.pitch), 0, mgl32.ZXY)
+	cam.Transformer.Orientation = mgl32.AnglesToQuat(mgl32.DegToRad(cam.yaw), mgl32.DegToRad(cam.pitch), 0, mgl32.ZXY).Mul(cam.Transformer.BaseOrientation)
 	cam.Transformer.Compose()
 	cam.ViewMatrix = cam.Transformer.Mat.Inv()
-}
-
-// Debug ...
-func (cam *Camera) Debug() {
-	fmt.Println("Pitch  Deg:", cam.pitch, "  Rad:", mgl32.DegToRad(cam.pitch))
-	fmt.Println("Yaw    Deg:", cam.yaw, "  Rad:", mgl32.DegToRad(cam.yaw))
 }
 
 var lastForward mgl32.Vec3
@@ -55,7 +55,6 @@ func (cam *Camera) updateVectors() {
 	cam.forward = cam.Transformer.Orientation.Rotate(mgl32.Vec3{0, 0, -1})
 	cam.up = cam.Transformer.Orientation.Rotate(cam.worldUp)
 	cam.right = cam.forward.Cross(cam.worldUp)
-
 }
 
 // LookAt ...
@@ -86,10 +85,10 @@ func (cam *Camera) LookAt(target mgl32.Vec3) {
 
 func (cam *Camera) updateDirection() {
 	cam.pitch += cam.dpitch
-	if cam.pitch > 89.0 {
-		cam.pitch = 89.0
-	} else if cam.pitch < -89.0 {
-		cam.pitch = -89.0
+	if cam.pitch > 90.0 {
+		cam.pitch = 90.0
+	} else if cam.pitch < -90.0 {
+		cam.pitch = -90.0
 	}
 
 	cam.yaw = Mod(cam.yaw+cam.dyaw, 360)

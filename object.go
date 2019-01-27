@@ -3,6 +3,7 @@ package gravity
 import (
 	"github.com/thegtproject/gravity/components/transformer"
 	"github.com/thegtproject/gravity/internal/gravitygl"
+	"github.com/thegtproject/gravity/math/mgl32"
 )
 
 // Object ...
@@ -23,12 +24,11 @@ type BaseObject struct {
 
 // NewBaseObject ...
 func NewBaseObject() *BaseObject {
-	obj := &BaseObject{
-		Primitive: Triangles,
-		id:        0,
+	return &BaseObject{
+		Transformer: transformer.NewTransformer(mgl32.QuatIdent()),
+		Primitive:   Triangles,
+		id:          0,
 	}
-	obj.Transformer = transformer.NewTransformer()
-	return obj
 }
 
 // Prepare ...

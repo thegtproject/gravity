@@ -31,18 +31,6 @@ func Asin(x float32) float32 {
 	return float32(math.Asin(float64(x)))
 }
 
-// // QuatFromEuler ...
-// func QuatFromEuler(alpha, beta, gamma float32) mgl32.Quat {
-// 	return mgl32.Quat{
-// 		W: Cos(alpha/2)*Cos(beta/2)*Cos(gamma/2) + Sin(alpha/2)*Sin(beta/2)*Sin(gamma/2),
-// 		V: mgl32.Vec3{
-// 			Sin(alpha/2)*Cos(beta/2)*Cos(gamma/2) - Cos(alpha/2)*Sin(beta/2)*Sin(gamma/2),
-// 			Cos(alpha/2)*Sin(beta/2)*Cos(gamma/2) + Sin(alpha/2)*Cos(beta/2)*Sin(gamma/2),
-// 			Cos(alpha/2)*Cos(beta/2)*Sin(gamma/2) - Sin(alpha/2)*Sin(beta/2)*Cos(gamma/2),
-// 		},
-// 	}
-// }
-
 // SetQuatFromEuler ...
 func SetQuatFromEuler(q *mgl32.Quat, v mgl32.Vec3) *mgl32.Quat {
 	c1 := Cos(v[0] / 2)
@@ -60,13 +48,28 @@ func SetQuatFromEuler(q *mgl32.Quat, v mgl32.Vec3) *mgl32.Quat {
 	return q
 }
 
-// // Calculate Euler angles (roll, pitch, and yaw) from the unit quaternion.
-// float roll = atan2(2.0f * (quat.w() * quat.x() + quat.y() * quat.z()),
-// 	1.0f - 2.0f * (quat.x() * quat.x() + quat.y() * quat.y()));
-// float pitch = asin(max(-1.0f, min(1.0f, 2.0f * (quat.w() * quat.y() - quat.z() * quat.x()))));
-// float yaw = atan2(2.0f * (quat.w() * quat.z() + quat.x() * quat.y()),
-// 	1.0f - 2.0f * (quat.y() * quat.y() + quat.z() * quat.z()));
+// Min ...
+func Min(a, b float32) float32 {
+	if a <= b {
+		return a
+	}
+	return b
+}
 
-// cam.front[0] = Cos(mgl32.DegToRad(cam.pitch)) * Cos(mgl32.DegToRad(cam.yaw))
-// cam.front[1] = Sin(mgl32.DegToRad(cam.pitch))
-// cam.front[2] = Cos(mgl32.DegToRad(cam.pitch)) * Sin(mgl32.DegToRad(cam.yaw))
+// Max ...
+func Max(a, b float32) float32 {
+	if a >= b {
+		return a
+	}
+	return b
+}
+
+// Abs ...
+func Abs(f float32) float32 {
+	return float32(math.Abs(float64(f)))
+}
+
+// ScreenToGLCoords ...
+func ScreenToGLCoords(width, height, x, y float32) (float32, float32) {
+	return x / (width - 1), -1.0*y/(height-1) + 1.0
+}

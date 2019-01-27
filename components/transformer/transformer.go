@@ -10,6 +10,8 @@ type Transformer struct {
 	Orientation mgl32.Quat
 	Position    mgl32.Vec3
 	Scale       mgl32.Vec3
+
+	BaseOrientation mgl32.Quat
 }
 
 var (
@@ -19,12 +21,13 @@ var (
 )
 
 // NewTransformer ...
-func NewTransformer() *Transformer {
+func NewTransformer(base mgl32.Quat) *Transformer {
 	return &Transformer{
-		Mat:         mgl32.Ident4(),
-		Position:    mgl32.Vec3{0, 0, 0},
-		Orientation: mgl32.QuatIdent(),
-		Scale:       mgl32.Vec3{1, 1, 1},
+		Mat:             mgl32.Ident4(),
+		Position:        mgl32.Vec3{0, 0, 0},
+		Orientation:     mgl32.QuatIdent(),
+		Scale:           mgl32.Vec3{1, 1, 1},
+		BaseOrientation: base,
 	}
 }
 

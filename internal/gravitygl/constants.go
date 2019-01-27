@@ -1541,3 +1541,9 @@ const (
 	NO_ERROR = 0
 	NONE     = 0
 )
+
+const (
+	LINE  = 0x1B01
+	FILL  = 0x1B02
+	POINT = 0x1B00
+)

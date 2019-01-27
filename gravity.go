@@ -4,12 +4,11 @@ import (
 	"fmt"
 
 	"github.com/go-gl/glfw/v3.2/glfw"
-
-	gl "github.com/thegtproject/gravity/internal/gravitygl"
+	"github.com/thegtproject/gravity/internal/gravitygl"
 )
 
 // Window ...
-var Window *glfw.Window
+var window *Window
 
 var running bool
 
@@ -27,7 +26,13 @@ func Init(cfg Config) {
 
 	initglfw()
 	createWindow(cfg.Title, cfg.Width, cfg.Height)
+	window.Width = float32(cfg.Width)
+	window.Height = float32(cfg.Height)
 	initgl()
+
+	gravitygl.ViewPort(0, 0, int32(cfg.Width), int32(cfg.Height))
+	gravitygl.Scissor(0, 0, int32(cfg.Width), int32(cfg.Height))
+
 	initCallbacks()
 	if cfg.VSync {
 		glfw.SwapInterval(1)
@@ -36,7 +41,6 @@ func Init(cfg Config) {
 	}
 
 	loadDefaultMaterialPrograms()
-
 }
 
 func initglfw() {
@@ -53,7 +57,7 @@ func initglfw() {
 }
 
 func initgl() {
-	err := gl.Init()
+	err := gravitygl.Init()
 	if err != nil {
 		panic(err)
 	}
@@ -67,23 +71,23 @@ func Run(run func()) {
 
 // Running ...
 func Running() bool {
-	return !Window.ShouldClose()
+	return !window.glfwWin.ShouldClose()
 }
 
 // Stop ...
 func Stop() {
-	Window.SetShouldClose(true)
+	window.glfwWin.SetShouldClose(true)
 }
 
 // Update ...
 func Update() {
-	Window.SwapBuffers()
+	window.glfwWin.SwapBuffers()
 	glfw.PollEvents()
+	UpdateInput()
 }
 
 func initCallbacks() {
-
-	Window.SetKeyCallback(
+	window.glfwWin.SetKeyCallback(
 		func(_ *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mod glfw.ModifierKey) {
 			if key == glfw.KeyUnknown {
 				return
@@ -95,6 +99,19 @@ func initCallbacks() {
 				onButtonRelease(int(key))
 			}
 		})
+	window.glfwWin.SetFocusCallback(window.onFocusChange)
+	window.glfwWin.SetCursorPosCallback(OnMouseMove)
+	window.glfwWin.SetMouseButtonCallback(func(_ *glfw.Window, btn glfw.MouseButton, action glfw.Action, mod glfw.ModifierKey) {
+		switch action {
+		case glfw.Press:
+			onButtonPress(int(btn))
+		case glfw.Release:
+			onButtonRelease(int(btn))
+		}
+	})
+
+	window.glfwWin.SetScrollCallback(OnMouseScroll)
+
 }
 func createWindow(title string, width int, height int) {
 	win, err := glfw.CreateWindow(
@@ -110,5 +127,9 @@ func createWindow(title string, width int, height int) {
 
 	win.MakeContextCurrent()
 
-	Window = win
+	window = &Window{
+		Width:   float32(width),
+		Height:  float32(height),
+		glfwWin: win,
+	}
 }

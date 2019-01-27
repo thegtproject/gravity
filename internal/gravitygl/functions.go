@@ -310,3 +310,8 @@ func ClearDepth(depth float64) {
 func GetError() Enum {
 	return Enum(gl.GetError())
 }
+
+// PolygonMode ...
+func PolygonMode(face, mode uint32) {
+	gl.PolygonMode(face, mode)
+}

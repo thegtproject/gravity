@@ -10,7 +10,7 @@ func main() {
 
 	cfg := gravity.Config{
 		Title: "Gravity Developing Application",
-		Width: 800, Height: 600,
+		Width: 1366, Height: 768,
 		VSync: true,
 	}
 

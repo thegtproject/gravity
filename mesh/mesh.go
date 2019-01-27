@@ -1,7 +1,7 @@
 package mesh
 
 import (
-	"github.com/thegtproject/gravity/math/glmath"
+	"github.com/thegtproject/gravity/math/mgl32"
 )
 
 // Mesh ...
@@ -41,6 +41,21 @@ func (m *Mesh) Scale(f float32) *Mesh {
 	for i := range m.Positions {
 		m.Positions[i] *= f
 	}
+	return m
+}
+
+// ScaleXYZ ...
+func (m *Mesh) ScaleXYZ(x, y, z float32) *Mesh {
+	for i := 0; i < len(m.Positions); i += 3 {
+		m.Positions[i+0] *= x
+		m.Positions[i+1] *= y
+		m.Positions[i+2] *= z
+	}
+	return m
+}
+
+// Rotate ...
+func (m *Mesh) Rotate() *Mesh {
 	return m
 }
 
@@ -222,7 +237,7 @@ func (m *Mesh) GenerateBoundingBoxMeshWireframe() *Mesh {
 }
 
 // MinMaxPositions ...
-func (m *Mesh) MinMaxPositions() (min, max glmath.Vec3) {
+func (m *Mesh) MinMaxPositions() (min, max mgl32.Vec3) {
 	var (
 		minx, maxx float32 = 0, 0
 		miny, maxy float32 = 0, 0
@@ -255,5 +270,5 @@ func (m *Mesh) MinMaxPositions() (min, max glmath.Vec3) {
 			maxz = z
 		}
 	}
-	return glmath.Vec3{minx, miny, minz}, glmath.Vec3{maxx, maxy, maxz}
+	return mgl32.Vec3{minx, miny, minz}, mgl32.Vec3{maxx, maxy, maxz}
 }

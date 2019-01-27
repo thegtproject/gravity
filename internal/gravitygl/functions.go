@@ -6,11 +6,11 @@ import (
 	"errors"
 
 	"github.com/go-gl/gl/v4.3-compatibility/gl"
-	"github.com/thegtproject/gravity/math/glmath"
+	"github.com/thegtproject/gravity/math/mgl32"
 )
 
 // ClearColor ...
-func ClearColor(c glmath.Vec4) {
+func ClearColor(c mgl32.Vec4) {
 	gl.ClearColor(c[0], c[1], c[2], c[3])
 }
 

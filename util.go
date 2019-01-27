@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"fmt"
 	"text/tabwriter"
+
+	"github.com/thegtproject/gravity/math/mgl32"
 )
 
 // PrintVec3 ...
-func PrintVec3(v Vec3) string {
+func PrintVec3(v mgl32.Vec3) string {
 	buf := new(bytes.Buffer)
 	w := tabwriter.NewWriter(buf, 8, 1, 0, ' ', tabwriter.AlignRight)
 	for _, i := range v {

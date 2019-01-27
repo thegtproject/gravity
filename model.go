@@ -2,6 +2,7 @@ package gravity
 
 import (
 	"github.com/thegtproject/gravity/internal/gravitygl"
+	"github.com/thegtproject/gravity/math/mgl32"
 	"github.com/thegtproject/gravity/mesh"
 )
 
@@ -12,7 +13,7 @@ type Model struct {
 	Mesh *mesh.Mesh
 	Mat  Material
 
-	v, p *Mat4
+	v, p *mgl32.Mat4
 }
 
 var attrib = func(d interface{}, u, size uint32) *gravitygl.Attribute {

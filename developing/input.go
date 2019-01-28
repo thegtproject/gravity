@@ -58,7 +58,7 @@ func handleInput(dt float32) {
 
 	if gravity.Pressed(gravity.KeyE) {
 		linewidget.Transformer.TranslateZ(1)
-		fmt.Println(linewidget.Transformer.Position)
+
 	}
 
 	if gravity.Pressed(gravity.Key1) {

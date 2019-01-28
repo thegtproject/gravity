@@ -29,15 +29,6 @@ var OnMouseMove = func(_ *glfw.Window, x, y float64) {
 
 	_mouse.Delta[0] = _x - Mouse.Position[0]
 	_mouse.Delta[1] = _y - Mouse.Position[1]
-
-	if Mouse.capture {
-		hx, hy := float64(window.Width)/2, float64(window.Height)/2
-		window.glfwWin.SetCursorPos(hx, hy)
-		_mouse.Position[0] = float32(hx)
-		_mouse.Position[1] = float32(hy)
-		return
-	}
-
 	_mouse.Position[0] = _x
 	_mouse.Position[1] = _y
 }

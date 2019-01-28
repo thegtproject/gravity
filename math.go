@@ -31,6 +31,16 @@ func Asin(x float32) float32 {
 	return float32(math.Asin(float64(x)))
 }
 
+// D2R ...
+func D2R(d float32) float32 {
+	return mgl32.DegToRad(d)
+}
+
+// R2D ...
+func R2D(r float32) float32 {
+	return mgl32.RadToDeg(r)
+}
+
 // SetQuatFromEuler ...
 func SetQuatFromEuler(q *mgl32.Quat, v mgl32.Vec3) *mgl32.Quat {
 	c1 := Cos(v[0] / 2)

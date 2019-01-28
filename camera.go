@@ -1,13 +1,14 @@
 package gravity
 
 import (
-	"github.com/thegtproject/gravity/components/transformer"
+	"github.com/thegtproject/gravity/core/components"
 	"github.com/thegtproject/gravity/math/mgl32"
 )
 
 // Camera ...
 type Camera struct {
-	Transformer      *transformer.Transformer
+	components.Transformer
+
 	ProjectionMatrix mgl32.Mat4
 	ViewMatrix       mgl32.Mat4
 	pitch, dpitch    float32
@@ -23,7 +24,7 @@ type Camera struct {
 func NewCamera() *Camera {
 	cam := &Camera{
 		ProjectionMatrix: mgl32.Perspective(mgl32.DegToRad(55), 800/600, 0.1, 10000),
-		Transformer: transformer.NewTransformer(
+		Transformer: components.NewTransformer(
 			mgl32.AnglesToQuat(mgl32.DegToRad(0), mgl32.DegToRad(90), 0, mgl32.ZXY),
 		),
 		pitch:   0.0,
@@ -44,7 +45,7 @@ func (cam *Camera) ChangePerspective(fovy, aspect, near, far float32) {
 func (cam *Camera) Update() {
 	cam.updateVectors()
 	cam.updateDirection()
-	cam.Transformer.Orientation = mgl32.AnglesToQuat(mgl32.DegToRad(cam.yaw), mgl32.DegToRad(cam.pitch), 0, mgl32.ZXY).Mul(cam.Transformer.BaseOrientation)
+	cam.Transformer.Rotate(mgl32.AnglesToQuat(D2R(cam.yaw), D2R(cam.pitch), 0, mgl32.ZXY))
 	cam.Transformer.Compose()
 	cam.ViewMatrix = cam.Transformer.Mat.Inv()
 }

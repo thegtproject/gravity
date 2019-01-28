@@ -1,8 +1,6 @@
 package gravity
 
 import (
-	"fmt"
-
 	"github.com/go-gl/glfw/v3.2/glfw"
 )
 
@@ -11,19 +9,17 @@ type Window struct {
 	Width, Height float32
 	glfwWin       *glfw.Window
 
-	focused     bool
-	capture     bool
-	captureHold bool
+	focused bool
 }
 
 // Captured ...
 func Captured() bool {
-	return window.Captured()
+	return window.glfwCursorDisabled()
 }
 
 // Captured ...
 func (win *Window) Captured() bool {
-	return win.capture
+	return window.glfwCursorDisabled()
 }
 
 // SetCaptureMode ...
@@ -33,23 +29,15 @@ func SetCaptureMode(b bool) {
 	} else {
 		window.glfwWin.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 	}
-	window.capture = b
-	Mouse.capture = b
 }
 
 func (win *Window) onFocusChange(w *glfw.Window, focused bool) {
-	win.focused = focused
-
-	if !win.focused && win.capture {
-		fmt.Println("pausing capture mode")
-		win.captureHold = true
+	if !win.focused && win.Captured() {
 		SetCaptureMode(false)
-		return
 	}
+	win.focused = focused
+}
 
-	if win.focused && win.captureHold {
-		fmt.Println("resuming capture mode")
-		win.captureHold = false
-		SetCaptureMode(true)
-	}
+func (win *Window) glfwCursorDisabled() bool {
+	return win.glfwWin.GetInputMode(glfw.CursorMode) == glfw.CursorDisabled
 }

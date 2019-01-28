@@ -1,4 +1,4 @@
-package transformer
+package components
 
 import (
 	"github.com/thegtproject/gravity/math/mgl32"
@@ -11,7 +11,7 @@ type Transformer struct {
 	Position    mgl32.Vec3
 	Scale       mgl32.Vec3
 
-	BaseOrientation mgl32.Quat
+	originalOrientation mgl32.Quat
 }
 
 var (
@@ -21,66 +21,66 @@ var (
 )
 
 // NewTransformer ...
-func NewTransformer(base mgl32.Quat) *Transformer {
-	return &Transformer{
-		Mat:             mgl32.Ident4(),
-		Position:        mgl32.Vec3{0, 0, 0},
-		Orientation:     mgl32.QuatIdent(),
-		Scale:           mgl32.Vec3{1, 1, 1},
-		BaseOrientation: base,
+func NewTransformer(base mgl32.Quat) Transformer {
+	return Transformer{
+		Mat:                 mgl32.Ident4(),
+		Position:            mgl32.Vec3{0, 0, 0},
+		Orientation:         mgl32.QuatIdent(),
+		Scale:               mgl32.Vec3{1, 1, 1},
+		originalOrientation: base,
 	}
 }
 
 // Compose ...
-func (tf *Transformer) Compose() {
-	tf.Mat = tf.Orientation.Mat4()
-	scale(&tf.Mat, tf.Scale)
-	setPosition(&tf.Mat, tf.Position)
+func (t *Transformer) Compose() {
+	t.Mat = t.Orientation.Mat4()
+	scale(&t.Mat, t.Scale)
+	setPosition(&t.Mat, t.Position)
 }
 
 // TranslateV ...
-func (tf *Transformer) TranslateV(v mgl32.Vec3) {
-	tf.Position = tf.Position.Add(v)
+func (t *Transformer) TranslateV(v mgl32.Vec3) {
+	t.Position = t.Position.Add(v)
 }
 
 // TranslateX ...
-func (tf *Transformer) TranslateX(d float32) {
-	tf.Position[0] += d
+func (t *Transformer) TranslateX(d float32) {
+	t.Position[0] += d
 }
 
 // TranslateY ...
-func (tf *Transformer) TranslateY(d float32) {
-	tf.Position[1] += d
+func (t *Transformer) TranslateY(d float32) {
+	t.Position[1] += d
 }
 
 // TranslateZ ...
-func (tf *Transformer) TranslateZ(d float32) {
-	tf.Position[2] += d
+func (t *Transformer) TranslateZ(d float32) {
+	t.Position[2] += d
 }
 
 // RotateX ...
-func (tf *Transformer) RotateX(angle float32) {
-	tf.rotateQ(angle, xAxis)
+func (t *Transformer) RotateX(angle float32) {
+	t.rotateQ(angle, xAxis)
 }
 
 // RotateY ...
-func (tf *Transformer) RotateY(angle float32) {
-	tf.rotateQ(angle, yAxis)
+func (t *Transformer) RotateY(angle float32) {
+	t.rotateQ(angle, yAxis)
 }
 
 // RotateZ ...
-func (tf *Transformer) RotateZ(angle float32) {
-	tf.rotateQ(angle, zAxis)
+func (t *Transformer) RotateZ(angle float32) {
+	t.rotateQ(angle, zAxis)
 }
 
 // Rotate ...
-func (tf *Transformer) Rotate(q mgl32.Quat) {
-	tf.Orientation = tf.Orientation.Mul(q)
+func (t *Transformer) Rotate(q mgl32.Quat) {
+	t.Orientation = q.Mul(t.originalOrientation)
 }
 
-func (tf *Transformer) rotateQ(angle float32, axis mgl32.Vec3) {
+func (t *Transformer) rotateQ(angle float32, axis mgl32.Vec3) {
 	q := mgl32.QuatRotate(angle, axis)
-	tf.Orientation = tf.Orientation.Mul(q)
+	t.Orientation = t.Orientation.Mul(q)
 }
 
 func scale(out *mgl32.Mat4, v mgl32.Vec3) {

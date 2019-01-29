@@ -23,16 +23,21 @@ var linewidgetb *gravity.BaseObject
 
 func setupscene() {
 	setgloptions()
-	cam = gravity.NewCamera()
-	DefaultScene.SetCamera(cam)
-	cam.Transformer.Position = mgl32.Vec3{-50, -110, 245}
+
+	cam = DefaultScene.SetCamera(
+		gravity.NewCamera(
+			// camera options
+			gravity.Position(71, -155, 186),
+			gravity.Rotate(0, 89),
+		))
 
 	linewidget = gravity.NewModel(
 		mesh.FromGob("assets/linewidget.gmesh").Scale(15),
 		materials.NewNone(),
 		cam,
 	)
-	linewidget.Transformer.Position = mgl32.Vec3{0, 0, 142}
+
+	linewidget.TranslateZ(142)
 	linewidget.Primitive = gravity.Lines
 	linewidgetb = linewidget.Base()
 

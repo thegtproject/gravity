@@ -22,7 +22,7 @@ func Mod(x, y float32) float32 {
 }
 
 // Atan2 ...
-func Atan2(x, y float32) float32 {
+func Atan2(y, x float32) float32 {
 	return float32(math.Atan2(float64(y), float64(x)))
 }
 
@@ -82,4 +82,28 @@ func Abs(f float32) float32 {
 // ScreenToGLCoords ...
 func ScreenToGLCoords(width, height, x, y float32) (float32, float32) {
 	return x / (width - 1), -1.0*y/(height-1) + 1.0
+}
+
+// Sincos ...
+func Sincos(x float32) (sin, cos float32) {
+	s, c := math.Sincos(float64(x))
+	return float32(s), float32(c)
+}
+
+func deg2quat(yaw, pitch float32) mgl32.Quat {
+	var s [3]float64
+	var c [3]float64
+
+	s[0], c[0] = 0, 1
+	s[1], c[1] = math.Sincos(float64(yaw * float32(math.Pi) / 180 / 2))
+	s[2], c[2] = math.Sincos(float64(pitch * float32(math.Pi) / 180 / 2))
+
+	return mgl32.Quat{
+		W: float32(c[0]*c[1]*c[2] - s[0]*c[1]*s[2]),
+		V: mgl32.Vec3{
+			float32(c[0]*c[1]*s[2] + s[0]*c[1]*c[2]),
+			float32(c[0]*s[1]*s[2] - s[0]*s[1]*c[2]),
+			float32(c[0]*s[1]*c[2] + s[0]*s[1]*s[2]),
+		},
+	}
 }

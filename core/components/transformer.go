@@ -6,12 +6,10 @@ import (
 
 // Transformer ...
 type Transformer struct {
-	Mat         mgl32.Mat4
-	Orientation mgl32.Quat
-	Position    mgl32.Vec3
-	Scale       mgl32.Vec3
-
-	originalOrientation mgl32.Quat
+	matrix mgl32.Mat4
+	rot    mgl32.Quat
+	pos    mgl32.Vec3
+	scale  mgl32.Vec3
 }
 
 var (
@@ -21,66 +19,107 @@ var (
 )
 
 // NewTransformer ...
-func NewTransformer(base mgl32.Quat) Transformer {
-	return Transformer{
-		Mat:                 mgl32.Ident4(),
-		Position:            mgl32.Vec3{0, 0, 0},
-		Orientation:         mgl32.QuatIdent(),
-		Scale:               mgl32.Vec3{1, 1, 1},
-		originalOrientation: base,
+func NewTransformer() *Transformer {
+	return &Transformer{
+		matrix: mgl32.Ident4(),
+		pos:    mgl32.Vec3{0, 0, 0},
+		scale:  mgl32.Vec3{1, 1, 1},
+		rot:    mgl32.QuatIdent(),
 	}
 }
 
-// Compose ...
-func (t *Transformer) Compose() {
-	t.Mat = t.Orientation.Mat4()
-	scale(&t.Mat, t.Scale)
-	setPosition(&t.Mat, t.Position)
+// UpdateTransform ...
+func (t *Transformer) UpdateTransform() {
+	t.matrix = t.rot.Mat4()
+	t.matrix[12] = t.pos.X()
+	t.matrix[13] = t.pos.Y()
+	t.matrix[14] = t.pos.Z()
+	scale(&t.matrix, t.scale)
 }
 
-// TranslateV ...
-func (t *Transformer) TranslateV(v mgl32.Vec3) {
-	t.Position = t.Position.Add(v)
+// GetTransformMatrix ...
+func (t *Transformer) GetTransformMatrix() mgl32.Mat4 {
+	return t.matrix
+}
+
+// GetPosition ...
+func (t *Transformer) GetPosition() mgl32.Vec3 {
+	return t.pos
+}
+
+// SetPosition ...
+func (t *Transformer) SetPosition(x, y, z float32) {
+	t.pos[0], t.pos[1], t.pos[2] = x, y, z
+}
+
+// SetRotation ...
+func (t *Transformer) SetRotation(q mgl32.Quat) {
+	t.rot = q
+}
+
+// Translate ...
+func (t *Transformer) Translate(v mgl32.Vec3) {
+	t.pos = t.pos.Add(v)
 }
 
 // TranslateX ...
 func (t *Transformer) TranslateX(d float32) {
-	t.Position[0] += d
+	t.pos[0] += d
 }
 
 // TranslateY ...
 func (t *Transformer) TranslateY(d float32) {
-	t.Position[1] += d
+	t.pos[1] += d
 }
 
 // TranslateZ ...
 func (t *Transformer) TranslateZ(d float32) {
-	t.Position[2] += d
+	t.pos[2] += d
 }
 
-// RotateX ...
-func (t *Transformer) RotateX(angle float32) {
-	t.rotateQ(angle, xAxis)
-}
+// // RotateX ...
+// func (t *Transformer) RotateX(angle float32) {
 
-// RotateY ...
-func (t *Transformer) RotateY(angle float32) {
-	t.rotateQ(angle, yAxis)
-}
+// }
 
-// RotateZ ...
-func (t *Transformer) RotateZ(angle float32) {
-	t.rotateQ(angle, zAxis)
-}
+// // RotateY ...
+// func (t *Transformer) RotateY(angle float32) {
+
+// }
+
+// // RotateZ ...
+// func (t *Transformer) RotateZ(angle float32) {
+
+// }
 
 // Rotate ...
-func (t *Transformer) Rotate(q mgl32.Quat) {
-	t.Orientation = q.Mul(t.originalOrientation)
+// func (t *Transformer) Rotate(q mgl32.Quat) {
+// 	t.rot = q.Mul(t.rot)
+// }
+
+// Scale ...
+func (t *Transformer) Scale(v mgl32.Vec3) {
+	t.scale = v
 }
 
-func (t *Transformer) rotateQ(angle float32, axis mgl32.Vec3) {
-	q := mgl32.QuatRotate(angle, axis)
-	t.Orientation = t.Orientation.Mul(q)
+// Scalef ...
+func (t *Transformer) Scalef(f float32) {
+	t.scale = t.scale.Mul(f)
+}
+
+// ScaleX ...
+func (t *Transformer) ScaleX(f float32) {
+	t.scale[0] *= f
+}
+
+// ScaleY ...
+func (t *Transformer) ScaleY(f float32) {
+	t.scale[1] *= f
+}
+
+// ScaleZ ...
+func (t *Transformer) ScaleZ(f float32) {
+	t.scale[2] *= f
 }
 
 func scale(out *mgl32.Mat4, v mgl32.Vec3) {
@@ -96,42 +135,4 @@ func scale(out *mgl32.Mat4, v mgl32.Vec3) {
 	out[9] *= v[2]
 	out[10] *= v[2]
 	out[11] *= v[2]
-}
-
-func setPosition(out *mgl32.Mat4, v mgl32.Vec3) {
-	out[12] = v[0]
-	out[13] = v[1]
-	out[14] = v[2]
-}
-
-func quatToMat4(q mgl32.Quat) mgl32.Mat4 {
-	n := q.Dot(q)
-
-	var s float32
-
-	if !mgl32.FloatEqual(n, 0) {
-		s = 2.0 / n
-	}
-
-	xs := q.V[0] * s
-	ys := q.V[1] * s
-	zs := q.V[2] * s
-	wx := q.W * xs
-	wy := q.W * ys
-	wz := q.W * zs
-	xx := q.V[0] * xs
-	xy := q.V[0] * ys
-	xz := q.V[0] * zs
-	yy := q.V[1] * ys
-	yz := q.V[1] * zs
-	zz := q.V[2] * zs
-
-	m := mgl32.Mat4{
-		1.0 - (yy + zz), xy + wz, xz - wy, 0,
-		xy - wz, 1.0 - (xx + zz), yz + wx, 0,
-		xz + wy, yz - wx, 1.0 - (xx + yy), 0,
-		0, 0, 0, 1,
-	}
-
-	return m
 }

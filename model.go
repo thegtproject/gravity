@@ -53,9 +53,9 @@ func (model *Model) Renderable() bool {
 // Prepare ...
 func (model *Model) Prepare() {
 	model.Mat.PreRender()
+	model.UpdateTransform()
 
-	model.Transformer.Compose()
-	gravitygl.UniformMatrix4fv(0, model.Transformer.Mat)
+	gravitygl.UniformMatrix4fv(0, model.GetTransformMatrix())
 	gravitygl.UniformMatrix4fv(1, *model.v)
 	gravitygl.UniformMatrix4fv(2, *model.p)
 }

@@ -5,7 +5,6 @@ import (
 
 	"github.com/thegtproject/gravity"
 	"github.com/thegtproject/gravity/internal/gravitygl"
-	"github.com/thegtproject/gravity/math/mgl32"
 )
 
 var lastx, lasty float32
@@ -23,10 +22,10 @@ func handleInput(dt float32) {
 		if gravity.Pressed(gravity.MouseButton1) &&
 			(lastx != gravity.Mouse.Delta[0] ||
 				lasty != gravity.Mouse.Delta[1]) {
-			cam.Rotate(dt*55*gravity.Mouse.Delta[1], -dt*55*gravity.Mouse.Delta[0])
+			cam.Push(dt*55*gravity.Mouse.Delta[1], -dt*55*gravity.Mouse.Delta[0])
 		}
 	} else {
-		cam.Rotate(dt*15*gravity.Mouse.Delta[1], -dt*15*gravity.Mouse.Delta[0])
+		cam.Push(dt*15*gravity.Mouse.Delta[1], -dt*15*gravity.Mouse.Delta[0])
 	}
 
 	if gravity.JustPressed(gravity.KeyF1) {
@@ -52,28 +51,34 @@ func handleInput(dt float32) {
 		}
 	}
 
-	if gravity.Pressed(gravity.KeyEscape) {
-		gravity.Stop()
+	if gravity.JustPressed(gravity.KeyEscape) {
+		if gravity.Captured() {
+			gravity.SetCaptureMode(!gravity.Captured())
+
+		} else {
+			gravity.Stop()
+		}
 	}
 
 	if gravity.Pressed(gravity.KeyE) {
-		linewidget.Transformer.TranslateZ(1)
+		linewidget.TranslateZ(1)
+	}
+
+	if gravity.JustPressed(gravity.KeyQ) {
 
 	}
 
 	if gravity.Pressed(gravity.Key1) {
-		cubeb.Transformer.RotateZ(dt * 7)
+
 	}
 	if gravity.Pressed(gravity.Key2) {
-		cubeb.Transformer.RotateZ(dt * -7)
+
 	}
 	if gravity.Pressed(gravity.Key3) {
-		scaleDelta := mgl32.Vec3{dt * 5, dt * 5, dt * 5}
-		cubeb.Transformer.Scale = cubeb.Transformer.Scale.Sub(scaleDelta)
+		cubeb.Scalef(-0.1)
 	}
 	if gravity.Pressed(gravity.Key4) {
-		scaleDelta := mgl32.Vec3{dt * 5, dt * 5, dt * 5}
-		cubeb.Transformer.Scale = cubeb.Transformer.Scale.Add(scaleDelta)
+		cubeb.Scalef(0.1)
 	}
 
 	if gravity.Pressed(gravity.KeyW) {
@@ -96,31 +101,20 @@ func handleInput(dt float32) {
 		cam.MoveDown(dt * moveFactor)
 	}
 
-	if gravity.Pressed(gravity.KeyLeft) {
-		cam.Rotate(0, dt*120)
+	var zz float32 = 10
+	if gravity.JustPressed(gravity.KeyLeft) {
+		cam.Push(0, zz)
 	}
-	if gravity.Pressed(gravity.KeyRight) {
-		cam.Rotate(0, dt*-120)
+	if gravity.JustPressed(gravity.KeyRight) {
+		cam.Push(0, -zz)
 	}
-	if gravity.Pressed(gravity.KeyUp) {
-		cam.Rotate(dt*120, 0)
+	if gravity.JustPressed(gravity.KeyUp) {
+		cam.Push(-zz, 0)
 	}
-	if gravity.Pressed(gravity.KeyDown) {
-		cam.Rotate(dt*-120, 0)
+	if gravity.JustPressed(gravity.KeyDown) {
+		cam.Push(zz, 0)
 	}
 
-	if gravity.Pressed(gravity.KeyI) {
-		cubeb.Transformer.RotateX(dt * -7)
-	}
-	if gravity.Pressed(gravity.KeyK) {
-		cubeb.Transformer.RotateX(dt * 7)
-	}
-	if gravity.Pressed(gravity.KeyJ) {
-		cubeb.Transformer.RotateY(dt * -7)
-	}
-	if gravity.Pressed(gravity.KeyL) {
-		cubeb.Transformer.RotateY(dt * 7)
-	}
 	if gravity.JustPressed(gravity.KeyGrave) {
 		debugCommandMode = true
 		fmt.Print("debug command: ")

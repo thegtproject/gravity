@@ -25,8 +25,9 @@ func (s *Scene) Render() {
 }
 
 // SetCamera ...
-func (s *Scene) SetCamera(c *Camera) {
+func (s *Scene) SetCamera(c *Camera) *Camera {
 	s.cam = c
+	return s.cam
 }
 
 // Import ...

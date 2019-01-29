@@ -20,10 +20,11 @@ func processDebugCommandKey(btn gravity.Button) {
 	case gravity.KeyC:
 		checkLast("Camera Location")
 		fmt.Println("Position:")
-		fmt.Println(cam.Transformer.Position)
+		fmt.Println(cam.GetPosition())
 		fmt.Println("Orientation:")
-		fmt.Println(cam.Transformer.Orientation)
+
 		fmt.Println("--------------------")
+		fmt.Println(terrain.GetPosition())
 		debugCommandMode = false
 		gravity.Unpress(btn)
 		btn = gravity.Button(0)

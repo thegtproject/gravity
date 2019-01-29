@@ -3,7 +3,6 @@ package gravity
 import (
 	"github.com/thegtproject/gravity/core/components"
 	"github.com/thegtproject/gravity/internal/gravitygl"
-	"github.com/thegtproject/gravity/math/mgl32"
 )
 
 // Object ...
@@ -15,7 +14,7 @@ type Object interface {
 
 // BaseObject ...
 type BaseObject struct {
-	components.Transformer
+	*Transformer
 
 	Primitive PrimitiveType
 	vao       *gravitygl.VertexArray
@@ -26,9 +25,9 @@ type BaseObject struct {
 // NewBaseObject ...
 func NewBaseObject() *BaseObject {
 	return &BaseObject{
-		Transformer: components.NewTransformer(mgl32.QuatIdent()),
 		Primitive:   Triangles,
 		id:          0,
+		Transformer: components.NewTransformer(),
 	}
 }
 

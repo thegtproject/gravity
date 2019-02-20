@@ -62,8 +62,12 @@ func loadDefaultMaterialPrograms() {
 	}
 
 	Log.Print("loading default material programs: ")
-	for _, n := range defaultMaterialNames {
-		Log.Print(n, ", ")
+	for i, n := range defaultMaterialNames {
+		if i < len(defaultMaterialNames)-1 {
+			Log.Print(n, ", ")
+		} else {
+			Log.Print(n)
+		}
 		loadMaterialProgram(n)
 	}
 	Log.Println("")

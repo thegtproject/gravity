@@ -5,9 +5,9 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/inkyblackness/imgui-go"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/thegtproject/gravity/internal/imgui-go"
 )
 
 func TestAllocatedGlyphRangesFreeSetsToZero(t *testing.T) {

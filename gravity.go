@@ -1,32 +1,15 @@
 package gravity
 
 import (
-	"fmt"
-
 	"github.com/go-gl/glfw/v3.2/glfw"
 	"github.com/thegtproject/gravity/internal/gravitygl"
+	"github.com/thegtproject/gravity/pkg/log"
 )
 
 // Window ...
 var window *Window
 var running bool
-
-// Log ...
-var Log = struct {
-	Print   func(a ...interface{})
-	Printf  func(format string, a ...interface{})
-	Println func(a ...interface{})
-}{
-	Print: func(a ...interface{}) {
-		fmt.Print(a...)
-	},
-	Printf: func(format string, a ...interface{}) {
-		fmt.Printf(format, a...)
-	},
-	Println: func(a ...interface{}) {
-		fmt.Println(a...)
-	},
-}
+var Log = log.GetRedirector()
 
 // Config ...
 type Config struct {

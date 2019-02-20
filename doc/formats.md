@@ -1,3 +1,5 @@
+# Formats
+
 ```
 Gravity's polygon format
 

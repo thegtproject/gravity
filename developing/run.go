@@ -8,7 +8,7 @@ import (
 	"github.com/thegtproject/gravity"
 	gl "github.com/thegtproject/gravity/internal/gravitygl"
 	imgui "github.com/thegtproject/gravity/internal/imgui-go"
-	"github.com/thegtproject/gravity/math/mgl32"
+	"github.com/thegtproject/gravity/pkg/math/mgl32"
 )
 
 var (

@@ -1,8 +1,8 @@
 package gravity
 
 import (
-	"github.com/thegtproject/gravity/core/components"
-	"github.com/thegtproject/gravity/math/mgl32"
+	"github.com/thegtproject/gravity/pkg/core/components"
+	"github.com/thegtproject/gravity/pkg/math/mgl32"
 )
 
 // Camera ...

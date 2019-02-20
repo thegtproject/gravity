@@ -1,6 +1,6 @@
 package gravity
 
-import "github.com/thegtproject/gravity/math/mgl32"
+import "github.com/thegtproject/gravity/pkg/math/mgl32"
 
 // Transformable ...
 type Transformable interface {

@@ -3,7 +3,7 @@ package loaders
 import (
 	"io/ioutil"
 
-	"github.com/thegtproject/gravity/mesh"
+	"github.com/thegtproject/gravity/pkg/mesh"
 	"github.com/udhos/gwob"
 )
 

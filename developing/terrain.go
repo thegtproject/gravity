@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/thegtproject/gravity"
-	"github.com/thegtproject/gravity/materials"
-	"github.com/thegtproject/gravity/mesh"
+	"github.com/thegtproject/gravity/pkg/materials"
+	"github.com/thegtproject/gravity/pkg/mesh"
 )
 
 func configureTerrain() {

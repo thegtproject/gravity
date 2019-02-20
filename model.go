@@ -2,8 +2,8 @@ package gravity
 
 import (
 	"github.com/thegtproject/gravity/internal/gravitygl"
-	"github.com/thegtproject/gravity/math/mgl32"
-	"github.com/thegtproject/gravity/mesh"
+	"github.com/thegtproject/gravity/pkg/math/mgl32"
+	"github.com/thegtproject/gravity/pkg/mesh"
 )
 
 // Model ...

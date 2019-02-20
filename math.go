@@ -3,7 +3,7 @@ package gravity
 import (
 	"math"
 
-	"github.com/thegtproject/gravity/math/mgl32"
+	"github.com/thegtproject/gravity/pkg/math/mgl32"
 )
 
 // Cos ...

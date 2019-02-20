@@ -25,7 +25,7 @@ void main() {
 	fragColor += mix(fragColor, dirt, splat.g);
 	fragColor += mix(fragColor, rock, splat.b);
 	fragColor += mix(fragColor, dirt, splat.a);
-	fragColor = vec4(mix(grass*0.3,  fragColor, height.r-0.2).rgb, 1.0);
+	fragColor = vec4(mix(grass*height.r,  fragColor, height.r-0.2).rgb, 1.0);
 
 
 	// fragColor = red   * (0.0 - splat.r) +

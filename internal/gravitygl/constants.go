@@ -1547,3 +1547,8 @@ const (
 	FILL  = 0x1B02
 	POINT = 0x1B00
 )
+
+const (
+	RGBA32F = 0x8814
+	RGBA8   = 0x8058
+)

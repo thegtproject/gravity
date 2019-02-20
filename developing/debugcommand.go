@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/thegtproject/gravity"
 )
 
@@ -12,19 +10,19 @@ var lastDebugCommand gravity.Button
 func processDebugCommandKey(btn gravity.Button) {
 	checkLast := func(msg string) {
 		if btn != lastDebugCommand {
-			fmt.Println(msg)
+			Log.Println(msg)
 		}
 	}
 
 	switch btn {
 	case gravity.KeyC:
 		checkLast("Camera Location")
-		fmt.Println("Position:")
-		fmt.Println(cam.GetPosition())
-		fmt.Println("Orientation:")
-
-		fmt.Println("--------------------")
-		fmt.Println(terrain.GetPosition())
+		Log.Println("Position:")
+		Log.Println(cam.GetPosition())
+		Log.Println("Orientation:")
+		Log.Println(cam.GetRotation())
+		Log.Println("--------------------")
+		Log.Println(terrain.GetPosition())
 		debugCommandMode = false
 		gravity.Unpress(btn)
 		btn = gravity.Button(0)
@@ -32,9 +30,9 @@ func processDebugCommandKey(btn gravity.Button) {
 		checkLast("exit debug command mode")
 		debugCommandMode = false
 		gravity.Unpress(btn)
+
 	default:
-		fmt.Println("unknown")
-		fmt.Print("debug cmd: ")
+
 		gravity.Unpress(btn)
 	}
 

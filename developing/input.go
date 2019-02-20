@@ -1,17 +1,21 @@
 package main
 
 import (
-	"fmt"
+	"math"
+
+	"github.com/westphae/quaternion"
 
 	"github.com/thegtproject/gravity"
 	"github.com/thegtproject/gravity/internal/gravitygl"
+	"github.com/thegtproject/gravity/math/mgl32"
 )
 
 var lastx, lasty float32
-var fovy float32 = 55
 
 var moveFactor = float32(55.0)
 var polygonMode = gravitygl.FILL
+
+var skipinput = false
 
 func handleInput(dt float32) {
 	if checkDebugCommand() {
@@ -30,27 +34,24 @@ func handleInput(dt float32) {
 
 	if gravity.JustPressed(gravity.KeyF1) {
 		gravity.SetCaptureMode(!gravity.Captured())
+
 	}
 
 	if gravity.JustPressed(gravity.KeyF2) {
 		if polygonMode == gravitygl.LINE {
 			gravitygl.PolygonMode(gravitygl.FRONT_AND_BACK, gravitygl.FILL)
 			polygonMode = gravitygl.FILL
+			GUIConsole.Println("Wireframe: Off")
 		} else {
 			gravitygl.PolygonMode(gravitygl.FRONT_AND_BACK, gravitygl.LINE)
 			polygonMode = gravitygl.LINE
+			GUIConsole.Println("Wireframe: On")
 		}
 	}
 
-	if gravity.Mouse.Scroll[1] != 0 {
-		if gravity.Pressed(gravity.KeyLeftAlt) {
-			moveFactor += gravity.Mouse.Scroll[1] * 2
-		} else {
-			fovy += gravity.Mouse.Scroll[1]
-			cam.ChangePerspective(fovy, 800/600, 0.1, 10000)
-		}
-	}
+	if gravity.JustPressed(gravity.Key8) {
 
+	}
 	if gravity.JustPressed(gravity.KeyEscape) {
 		if gravity.Captured() {
 			gravity.SetCaptureMode(!gravity.Captured())
@@ -60,27 +61,30 @@ func handleInput(dt float32) {
 		}
 	}
 
-	if gravity.Pressed(gravity.KeyE) {
-		linewidget.TranslateZ(1)
+	if gravity.Pressed(gravity.Key1) {
+		terrain.Scalef(1.1)
+	}
+	if gravity.Pressed(gravity.Key2) {
+		terrain.Scalef(0.9)
+	}
+	if gravity.JustPressed(gravity.Key3) {
+		Log.Println(cam.GetPosition())
+		Log.Println(cam.GetRotation())
+		Log.Println(terrain.GetScale())
+	}
+
+	if gravity.Pressed(gravity.KeyT) {
+		Log.Println("testing....", cam.GetPosition())
 	}
 
 	if gravity.JustPressed(gravity.KeyQ) {
-
+		Log.Println("--------")
+		Log.Println("cam rot:  ", cam.GetRotation(), "  ", QTE(cam.GetRotation()))
+		// Log.Println("quad rot: ", quad.GetRotation(), "  ", QTE(quad.GetRotation()))
 	}
 
-	if gravity.Pressed(gravity.Key1) {
-
-	}
-	if gravity.Pressed(gravity.Key2) {
-
-	}
-	if gravity.Pressed(gravity.Key3) {
-		cubeb.Scalef(-0.1)
-	}
-	if gravity.Pressed(gravity.Key4) {
-		cubeb.Scalef(0.1)
-	}
-
+	//	quadrot = mgl32.AnglesToQuat(yaw, pitch, 0, mgl32.ZXZ).Mul(quadrot)
+	//	terrain.SetRotation(quadrot)
 	if gravity.Pressed(gravity.KeyW) {
 		cam.MoveForward(dt * moveFactor)
 	}
@@ -101,25 +105,40 @@ func handleInput(dt float32) {
 		cam.MoveDown(dt * moveFactor)
 	}
 
-	var zz float32 = 10
-	if gravity.JustPressed(gravity.KeyLeft) {
-		cam.Push(0, zz)
-	}
-	if gravity.JustPressed(gravity.KeyRight) {
-		cam.Push(0, -zz)
-	}
-	if gravity.JustPressed(gravity.KeyUp) {
-		cam.Push(-zz, 0)
-	}
-	if gravity.JustPressed(gravity.KeyDown) {
-		cam.Push(zz, 0)
-	}
-
 	if gravity.JustPressed(gravity.KeyGrave) {
 		debugCommandMode = true
-		fmt.Print("debug command: ")
+		Log.Print("debug command: ")
 	}
 
 	lastx = gravity.Mouse.Delta[0]
 	lasty = gravity.Mouse.Delta[1]
+}
+
+func deg2quat(yaw, pitch float32) mgl32.Quat {
+	var s [3]float64
+	var c [3]float64
+
+	s[0], c[0] = 0, 1
+	s[1], c[1] = math.Sincos(float64(yaw * float32(math.Pi) / 180 / 2))
+	s[2], c[2] = math.Sincos(float64(pitch * float32(math.Pi) / 180 / 2))
+
+	return mgl32.Quat{
+		W: float32(c[0]*c[1]*c[2] - s[0]*c[1]*s[2]),
+		V: mgl32.Vec3{
+			float32(c[0]*c[1]*s[2] + s[0]*c[1]*c[2]),
+			float32(c[0]*s[1]*s[2] - s[0]*s[1]*c[2]),
+			float32(c[0]*s[1]*c[2] + s[0]*s[1]*s[2]),
+		},
+	}
+}
+
+func QTE(q mgl32.Quat) [3]float32 {
+	qq := quaternion.Quaternion{
+		W: float64(q.W),
+		X: float64(q.V[0]),
+		Y: float64(q.V[1]),
+		Z: float64(q.V[2]),
+	}
+	a, b, c := quaternion.Euler(qq)
+	return [3]float32{gravity.R2D(float32(a)), gravity.R2D(float32(b)), gravity.R2D(float32(c))}
 }

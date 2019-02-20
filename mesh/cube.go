@@ -75,7 +75,7 @@ var cubePositions = []float32{
 	0.5, 0.5, 0.5,
 }
 
-var cubeIndices = []uint16{
+var cubeIndices = []uint32{
 	// front
 	0, 1, 2,
 	2, 3, 0,

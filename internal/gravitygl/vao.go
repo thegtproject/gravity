@@ -2,7 +2,7 @@ package gravitygl
 
 // VertexArray ...
 type VertexArray struct {
-	Triangles  *[]uint16
+	Triangles  *[]uint32
 	Attributes []*Attribute
 	id         uint32
 	buffer     *Buffer

@@ -19,7 +19,7 @@ func (s *Scene) Render() {
 
 		obj.Prepare()
 
-		gravitygl.DrawElements(baseObj.Primitive, baseObj.vao.Length(), gravitygl.UNSIGNED_SHORT, 0)
+		gravitygl.DrawElements(baseObj.Primitive, baseObj.vao.Length(), gravitygl.UNSIGNED_INT, 0)
 
 	}
 }

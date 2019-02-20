@@ -8,7 +8,7 @@ import (
 // NewSphere ...
 func NewSphere(radius float32, slices, stacks int) *Mesh {
 	var (
-		indices   []uint16
+		indices   []uint32
 		positions []float32
 		colors    []float32
 		coords    []float32
@@ -37,13 +37,13 @@ func NewSphere(radius float32, slices, stacks int) *Mesh {
 	}
 
 	for i := 0; i < slices*stacks+slices; i++ {
-		indices = append(indices, uint16(i))
-		indices = append(indices, uint16(i+slices+1))
-		indices = append(indices, uint16(i+slices))
+		indices = append(indices, uint32(i))
+		indices = append(indices, uint32(i+slices+1))
+		indices = append(indices, uint32(i+slices))
 
-		indices = append(indices, uint16(i+slices+1))
-		indices = append(indices, uint16(i))
-		indices = append(indices, uint16(i+1))
+		indices = append(indices, uint32(i+slices+1))
+		indices = append(indices, uint32(i))
+		indices = append(indices, uint32(i+1))
 	}
 
 	for i := 0; i < len(positions)/3; i++ {

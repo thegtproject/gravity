@@ -23,7 +23,7 @@ type Camera struct {
 // NewCamera ...
 func NewCamera(options ...CameraOption) *Camera {
 	cam := &Camera{
-		ProjectionMatrix: mgl32.Perspective(D2R(55), 800/600, 0.1, 10000),
+		ProjectionMatrix: mgl32.Perspective(D2R(55), 1920/1080, 0.1, 10000),
 		Transformer:      components.NewTransformer(),
 		up:               mgl32.Vec3{0, 1, 0},
 		worldUp:          mgl32.Vec3{0, 0, 1},
@@ -154,7 +154,7 @@ func Rotate(yaw, pitch float32) CameraOption {
 		} else if pitch < 0.0 {
 			pitch = 0.0
 		}
-		c.yaw = Mod(yaw, 360)
-		c.pitch = pitch
+		c.dyaw = Mod(yaw, 360)
+		c.dpitch = pitch
 	}
 }

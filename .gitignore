@@ -4,3 +4,4 @@ debug
 *.trace
 developing/save
 developing/imgui.ini
+libs

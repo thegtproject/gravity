@@ -9,8 +9,24 @@ import (
 
 // Window ...
 var window *Window
-
 var running bool
+
+// Log ...
+var Log = struct {
+	Print   func(a ...interface{})
+	Printf  func(format string, a ...interface{})
+	Println func(a ...interface{})
+}{
+	Print: func(a ...interface{}) {
+		fmt.Print(a...)
+	},
+	Printf: func(format string, a ...interface{}) {
+		fmt.Printf(format, a...)
+	},
+	Println: func(a ...interface{}) {
+		fmt.Println(a...)
+	},
+}
 
 // Config ...
 type Config struct {
@@ -21,8 +37,8 @@ type Config struct {
 
 // Init ...
 func Init(cfg Config) {
-	fmt.Print("Gravity - ", Version, "\n\n")
-	println("Gravity.Init()")
+	Log.Print("Gravity - ", Version, "\n\n")
+	Log.Println("Gravity.Init()")
 
 	initglfw()
 	createWindow(cfg.Title, cfg.Width, cfg.Height)
@@ -63,31 +79,36 @@ func initgl() {
 	}
 }
 
+// GetWindow ...
+func GetWindow() *Window {
+	return window
+}
+
 // Run ...
 func Run(run func()) {
-	println("Gravity.Run()")
+	Log.Println("Gravity.Run()")
 	run()
 }
 
 // Running ...
 func Running() bool {
-	return !window.glfwWin.ShouldClose()
+	return !window.GlfwWin.ShouldClose()
 }
 
 // Stop ...
 func Stop() {
-	window.glfwWin.SetShouldClose(true)
+	window.GlfwWin.SetShouldClose(true)
 }
 
 // Update ...
 func Update() {
-	window.glfwWin.SwapBuffers()
+	window.GlfwWin.SwapBuffers()
 	glfw.PollEvents()
 	UpdateInput()
 }
 
 func initCallbacks() {
-	window.glfwWin.SetKeyCallback(
+	window.GlfwWin.SetKeyCallback(
 		func(_ *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mod glfw.ModifierKey) {
 			if key == glfw.KeyUnknown {
 				return
@@ -99,9 +120,9 @@ func initCallbacks() {
 				onButtonRelease(int(key))
 			}
 		})
-	window.glfwWin.SetFocusCallback(window.onFocusChange)
-	window.glfwWin.SetCursorPosCallback(OnMouseMove)
-	window.glfwWin.SetMouseButtonCallback(func(_ *glfw.Window, btn glfw.MouseButton, action glfw.Action, mod glfw.ModifierKey) {
+	window.GlfwWin.SetFocusCallback(window.onFocusChange)
+	window.GlfwWin.SetCursorPosCallback(OnMouseMove)
+	window.GlfwWin.SetMouseButtonCallback(func(_ *glfw.Window, btn glfw.MouseButton, action glfw.Action, mod glfw.ModifierKey) {
 		switch action {
 		case glfw.Press:
 			onButtonPress(int(btn))
@@ -110,7 +131,7 @@ func initCallbacks() {
 		}
 	})
 
-	window.glfwWin.SetScrollCallback(OnMouseScroll)
+	window.GlfwWin.SetScrollCallback(OnMouseScroll)
 
 }
 func createWindow(title string, width int, height int) {
@@ -130,6 +151,6 @@ func createWindow(title string, width int, height int) {
 	window = &Window{
 		Width:   float32(width),
 		Height:  float32(height),
-		glfwWin: win,
+		GlfwWin: win,
 	}
 }

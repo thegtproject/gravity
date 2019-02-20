@@ -6,7 +6,7 @@ import (
 
 // Mesh ...
 type Mesh struct {
-	Indices   []uint16
+	Indices   []uint32
 	Positions []float32
 	Colors    []float32
 	Coords    []float32
@@ -127,7 +127,7 @@ func (m *Mesh) GenerateBoundingBoxMeshSolid() *Mesh {
 			maxx, maxy, maxz,
 		},
 
-		Indices: []uint16{
+		Indices: []uint32{
 			0, 1, 2, 2, 1, 3,
 			4, 5, 6, 6, 5, 7,
 			8, 9, 10, 10, 9, 11,
@@ -218,7 +218,7 @@ func (m *Mesh) GenerateBoundingBoxMeshWireframe() *Mesh {
 			minx, maxy, maxz,
 		},
 
-		Indices: []uint16{
+		Indices: []uint32{
 			0, 1, 1, 2, 2, 3, 3, 0,
 			4, 5, 5, 6, 6, 7, 7, 4,
 			0, 4, 1, 5, 2, 6, 3, 7,

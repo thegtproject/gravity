@@ -7,7 +7,7 @@ import (
 // Window ...
 type Window struct {
 	Width, Height float32
-	glfwWin       *glfw.Window
+	GlfwWin       *glfw.Window
 
 	focused bool
 }
@@ -25,10 +25,11 @@ func (win *Window) Captured() bool {
 // SetCaptureMode ...
 func SetCaptureMode(b bool) {
 	if b {
-		window.glfwWin.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+		window.GlfwWin.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	} else {
-		window.glfwWin.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
+		window.GlfwWin.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 	}
+	Callbacks.CaptureModeOnChange(b)
 }
 
 func (win *Window) onFocusChange(w *glfw.Window, focused bool) {
@@ -39,5 +40,5 @@ func (win *Window) onFocusChange(w *glfw.Window, focused bool) {
 }
 
 func (win *Window) glfwCursorDisabled() bool {
-	return win.glfwWin.GetInputMode(glfw.CursorMode) == glfw.CursorDisabled
+	return win.GlfwWin.GetInputMode(glfw.CursorMode) == glfw.CursorDisabled
 }

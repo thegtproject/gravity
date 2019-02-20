@@ -12,8 +12,13 @@ var _ = png.BestCompression
 var _ = jpeg.DefaultQuality
 
 // TextureDataFromImage ...
+// GL texture data really should aways be 4 wide (rgba). Fix this
+// function to convert it if necessary.
 func TextureDataFromImage(img image.Image) *image.RGBA {
 	rgba := image.NewRGBA(img.Bounds())
+
+	// TODO: Make sure image is power of 2
+
 	draw.Draw(rgba, rgba.Bounds(), img, img.Bounds().Min, draw.Src)
 	verticalFlip(rgba)
 	return rgba

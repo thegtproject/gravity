@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/thegtproject/gravity/math/mgl32"
+
 	"github.com/thegtproject/gravity/internal/gravitygl"
 )
 
@@ -56,14 +58,15 @@ func loadDefaultMaterialPrograms() {
 		"singlecolor",
 		"none",
 		"textest",
+		"terrain",
 	}
 
-	fmt.Print("loading default material programs: ")
+	Log.Print("loading default material programs: ")
 	for _, n := range defaultMaterialNames {
-		fmt.Print(n, ", ")
+		Log.Print(n, ", ")
 		loadMaterialProgram(n)
 	}
-	fmt.Println("")
+	Log.Println("")
 }
 
 func loadMaterialProgram(name string) {
@@ -78,4 +81,28 @@ func loadMaterialProgram(name string) {
 		panic(err)
 	}
 	addMaterialProgram(name, string(v), string(f))
+}
+
+// UniformSubmission ...
+type UniformSubmission struct {
+	Type gravitygl.Enum
+	Loc  int32
+	Data interface{}
+}
+
+// SubmitUniforms ...
+func (mat *BaseMaterial) SubmitUniforms(ulist []UniformSubmission) {
+	for _, u := range ulist {
+		switch u.Type {
+		case gravitygl.FLOAT_MAT4:
+			data := *u.Data.(*mgl32.Mat4)
+			gravitygl.UniformMatrix4fv(u.Loc, data)
+		case gravitygl.SAMPLER_2D:
+			data := u.Data.(*Texture)
+
+			gravitygl.ActiveTexture(data.Unit)
+			gravitygl.BindTexture(data.target, data.textureid)
+			gravitygl.Uniform1i(u.Loc, int32(data.Unit))
+		}
+	}
 }

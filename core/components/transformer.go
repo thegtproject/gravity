@@ -38,8 +38,13 @@ func (t *Transformer) UpdateTransform() {
 }
 
 // GetTransformMatrix ...
-func (t *Transformer) GetTransformMatrix() mgl32.Mat4 {
-	return t.matrix
+func (t *Transformer) GetTransformMatrix() *mgl32.Mat4 {
+	return &t.matrix
+}
+
+// GetRotation ...
+func (t *Transformer) GetRotation() mgl32.Quat {
+	return t.rot
 }
 
 // GetPosition ...
@@ -96,6 +101,11 @@ func (t *Transformer) TranslateZ(d float32) {
 // func (t *Transformer) Rotate(q mgl32.Quat) {
 // 	t.rot = q.Mul(t.rot)
 // }
+
+// GetScale ...
+func (t *Transformer) GetScale() mgl32.Vec3 {
+	return t.scale
+}
 
 // Scale ...
 func (t *Transformer) Scale(v mgl32.Vec3) {

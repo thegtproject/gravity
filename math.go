@@ -90,6 +90,16 @@ func Sincos(x float32) (sin, cos float32) {
 	return float32(s), float32(c)
 }
 
+// QuatToEuler ...
+func QuatToEuler(q mgl32.Quat) mgl32.Vec3 {
+
+	// phi := math.Atan2(2*(r.W*r.X+r.Y*r.Z), 1-2*(r.X*r.X+r.Y*r.Y))
+	// theta := math.Asin(2 * (r.W*r.Y - r.Z*r.X))
+	// psi := math.Atan2(2*(r.X*r.Y+r.W*r.Z), 1-2*(r.Y*r.Y+r.Z*r.Z))
+	// return phi, theta, psi
+	return mgl32.Vec3{}
+}
+
 func deg2quat(yaw, pitch float32) mgl32.Quat {
 	var s [3]float64
 	var c [3]float64

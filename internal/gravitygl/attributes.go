@@ -34,8 +34,8 @@ func validateDataInterface(data interface{}) *data {
 	switch data.(type) {
 	case []float32:
 		return newData(data, GLFloat)
-	case []uint16:
-		return newData(data, GLUnsignedShort)
+	case []uint32:
+		return newData(data, GLUnsignedInt32)
 	default:
 		panic("invalid data type for attribute")
 	}

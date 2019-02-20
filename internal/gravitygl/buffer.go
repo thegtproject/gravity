@@ -35,8 +35,9 @@ func NewBuffer(target GLUint32, usage GLUint32, data interface{}) *Buffer {
 	switch data.(type) {
 	case []float32:
 		xtype = FLOAT
-	case []uint16:
-		xtype = UNSIGNED_SHORT
+	case []uint32:
+
+		xtype = UNSIGNED_INT
 	default:
 
 		panic("unknown data type")

@@ -1,60 +1,45 @@
 package gravitygl
 
 import (
-	"image"
+	"unsafe"
 
 	"github.com/go-gl/gl/v4.3-compatibility/gl"
 )
 
-// MakeTextureImg ...
-func MakeTextureImg(img image.NRGBA) uint32 {
-	tex := CreateTexture()
+// // MakeTextureImg ...
+// func MakeTextureImg(img image.NRGBA) uint32 {
+// 	tex := CreateTexture()
 
-	ActiveTexture(TEXTURE0)
-	BindTexture(tex)
+// 	ActiveTexture(TEXTURE0)
+// 	BindTexture(TEXTURE_2D, tex)
 
-	width := int32(img.Bounds().Dx())
-	height := int32(img.Bounds().Dy())
+// 	width := int32(img.Bounds().Dx())
+// 	height := int32(img.Bounds().Dy())
 
-	gl.TexImage2D(
-		TEXTURE_2D,
-		0,
-		RGBA,
-		width,
-		height,
-		0,
-		RGBA,
-		UNSIGNED_BYTE,
-		gl.Ptr(img.Pix),
-	)
+// 	gl.TexImage2D(
+// 		TEXTURE_2D,
+// 		0,
+// 		RGBA,
+// 		width,
+// 		height,
+// 		0,
+// 		RGBA,
+// 		UNSIGNED_BYTE,
+// 		gl.Ptr(img.Pix),
+// 	)
 
-	TexParameteri(tex, TEXTURE_WRAP_S, CLAMP_TO_EDGE)
-	TexParameteri(tex, TEXTURE_WRAP_T, CLAMP_TO_EDGE)
-	TexParameteri(tex, TEXTURE_MIN_FILTER, LINEAR)
-	TexParameteri(tex, TEXTURE_MAG_FILTER, LINEAR)
+// 	TexParameteri(tex, TEXTURE_WRAP_S, CLAMP_TO_EDGE)
+// 	TexParameteri(tex, TEXTURE_WRAP_T, CLAMP_TO_EDGE)
+// 	TexParameteri(tex, TEXTURE_MIN_FILTER, LINEAR)
+// 	TexParameteri(tex, TEXTURE_MAG_FILTER, LINEAR)
 
-	//GenerateMipmap(TEXTURE_2D)
-	return tex
-}
+// 	//GenerateMipmap(TEXTURE_2D)
+// 	return tex
+// }
 
-// MakeTexture ...
-func MakeTexture(w, h int32) uint32 {
-
-	tex := CreateTexture()
-
-	BindTexture(tex)
-
-	gl.TexImage2D(
-		gl.TEXTURE_2D, 0, gl.RGB, w, h, 0, gl.RGB, gl.UNSIGNED_BYTE, nil,
-	)
-
-	TexParameteri(tex, TEXTURE_WRAP_S, REPEAT)
-	TexParameteri(tex, TEXTURE_WRAP_T, REPEAT)
-	TexParameteri(tex, TEXTURE_MIN_FILTER, LINEAR)
-	TexParameteri(tex, TEXTURE_MAG_FILTER, LINEAR)
-
-	GenerateMipmap(TEXTURE_2D)
-	return tex
+// TexImage2D ...
+func TexImage2D(target uint32, level int32, internalformat int32, width int32, height int32, border int32, format uint32, xtype uint32, pixels unsafe.Pointer) {
+	gl.TexImage2D(target, level, internalformat, width, height, border, format, xtype, pixels)
 }
 
 // CreateTexture ...
@@ -65,13 +50,13 @@ func CreateTexture() uint32 {
 }
 
 // ActiveTexture ...
-func ActiveTexture(tex uint32) {
-	gl.ActiveTexture(tex)
+func ActiveTexture(unit uint32) {
+	gl.ActiveTexture(TEXTURE0 + unit)
 }
 
 // BindTexture ...
-func BindTexture(tex uint32) {
-	gl.BindTexture(gl.TEXTURE_2D, tex)
+func BindTexture(target, tex uint32) {
+	gl.BindTexture(target, tex)
 }
 
 // TexParameteri ...
@@ -89,4 +74,9 @@ func FramebufferTexture2D(tex uint32) {
 	gl.FramebufferTexture2D(
 		gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0,
 	)
+}
+
+// PixelStorei ...
+func PixelStorei(pname uint32, param int32) {
+	gl.PixelStorei(pname, param)
 }

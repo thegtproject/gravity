@@ -6,11 +6,11 @@ import "fmt"
 type Attribute struct {
 	buffer *Buffer
 	usage  uint32
-	data   *data
+	data   *datainfo
 	size   int32
 }
 
-type data struct {
+type datainfo struct {
 	data     interface{}
 	dataType DataType
 }
@@ -30,7 +30,7 @@ func (attr *Attribute) Dump() {
 	fmt.Println("data:", attr.data)
 }
 
-func validateDataInterface(data interface{}) *data {
+func validateDataInterface(data interface{}) *datainfo {
 	switch data.(type) {
 	case []float32:
 		return newData(data, GLFloat)
@@ -41,8 +41,8 @@ func validateDataInterface(data interface{}) *data {
 	}
 }
 
-func newData(d interface{}, dataType DataType) *data {
-	return &data{
+func newData(d interface{}, dataType DataType) *datainfo {
+	return &datainfo{
 		data:     d,
 		dataType: dataType,
 	}

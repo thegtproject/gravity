@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/thegtproject/gravity/pkg/core/texture"
 	"github.com/thegtproject/gravity/pkg/math/mgl32"
 
 	"github.com/thegtproject/gravity/internal/gravitygl"
@@ -102,10 +103,10 @@ func (mat *BaseMaterial) SubmitUniforms(ulist []UniformSubmission) {
 			data := *u.Data.(*mgl32.Mat4)
 			gravitygl.UniformMatrix4fv(u.Loc, data)
 		case gravitygl.SAMPLER_2D:
-			data := u.Data.(*Texture)
+			data := u.Data.(*texture.Texture)
 
 			gravitygl.ActiveTexture(data.Unit)
-			gravitygl.BindTexture(data.target, data.textureid)
+			gravitygl.BindTexture(data.Target, data.Textureid)
 			gravitygl.Uniform1i(u.Loc, int32(data.Unit))
 		}
 	}

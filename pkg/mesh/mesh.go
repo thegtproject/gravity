@@ -1,6 +1,7 @@
 package mesh
 
 import (
+	"github.com/thegtproject/gravity/pkg/core/texture"
 	"github.com/thegtproject/gravity/pkg/math/mgl32"
 )
 
@@ -11,6 +12,8 @@ type Mesh struct {
 	Colors    []float32
 	Coords    []float32
 	Normals   []float32
+	Textures  []*texture.Texture
+	Target    []int32
 }
 
 // NewMesh ...

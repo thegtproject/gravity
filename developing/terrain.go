@@ -2,16 +2,17 @@ package main
 
 import (
 	"github.com/thegtproject/gravity"
+	"github.com/thegtproject/gravity/internal/gravitygl"
 	"github.com/thegtproject/gravity/pkg/materials"
 	"github.com/thegtproject/gravity/pkg/mesh"
 )
 
 func configureTerrain() {
-	splatmap := gravity.NewTextureFromFile("assets/terr/splatmap.png")
-	heightmap := gravity.NewTextureFromFile("assets/terr/height.png")
-	dirt := gravity.NewTextureFromFile("../assets/textures/terrain/dirt05.jpg")
-	rock := gravity.NewTextureFromFile("../assets/textures/terrain/rock.jpg")
-	grass := gravity.NewTextureFromFile("../assets/textures/terrain/grass.jpg")
+	splatmap := gravitygl.NewTextureFromFile("assets/terr/splatmap.png")
+	heightmap := gravitygl.NewTextureFromFile("assets/terr/height.png")
+	dirt := gravitygl.NewTextureFromFile("../assets/textures/terrain/dirt05.jpg")
+	rock := gravitygl.NewTextureFromFile("../assets/textures/terrain/rock.jpg")
+	grass := gravitygl.NewTextureFromFile("../assets/textures/terrain/grass.jpg")
 
 	splatmap.Unit = 0
 	heightmap.Unit = 1
@@ -19,11 +20,11 @@ func configureTerrain() {
 	rock.Unit = 3
 	grass.Unit = 4
 
-	splatmap.UploadToGPU()
-	heightmap.UploadToGPU()
-	dirt.UploadToGPU()
-	rock.UploadToGPU()
-	grass.UploadToGPU()
+	gravitygl.UploadToGPU(splatmap)
+	gravitygl.UploadToGPU(heightmap)
+	gravitygl.UploadToGPU(dirt)
+	gravitygl.UploadToGPU(rock)
+	gravitygl.UploadToGPU(grass)
 
 	terrain = gravity.NewModel(mesh.FromGob("assets/terr/terrain.obj"), materials.NewTerrain(), cam)
 

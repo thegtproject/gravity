@@ -168,6 +168,11 @@ func NewTextureFromImage(target uint32, img ...image.Image) *texture.Texture {
 		Mips:           0,
 		Format:         RGBA8,
 		Originalformat: RGBA,
+		WrapS:          CLAMP_TO_EDGE,
+		WrapT:          CLAMP_TO_EDGE,
+		WrapR:          CLAMP_TO_EDGE,
+		MinFilter:      LINEAR,
+		MagFilter:      LINEAR,
 	}
 	for _, im := range img {
 		t.Imgdata = append(t.Imgdata, NewImageDataFromImage(im))

@@ -19,15 +19,16 @@ func setupscene() {
 
 	cam = DefaultScene.SetCamera(
 		gravity.NewCamera(
-			// camera options
-			gravity.Position(0, -100, -10),
+		// camera options
+		// gravity.Position(0, -100, -10),
 		))
 	cam.Push(90, 0)
-	//configureTerrain()
-	configureSkybox()
 
-	//DefaultScene.Import(terrain)
+	configureSkybox()
 	DefaultScene.Import(skybox)
+
+	configureTerrain()
+	DefaultScene.Import(terrain)
 
 	run()
 }

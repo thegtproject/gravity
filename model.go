@@ -1,6 +1,8 @@
 package gravity
 
 import (
+	"fmt"
+
 	"github.com/thegtproject/gravity/internal/gravitygl"
 	"github.com/thegtproject/gravity/pkg/math/mgl32"
 	"github.com/thegtproject/gravity/pkg/mesh"
@@ -56,6 +58,7 @@ func NewModel(m *mesh.Mesh, material Material, cam *Camera) *Model {
 
 // AddUniform ...
 func (model *Model) AddUniform(name string, data interface{}) {
+	fmt.Println("Adding:", name, "\n", data, "\n", "---------------------------")
 	for _, u := range model.Mat.GetBaseMaterial().Program.Uniforms {
 		if u.Name == name && u.Loc > -1 {
 			model.uniformSubmitList = append(model.uniformSubmitList,
@@ -63,11 +66,13 @@ func (model *Model) AddUniform(name string, data interface{}) {
 					Type: u.Type,
 					Loc:  u.Loc,
 					Data: data,
-				})
+				},
+			)
+			fmt.Println("Added:", u.Name, "Loc:", u.Loc, "data:\n", data)
 			return
 		}
 	}
-	Log.Printf("model.adduniform: error: \"%s\" does not exist\n", name)
+	fmt.Printf("model.adduniform: error: \"%s\" does not exist\n", name)
 }
 
 // Renderable ...

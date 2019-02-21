@@ -60,6 +60,7 @@ func loadDefaultMaterialPrograms() {
 		"none",
 		"textest",
 		"terrain",
+		"skybox",
 	}
 
 	Log.Print("loading default material programs: ")
@@ -104,10 +105,33 @@ func (mat *BaseMaterial) SubmitUniforms(ulist []UniformSubmission) {
 			gravitygl.UniformMatrix4fv(u.Loc, data)
 		case gravitygl.SAMPLER_2D:
 			data := u.Data.(*texture.Texture)
-
+			gravitygl.ActiveTexture(data.Unit)
+			gravitygl.BindTexture(data.Target, data.Textureid)
+			gravitygl.Uniform1i(u.Loc, int32(data.Unit))
+		case gravitygl.SAMPLER_CUBE:
+			data := u.Data.(*texture.Texture)
+			if ShowUniform {
+				Log.Println(
+					"Unit:", gravitygl.Enum(data.Unit), "\n",
+					"ID:", gravitygl.Enum(data.ID), "\n",
+					"Textureid:", gravitygl.Enum(data.Textureid), "\n",
+					"Target:", gravitygl.Enum(data.Target), "\n",
+					"Mips:", gravitygl.Enum(data.Mips), "\n",
+					"Format:", gravitygl.Enum(data.Format), "\n",
+					"Originalformat:", gravitygl.Enum(data.Originalformat), "\n",
+					"MagFilter:", gravitygl.Enum(data.MagFilter), "\n",
+					"MinFilter:", gravitygl.Enum(data.MinFilter), "\n",
+					"WrapS:", gravitygl.Enum(data.WrapS), "\n",
+					"WrapT:", gravitygl.Enum(data.WrapT), "\n",
+					"---------------------------",
+				)
+				ShowUniform = false
+			}
 			gravitygl.ActiveTexture(data.Unit)
 			gravitygl.BindTexture(data.Target, data.Textureid)
 			gravitygl.Uniform1i(u.Loc, int32(data.Unit))
 		}
 	}
 }
+
+var ShowUniform bool

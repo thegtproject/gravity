@@ -22,7 +22,7 @@ func processDebugCommandKey(btn gravity.Button) {
 		Log.Println("Orientation:")
 		Log.Println(cam.GetRotation())
 		Log.Println("--------------------")
-		Log.Println(terrain.GetPosition())
+		//		Log.Println(terrain.GetPosition())
 		debugCommandMode = false
 		gravity.Unpress(btn)
 		btn = gravity.Button(0)

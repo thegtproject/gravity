@@ -73,8 +73,8 @@ func handleInput(dt float32) {
 		Log.Println(terrain.GetScale())
 	}
 
-	if gravity.Pressed(gravity.KeyT) {
-		Log.Println("testing....", cam.GetPosition())
+	if gravity.JustPressed(gravity.KeyT) {
+		gravity.ShowUniform = true
 	}
 
 	if gravity.JustPressed(gravity.KeyQ) {

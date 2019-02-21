@@ -4,7 +4,6 @@ import (
 	"image"
 	"image/jpeg"
 	"image/png"
-	"os"
 	"unsafe"
 
 	"github.com/go-gl/gl/v4.3-compatibility/gl"
@@ -89,6 +88,25 @@ func PixelStorei(pname uint32, param int32) {
 
 var _, _ = png.BestSpeed, jpeg.DefaultQuality
 
+// NewImageDataFromImage ...
+func NewImageDataFromImage(img image.Image) *texture.ImageData {
+	return &texture.ImageData{
+		RGBA: data.TextureDataFromImage(img),
+		H:    int32(img.Bounds().Dx()),
+		W:    int32(img.Bounds().Dy()),
+	}
+}
+
+// NewImageDataFromFile ...
+func NewImageDataFromFile(filename string) *texture.ImageData {
+	img := data.TextureRGBAFromFile(filename)
+	return &texture.ImageData{
+		RGBA: img,
+		H:    int32(img.Bounds().Dx()),
+		W:    int32(img.Bounds().Dy()),
+	}
+}
+
 // UploadToGPU ...
 func UploadToGPU(t *texture.Texture) {
 
@@ -97,47 +115,63 @@ func UploadToGPU(t *texture.Texture) {
 	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0)
 	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0)
 
-	TexParameteri(t.Textureid, TEXTURE_WRAP_S, REPEAT)
-	TexParameteri(t.Textureid, TEXTURE_WRAP_T, REPEAT)
-	TexParameteri(t.Textureid, TEXTURE_MIN_FILTER, LINEAR)
-	TexParameteri(t.Textureid, TEXTURE_MAG_FILTER, LINEAR)
-
 	// TODO: https://www.khronos.org/opengl/wiki/Image_Formats#Required_formats
-	TexImage2D(t.Target, t.Mips, t.Format, t.Imgdata.W, t.Imgdata.H, 0, t.Originalformat, UNSIGNED_BYTE, unsafe.Pointer(&t.Imgdata.Pix[0]))
+
+	if t.Target == TEXTURE_CUBE_MAP {
+		CubeMapTargets := []uint32{
+			TEXTURE_CUBE_MAP_POSITIVE_X,
+			TEXTURE_CUBE_MAP_NEGATIVE_X,
+			TEXTURE_CUBE_MAP_POSITIVE_Y,
+			TEXTURE_CUBE_MAP_NEGATIVE_Y,
+			TEXTURE_CUBE_MAP_POSITIVE_Z,
+			TEXTURE_CUBE_MAP_NEGATIVE_Z,
+		}
+		for target, imgdata := range t.Imgdata {
+			TexImage2D(
+				CubeMapTargets[target], t.Mips, t.Format,
+				imgdata.W, imgdata.H, 0, t.Originalformat,
+				UNSIGNED_BYTE, unsafe.Pointer(&imgdata.Pix[0]),
+			)
+		}
+	} else {
+		for _, imgdata := range t.Imgdata {
+			TexImage2D(
+				t.Target, t.Mips, t.Format, imgdata.W, imgdata.H, 0,
+				t.Originalformat, UNSIGNED_BYTE, unsafe.Pointer(&imgdata.Pix[0]),
+			)
+		}
+	}
+
+	TexParameteri(t.Textureid, TEXTURE_WRAP_S, t.WrapS)
+	TexParameteri(t.Textureid, TEXTURE_WRAP_T, t.WrapT)
+	TexParameteri(t.Textureid, TEXTURE_WRAP_R, t.WrapR)
+	TexParameteri(t.Textureid, TEXTURE_MIN_FILTER, t.MinFilter)
+	TexParameteri(t.Textureid, TEXTURE_MAG_FILTER, t.MagFilter)
 }
 
 // NewTextureFromFile ...
-func NewTextureFromFile(path string) *texture.Texture {
-	f, err := os.Open(path)
-	if err != nil {
-		panic(err)
+func NewTextureFromFile(target uint32, filename ...string) *texture.Texture {
+	var images []image.Image
+	for _, file := range filename {
+		images = append(images, data.TextureImageFromFile(file))
 	}
-	defer f.Close()
-	img, _, err := image.Decode(f)
-	if err != nil {
-		panic(err)
-	}
-	return NewTextureFromImage(img, gl.TEXTURE_2D)
+	return NewTextureFromImage(target, images...)
 }
 
 // NewTextureFromImage ...
-func NewTextureFromImage(img image.Image, target uint32) *texture.Texture {
+func NewTextureFromImage(target uint32, img ...image.Image) *texture.Texture {
 	t := &texture.Texture{
-		Unit: 0,
-
-		ID: 0,
-		Imgdata: texture.ImageData{
-			RGBA: data.TextureDataFromImage(img),
-			H:    int32(img.Bounds().Dx()),
-			W:    int32(img.Bounds().Dy()),
-		},
+		Unit:           0,
+		ID:             0,
 		Target:         target,
 		Textureid:      CreateTexture(),
 		Mips:           0,
 		Format:         RGBA8,
 		Originalformat: RGBA,
 	}
-
+	for _, im := range img {
+		t.Imgdata = append(t.Imgdata, NewImageDataFromImage(im))
+	}
 	return t
 }
 

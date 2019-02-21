@@ -1403,6 +1403,7 @@ const (
 	TEXTURE_MIN_FILTER                           = 0x2801
 	TEXTURE_WRAP_S                               = 0x2802
 	TEXTURE_WRAP_T                               = 0x2803
+	TEXTURE_WRAP_R                               = 0x8072
 	TEXTURE                                      = 0x1702
 	TEXTURE_CUBE_MAP                             = 0x8513
 	TEXTURE_BINDING_CUBE_MAP                     = 0x8514

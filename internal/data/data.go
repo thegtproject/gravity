@@ -6,6 +6,9 @@ import (
 	"image/jpeg"
 	"image/png"
 	"os"
+	"path/filepath"
+
+	"github.com/ftrvxmtrx/tga"
 )
 
 var _ = png.BestCompression
@@ -24,18 +27,58 @@ func TextureDataFromImage(img image.Image) *image.RGBA {
 	return rgba
 }
 
-// TextureDataFromFile ...
-func TextureDataFromFile(filename string) *image.RGBA {
+// TextureRGBAFromFile ...
+func TextureRGBAFromFile(filename string) *image.RGBA {
 	f, err := os.Open(filename)
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
-	img, _, err := image.Decode(f)
+
+	ext := filepath.Ext(filename)
+	if ext == ".jpeg" || ext == ".jpg" || ext == ".png" {
+		img, _, err := image.Decode(f)
+		if err != nil {
+			panic(err)
+		}
+		return TextureDataFromImage(img)
+	}
+
+	if ext == ".tga" {
+		img, err := tga.Decode(f)
+		if err != nil {
+			panic(err)
+		}
+		return TextureDataFromImage(img)
+	}
+	panic("unsupported texture type")
+}
+
+// TextureImageFromFile ...
+func TextureImageFromFile(filename string) image.Image {
+	f, err := os.Open(filename)
 	if err != nil {
 		panic(err)
 	}
-	return TextureDataFromImage(img)
+	defer f.Close()
+
+	ext := filepath.Ext(filename)
+	if ext == ".jpeg" || ext == ".jpg" || ext == ".png" {
+		img, _, err := image.Decode(f)
+		if err != nil {
+			panic(err)
+		}
+		return img
+	}
+
+	if ext == ".tga" {
+		img, err := tga.Decode(f)
+		if err != nil {
+			panic(err)
+		}
+		return img
+	}
+	panic("unsupported texture type")
 }
 
 func verticalFlip(rgba *image.RGBA) {

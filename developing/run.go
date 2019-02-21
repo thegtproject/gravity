@@ -47,7 +47,7 @@ func run() {
 		cam.Update()
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-		if io.WantCaptureMouse() == false {
+		if io.WantCaptureMouse() == false || gravity.Captured() {
 			handleInput(dt)
 		}
 
@@ -79,9 +79,26 @@ func run() {
 
 func processgui(impl *imguiGlfw3) {
 	impl.NewFrame()
+	euler := QTE(cam.GetRotation())
+	yaw, pitch := cam.GetYawPitch()
+	GUICamera.buf.Reset()
+	GUICamera.Printf(`Camera Orientation:
+
+  Yaw:  %0.2f  Pitch: %0.2f
+  Quaternion: 
+  W: %0.2f X: %0.2f Y: %0.2f Z: %0.2f
+  Euler:
+  %0.2f Y: %0.2f Z: %0.2f
+
+Camera Position:
+  X: %0.2f Y: %0.2f Z: %0.2f
+`,
+		yaw, pitch, cam.GetRotation().W, cam.GetRotation().X(), cam.GetRotation().Y(), cam.GetRotation().Z(), euler[0], euler[1], euler[2], cam.GetPosition()[0], cam.GetPosition()[1], cam.GetPosition()[2],
+	)
 
 	GUIOutput.Render()
 	GUIConsole.Render()
+	GUICamera.Render()
 
 	imgui.EndFrame()
 	imgui.Render()

@@ -4,4 +4,4 @@ package gravity
 //go:generate go run ./developing/tools genversion
 
 // Version ...
-const Version = "ep05-0abaa7 (expirimental/prototyping)"
+const Version = "ep05-2aac50 (expirimental/prototyping)"

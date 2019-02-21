@@ -17,9 +17,35 @@ var polygonMode = gravitygl.FILL
 
 var skipinput = false
 
+var yaww, pitchh float32
+
 func handleInput(dt float32) {
 	if checkDebugCommand() {
 		return
+	}
+
+	if gravity.Pressed(gravity.KeyLeftShift) {
+		moveFactor = 255
+	} else {
+		moveFactor = 55
+	}
+
+	dothing := func(yaw, pitch float32) {
+		y, p := cam.GetYawPitch()
+		cam.DebugSetYawPitch(yaw+y, 0, pitch+p, 0)
+	}
+
+	if gravity.JustPressed(gravity.KeyF8) {
+		dothing(45, 0)
+	}
+	if gravity.JustPressed(gravity.KeyF9) {
+		dothing(-45, 0)
+	}
+	if gravity.JustPressed(gravity.KeyF10) {
+		dothing(0, 45)
+	}
+	if gravity.JustPressed(gravity.KeyF11) {
+		dothing(0, -45)
 	}
 
 	if !gravity.Captured() {
@@ -49,8 +75,12 @@ func handleInput(dt float32) {
 		}
 	}
 
-	if gravity.JustPressed(gravity.Key8) {
+	if gravity.Pressed(gravity.Key8) {
+		linewidget.TranslateZ(25)
+	}
 
+	if gravity.Pressed(gravity.Key9) {
+		linewidget.TranslateZ(-25)
 	}
 	if gravity.JustPressed(gravity.KeyEscape) {
 		if gravity.Captured() {

@@ -100,7 +100,8 @@ func QuatToEuler(q mgl32.Quat) mgl32.Vec3 {
 	return mgl32.Vec3{}
 }
 
-func deg2quat(yaw, pitch float32) mgl32.Quat {
+// Deg2Quat ...
+func Deg2Quat(yaw, pitch float32) mgl32.Quat {
 	var s [3]float64
 	var c [3]float64
 

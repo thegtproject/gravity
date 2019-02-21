@@ -12,6 +12,7 @@ var cam *gravity.Camera
 
 var terrain *gravity.Model
 var skybox *gravity.Model
+var linewidget *gravity.Model
 
 func setupscene() {
 	setgloptions()
@@ -19,16 +20,19 @@ func setupscene() {
 
 	cam = DefaultScene.SetCamera(
 		gravity.NewCamera(
-		// camera options
-		// gravity.Position(0, -100, -10),
+			// camera options
+			gravity.Position(0, 0, 950),
 		))
-	cam.Push(90, 0)
+	// cam.Push(90, 0)
 
 	configureSkybox()
 	DefaultScene.Import(skybox)
 
 	configureTerrain()
 	DefaultScene.Import(terrain)
+
+	configureLinewidget()
+	DefaultScene.Import(linewidget)
 
 	run()
 }

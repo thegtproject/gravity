@@ -20,6 +20,18 @@ type Camera struct {
 	worldUp mgl32.Vec3
 }
 
+func (cam *Camera) DebugSetYawPitch(yaw, dyaw, pitch, dpitch float32) {
+	cam.yaw = yaw
+	cam.dyaw = dyaw
+	cam.pitch = pitch
+	cam.dpitch = dpitch
+	cam.update()
+}
+
+func (cam *Camera) GetYawPitch() (float32, float32) {
+	return cam.yaw, cam.pitch
+}
+
 // NewCamera ...
 func NewCamera(options ...CameraOption) *Camera {
 	cam := &Camera{
@@ -114,6 +126,12 @@ func (cam *Camera) processYawPitchDeltas() {
 	cam.dpitch, cam.dyaw = 0, 0
 }
 
+func (cam *Camera) processYawPitchDeltasNoLock() {
+	cam.pitch = Mod(cam.pitch+cam.dpitch, 360)
+	cam.yaw = Mod(cam.yaw+cam.dyaw, 360)
+	cam.dpitch, cam.dyaw = 0, 0
+}
+
 var (
 	localAxisUp = mgl32.Vec3{0, 0, -1}
 	tmpRot      = mgl32.Quat{}
@@ -126,8 +144,9 @@ func (cam *Camera) calculateLocalAxis() {
 }
 
 func (cam *Camera) update() {
-	cam.processYawPitchDeltas()
-	tmpRot = deg2quat(cam.yaw, cam.pitch)
+	// cam.processYawPitchDeltas()
+	cam.processYawPitchDeltasNoLock()
+	tmpRot = Deg2Quat(cam.yaw, cam.pitch)
 	cam.calculateLocalAxis()
 	cam.SetRotation(tmpRot)
 

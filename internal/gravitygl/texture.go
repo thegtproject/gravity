@@ -1,14 +1,11 @@
 package gravitygl
 
 import (
-	"image"
 	"image/jpeg"
 	"image/png"
 	"unsafe"
 
 	"github.com/go-gl/gl/v4.3-compatibility/gl"
-	"github.com/thegtproject/gravity/internal/data"
-	"github.com/thegtproject/gravity/pkg/core/texture"
 )
 
 // // MakeTextureImg ...
@@ -87,98 +84,6 @@ func PixelStorei(pname uint32, param int32) {
 }
 
 var _, _ = png.BestSpeed, jpeg.DefaultQuality
-
-// NewImageDataFromImage ...
-func NewImageDataFromImage(img image.Image) *texture.ImageData {
-	return &texture.ImageData{
-		RGBA: data.TextureDataFromImage(img),
-		H:    int32(img.Bounds().Dx()),
-		W:    int32(img.Bounds().Dy()),
-	}
-}
-
-// NewImageDataFromFile ...
-func NewImageDataFromFile(filename string) *texture.ImageData {
-	img := data.TextureRGBAFromFile(filename)
-	return &texture.ImageData{
-		RGBA: img,
-		H:    int32(img.Bounds().Dx()),
-		W:    int32(img.Bounds().Dy()),
-	}
-}
-
-// UploadToGPU ...
-func UploadToGPU(t *texture.Texture) {
-
-	ActiveTexture(t.Unit)
-	BindTexture(t.Target, t.Textureid)
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0)
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0)
-
-	// TODO: https://www.khronos.org/opengl/wiki/Image_Formats#Required_formats
-
-	if t.Target == TEXTURE_CUBE_MAP {
-		CubeMapTargets := []uint32{
-			TEXTURE_CUBE_MAP_POSITIVE_X,
-			TEXTURE_CUBE_MAP_NEGATIVE_X,
-			TEXTURE_CUBE_MAP_POSITIVE_Y,
-			TEXTURE_CUBE_MAP_NEGATIVE_Y,
-			TEXTURE_CUBE_MAP_POSITIVE_Z,
-			TEXTURE_CUBE_MAP_NEGATIVE_Z,
-		}
-		for target, imgdata := range t.Imgdata {
-			TexImage2D(
-				CubeMapTargets[target], t.Mips, t.Format,
-				imgdata.W, imgdata.H, 0, t.Originalformat,
-				UNSIGNED_BYTE, unsafe.Pointer(&imgdata.Pix[0]),
-			)
-		}
-	} else {
-		for _, imgdata := range t.Imgdata {
-			TexImage2D(
-				t.Target, t.Mips, t.Format, imgdata.W, imgdata.H, 0,
-				t.Originalformat, UNSIGNED_BYTE, unsafe.Pointer(&imgdata.Pix[0]),
-			)
-		}
-	}
-
-	TexParameteri(t.Textureid, TEXTURE_WRAP_S, t.WrapS)
-	TexParameteri(t.Textureid, TEXTURE_WRAP_T, t.WrapT)
-	TexParameteri(t.Textureid, TEXTURE_WRAP_R, t.WrapR)
-	TexParameteri(t.Textureid, TEXTURE_MIN_FILTER, t.MinFilter)
-	TexParameteri(t.Textureid, TEXTURE_MAG_FILTER, t.MagFilter)
-}
-
-// NewTextureFromFile ...
-func NewTextureFromFile(target uint32, filename ...string) *texture.Texture {
-	var images []image.Image
-	for _, file := range filename {
-		images = append(images, data.TextureImageFromFile(file))
-	}
-	return NewTextureFromImage(target, images...)
-}
-
-// NewTextureFromImage ...
-func NewTextureFromImage(target uint32, img ...image.Image) *texture.Texture {
-	t := &texture.Texture{
-		Unit:           0,
-		ID:             0,
-		Target:         target,
-		Textureid:      CreateTexture(),
-		Mips:           0,
-		Format:         RGBA8,
-		Originalformat: RGBA,
-		WrapS:          CLAMP_TO_EDGE,
-		WrapT:          CLAMP_TO_EDGE,
-		WrapR:          CLAMP_TO_EDGE,
-		MinFilter:      LINEAR,
-		MagFilter:      LINEAR,
-	}
-	for _, im := range img {
-		t.Imgdata = append(t.Imgdata, NewImageDataFromImage(im))
-	}
-	return t
-}
 
 // if(depth_buffer_precision == 16)
 // {

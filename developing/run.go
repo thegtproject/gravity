@@ -5,9 +5,9 @@ import (
 	"runtime/debug"
 	"time"
 
+	imgui "github.com/inkyblackness/imgui-go"
 	"github.com/thegtproject/gravity"
 	gl "github.com/thegtproject/gravity/internal/gravitygl"
-	imgui "github.com/inkyblackness/imgui-go"
 	"github.com/thegtproject/gravity/pkg/math/mgl32"
 )
 
@@ -27,7 +27,7 @@ func run() {
 		gravity.GetWindow().GlfwWin,
 	)
 	defer impl.Shutdown()
-	imgui.CurrentIO().Fonts().AddFontFromFileTTF("assets/fonts/SourceCodePro-Black.ttf", 16)
+	imgui.CurrentIO().Fonts().AddFontFromFileTTF("assets/fonts/SourceCodePro-Black.ttf", 22)
 
 	last := time.Now()
 	start := time.Now()
@@ -61,9 +61,6 @@ func run() {
 		frames++
 
 		timing = time.Since(start)
-		// if  timing.Seconds() >= 3 {
-		// 	gravity.Stop()
-		// }
 	}
 
 	stats := &debug.GCStats{}
@@ -81,21 +78,16 @@ func run() {
 
 func processgui(impl *imguiGlfw3) {
 	impl.NewFrame()
-	euler := QTE(cam.GetRotation())
+	x, y, z := gravity.QuatToEulerDeg(cam.GetRotation())
+	euler := [3]float32{x, y, z}
 	yaw, pitch := cam.GetYawPitch()
 	GUICamera.buf.Reset()
-	GUICamera.Printf(`Camera Orientation:
-
-  Yaw:  %0.2f  Pitch: %0.2f
-  Quaternion: 
-  W: %0.2f X: %0.2f Y: %0.2f Z: %0.2f
-  Euler:
-  %0.2f Y: %0.2f Z: %0.2f
-
-Camera Position:
-  X: %0.2f Y: %0.2f Z: %0.2f
+	GUICamera.Printf(`Camera:
+Yaw:   %0.2f  Pitch: %0.2f
+Euler: %0.2f %0.2f %0.2f
+Pos:   %0.2f %0.2f %0.2f
 `,
-		yaw, pitch, cam.GetRotation().W, cam.GetRotation().X(), cam.GetRotation().Y(), cam.GetRotation().Z(), euler[0], euler[1], euler[2], cam.GetPosition()[0], cam.GetPosition()[1], cam.GetPosition()[2],
+		yaw, pitch, euler[0], euler[1], euler[2], cam.GetPosition()[0], cam.GetPosition()[1], cam.GetPosition()[2],
 	)
 
 	GUIOutput.Render()

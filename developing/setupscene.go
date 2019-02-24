@@ -21,9 +21,9 @@ func setupscene() {
 	cam = DefaultScene.SetCamera(
 		gravity.NewCamera(
 			// camera options
-			gravity.Position(0, 0, 950),
+			gravity.Position(75, -475, 490),
 		))
-	// cam.Push(90, 0)
+	cam.Push(90, 0)
 
 	configureSkybox()
 	DefaultScene.Import(skybox)

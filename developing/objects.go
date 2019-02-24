@@ -8,7 +8,7 @@ import (
 )
 
 func configureSkybox() {
-	tex := gravitygl.NewCubeMap(
+	tex := gravity.NewCubeMap(
 		"assets/skybox/yukongold/yukongold_rt.tga",
 		"assets/skybox/yukongold/yukongold_lf.tga",
 		"assets/skybox/yukongold/yukongold_ft.tga",
@@ -29,17 +29,18 @@ func configureLinewidget() {
 		mesh.FromGob("assets/mesh/linewidget.gmesh"),
 		materials.NewNone(), cam,
 	)
-	linewidget.Scalef(35)
+	linewidget.Scalef(65)
+	linewidget.TranslateZ(450)
 	linewidget.Primitive = gravitygl.LINES
 
 }
 
 func configureTerrain() {
-	splatmap := gravitygl.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/terrain/splatmap.png")
-	heightmap := gravitygl.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/terrain/height.png")
-	dirt := gravitygl.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/textures/dirt05.jpg")
-	rock := gravitygl.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/textures/rock.jpg")
-	grass := gravitygl.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/textures/grass.jpg")
+	splatmap := gravity.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/terrain/splatmap.png")
+	heightmap := gravity.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/terrain/height.png")
+	dirt := gravity.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/textures/dirt05.jpg")
+	rock := gravity.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/textures/rock.jpg")
+	grass := gravity.NewTextureFromFile(gravitygl.TEXTURE_2D, "assets/textures/grass.jpg")
 
 	splatmap.Unit = 0
 	heightmap.Unit = 1
@@ -47,11 +48,11 @@ func configureTerrain() {
 	rock.Unit = 3
 	grass.Unit = 4
 
-	gravitygl.UploadToGPU(splatmap)
-	gravitygl.UploadToGPU(heightmap)
-	gravitygl.UploadToGPU(dirt)
-	gravitygl.UploadToGPU(rock)
-	gravitygl.UploadToGPU(grass)
+	gravity.UploadToGPU(splatmap)
+	gravity.UploadToGPU(heightmap)
+	gravity.UploadToGPU(dirt)
+	gravity.UploadToGPU(rock)
+	gravity.UploadToGPU(grass)
 
 	terrain = gravity.NewModel(mesh.FromGob("assets/mesh/terrain.obj"), materials.NewTerrain(), cam)
 

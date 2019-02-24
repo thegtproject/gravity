@@ -1,18 +1,51 @@
-package data
+package gravity
 
 import (
 	"image"
 	"image/draw"
-	"image/jpeg"
-	"image/png"
+	_ "image/jpeg"
+	_ "image/png"
 	"os"
 	"path/filepath"
 
 	"github.com/ftrvxmtrx/tga"
 )
 
-var _ = png.BestCompression
-var _ = jpeg.DefaultQuality
+// ImageData ...
+type ImageData struct {
+	Pix    []uint8
+	Width  int32
+	Height int32
+	Stride int
+}
+
+// NewImageDataFromImage ...
+func NewImageDataFromImage(img image.Image) *ImageData {
+	return &ImageData{
+		Pix:    TextureDataFromImage(img).Pix,
+		Width:  int32(img.Bounds().Dy()),
+		Height: int32(img.Bounds().Dx()),
+	}
+}
+
+// NewImageDataFromFile ...
+func NewImageDataFromFile(filename string) *ImageData {
+	img := TextureRGBAFromFile(filename)
+	return &ImageData{
+		Pix:    img.Pix,
+		Width:  int32(img.Bounds().Dy()),
+		Height: int32(img.Bounds().Dx()),
+	}
+}
+
+// NewTextureFromFile ...
+func NewTextureFromFile(target uint32, filename ...string) *Texture {
+	var images []image.Image
+	for _, file := range filename {
+		images = append(images, TextureImageFromFile(file))
+	}
+	return NewTextureFromImage(target, images...)
+}
 
 // TextureDataFromImage ...
 // GL texture data really should aways be 4 wide (rgba). Fix this

@@ -90,14 +90,42 @@ func Sincos(x float32) (sin, cos float32) {
 	return float32(s), float32(c)
 }
 
-// QuatToEuler ...
-func QuatToEuler(q mgl32.Quat) mgl32.Vec3 {
+// Norm ...
+func Norm(q mgl32.Quat) float32 {
+	return float32(math.Sqrt(float64(
+		q.W*q.W + q.V[0]*q.V[0] + q.V[1]*q.V[1] + q.V[2]*q.V[2],
+	)))
+}
 
-	// phi := math.Atan2(2*(r.W*r.X+r.Y*r.Z), 1-2*(r.X*r.X+r.Y*r.Y))
-	// theta := math.Asin(2 * (r.W*r.Y - r.Z*r.X))
-	// psi := math.Atan2(2*(r.X*r.Y+r.W*r.Z), 1-2*(r.Y*r.Y+r.Z*r.Z))
-	// return phi, theta, psi
-	return mgl32.Vec3{}
+// Unit ...
+func Unit(q mgl32.Quat) mgl32.Quat {
+	k := Norm(q)
+	return mgl32.Quat{
+		W: q.W / k,
+		V: mgl32.Vec3{
+			q.V[0] / k,
+			q.V[1] / k,
+			q.V[2] / k,
+		},
+	}
+}
+
+// QuatToEuler ...
+func QuatToEuler(q mgl32.Quat) (float32, float32, float32) {
+	r := Unit(q)
+	phi := Atan2(2*(r.W*r.V[0]+r.V[1]*r.V[2]), 1-2*(r.V[0]*r.V[0]+r.V[1]*r.V[1]))
+	theta := Asin(2 * (r.W*r.V[1] - r.V[2]*r.V[0]))
+	psi := Atan2(2*(r.V[0]*r.V[1]+r.W*r.V[2]), 1-2*(r.V[1]*r.V[1]+r.V[2]*r.V[2]))
+	return phi, theta, psi
+}
+
+// QuatToEulerDeg ...
+func QuatToEulerDeg(q mgl32.Quat) (float32, float32, float32) {
+	r := Unit(q)
+	phi := Atan2(2*(r.W*r.V[0]+r.V[1]*r.V[2]), 1-2*(r.V[0]*r.V[0]+r.V[1]*r.V[1]))
+	theta := Asin(2 * (r.W*r.V[1] - r.V[2]*r.V[0]))
+	psi := Atan2(2*(r.V[0]*r.V[1]+r.W*r.V[2]), 1-2*(r.V[1]*r.V[1]+r.V[2]*r.V[2]))
+	return R2D(phi), R2D(theta), R2D(psi)
 }
 
 // Deg2Quat ...

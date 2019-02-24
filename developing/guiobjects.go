@@ -64,15 +64,6 @@ func (g *guiConsole) Render() {
 	imgui.PopStyleColorV(3)
 }
 
-type guiCamera struct {
-	buf           bytes.Buffer
-	posOpened     imgui.Vec2
-	posCollapsed  imgui.Vec2
-	sizeOpened    imgui.Vec2
-	sizeCollapsed imgui.Vec2
-	opened        bool
-}
-
 type guiOutput struct {
 	buf           bytes.Buffer
 	posOpened     imgui.Vec2
@@ -105,7 +96,8 @@ func (g *guiOutput) Println(a ...interface{}) {
 func (g *guiOutput) Render() {
 	const flags = 0 |
 		imgui.WindowFlagsNoResize |
-		imgui.WindowFlagsNoSavedSettings
+		imgui.WindowFlagsNoSavedSettings |
+		imgui.WindowFlagsNoInputs
 
 	if g.opened {
 		imgui.SetNextWindowPos(g.posOpened)
@@ -129,10 +121,24 @@ func (g *guiOutput) Render() {
 	imgui.PopStyleColorV(3)
 }
 
+type guiCamera struct {
+	buf           bytes.Buffer
+	posOpened     imgui.Vec2
+	posCollapsed  imgui.Vec2
+	sizeOpened    imgui.Vec2
+	sizeCollapsed imgui.Vec2
+	opened        bool
+}
+
+var (
+	PX, PY float32 = 1366 - SX - 5, 5
+	SX, SY float32 = 310, 115
+)
+
 // GUICamera ...
 var GUICamera = guiCamera{
-	posOpened:  imgui.Vec2{X: 5, Y: 150},
-	sizeOpened: imgui.Vec2{X: 250, Y: 225},
+	posOpened:  imgui.Vec2{X: PX, Y: PY},
+	sizeOpened: imgui.Vec2{X: SX, Y: SY},
 }
 
 func (g *guiCamera) Print(a ...interface{}) {
@@ -150,7 +156,14 @@ func (g *guiCamera) Println(a ...interface{}) {
 func (g *guiCamera) Render() {
 	const flags = 0 |
 		imgui.WindowFlagsNoResize |
-		imgui.WindowFlagsNoSavedSettings
+		imgui.WindowFlagsNoSavedSettings |
+		imgui.WindowFlagsNoTitleBar |
+		imgui.WindowFlagsNoInputs |
+		imgui.WindowFlagsNoScrollbar
+
+	imgui.PushStyleVarFloat(imgui.StyleVarWindowBorderSize, 0)
+	imgui.PushStyleColor(imgui.StyleColorText, imgui.Vec4{0, 0, 0, 1.0})
+	imgui.SetNextWindowBgAlpha(0.1)
 
 	if g.opened {
 		imgui.SetNextWindowPos(g.posOpened)
@@ -170,6 +183,6 @@ func (g *guiCamera) Render() {
 	imgui.Text(g.buf.String())
 	imgui.SetScrollHereY(1.0)
 	imgui.End()
-	imgui.PopStyleVar()
-	imgui.PopStyleColorV(3)
+	imgui.PopStyleVarV(2)
+	imgui.PopStyleColorV(4)
 }

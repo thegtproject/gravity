@@ -1,26 +1,22 @@
 package gravitygl
 
-import (
-	"github.com/thegtproject/gravity/pkg/core/texture"
-)
-
 // NewCubeMap ...
-func NewCubeMap(PosX, NegX, PosY, NegY, PosZ, NegZ string) *texture.Texture {
-	tex := NewTextureFromFile(
-		TEXTURE_CUBE_MAP, PosX, NegX, PosY, NegY, PosZ, NegZ,
-	)
-	tex.MinFilter = LINEAR
-	tex.MagFilter = LINEAR
-	tex.WrapS = CLAMP_TO_EDGE
-	tex.WrapT = CLAMP_TO_EDGE
-	tex.WrapR = CLAMP_TO_EDGE
-	// tex.Format = RGB
-	// tex.Originalformat = RGB
+// func NewCubeMap(PosX, NegX, PosY, NegY, PosZ, NegZ string) *texture.Texture {
+// 	tex := NewTextureFromFile(
+// 		TEXTURE_CUBE_MAP, PosX, NegX, PosY, NegY, PosZ, NegZ,
+// 	)
+// 	tex.MinFilter = LINEAR
+// 	tex.MagFilter = LINEAR
+// 	tex.WrapS = CLAMP_TO_EDGE
+// 	tex.WrapT = CLAMP_TO_EDGE
+// 	tex.WrapR = CLAMP_TO_EDGE
+// 	// tex.Format = RGB
+// 	// tex.Originalformat = RGB
 
-	UploadToGPU(tex)
+// 	UploadToGPU(tex)
 
-	return tex
-}
+// 	return tex
+// }
 
 // // GenerateCubeMap ...
 // func GenerateCubeMap(PosX, NegX, PosY, NegY, PosZ, NegZ *image.RGBA) uint32 {

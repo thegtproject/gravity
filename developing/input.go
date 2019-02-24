@@ -20,9 +20,6 @@ var skipinput = false
 var yaww, pitchh float32
 
 func handleInput(dt float32) {
-	if checkDebugCommand() {
-		return
-	}
 
 	if gravity.Pressed(gravity.KeyLeftShift) {
 		moveFactor = 255
@@ -103,10 +100,6 @@ func handleInput(dt float32) {
 		Log.Println(terrain.GetScale())
 	}
 
-	if gravity.JustPressed(gravity.KeyT) {
-		gravity.ShowUniform = true
-	}
-
 	if gravity.JustPressed(gravity.KeyQ) {
 		Log.Println("--------")
 		Log.Println("cam rot:  ", cam.GetRotation(), "  ", QTE(cam.GetRotation()))
@@ -133,11 +126,6 @@ func handleInput(dt float32) {
 	}
 	if gravity.Pressed(gravity.KeyLeftControl) {
 		cam.MoveDown(dt * moveFactor)
-	}
-
-	if gravity.JustPressed(gravity.KeyGrave) {
-		debugCommandMode = true
-		Log.Print("debug command: ")
 	}
 
 	lastx = gravity.Mouse.Delta[0]

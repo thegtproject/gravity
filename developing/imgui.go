@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-gl/gl/v4.3-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
-	imgui "github.com/thegtproject/gravity/internal/imgui-go"
+	imgui "github.com/inkyblackness/imgui-go"
 )
 
 type imguiGlfw3 struct {
@@ -35,6 +35,7 @@ func imguiGlfw3Init(window *glfw.Window) *imguiGlfw3 {
 	}
 
 	io := imgui.CurrentIO()
+	
 	// Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
 	io.KeyMap(int(imgui.KeyTab), int(glfw.KeyTab))
 	io.KeyMap(int(imgui.KeyLeftArrow), int(glfw.KeyLeft))

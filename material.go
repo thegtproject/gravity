@@ -76,8 +76,8 @@ func loadDefaultMaterialPrograms() {
 }
 
 func loadMaterialProgram(name string) {
-	vertFilename := fmt.Sprintf("../assets/shaders/%s.vert.glsl", name)
-	fragFilename := fmt.Sprintf("../assets/shaders/%s.frag.glsl", name)
+	vertFilename := fmt.Sprintf("assets/shaders/%s.vert.glsl", name)
+	fragFilename := fmt.Sprintf("assets/shaders/%s.frag.glsl", name)
 	v, err := ioutil.ReadFile(vertFilename)
 	if err != nil {
 		panic(err)
@@ -110,28 +110,9 @@ func (mat *BaseMaterial) SubmitUniforms(ulist []UniformSubmission) {
 			gravitygl.Uniform1i(u.Loc, int32(data.Unit))
 		case gravitygl.SAMPLER_CUBE:
 			data := u.Data.(*texture.Texture)
-			if ShowUniform {
-				Log.Println(
-					"Unit:", gravitygl.Enum(data.Unit), "\n",
-					"ID:", gravitygl.Enum(data.ID), "\n",
-					"Textureid:", gravitygl.Enum(data.Textureid), "\n",
-					"Target:", gravitygl.Enum(data.Target), "\n",
-					"Mips:", gravitygl.Enum(data.Mips), "\n",
-					"Format:", gravitygl.Enum(data.Format), "\n",
-					"Originalformat:", gravitygl.Enum(data.Originalformat), "\n",
-					"MagFilter:", gravitygl.Enum(data.MagFilter), "\n",
-					"MinFilter:", gravitygl.Enum(data.MinFilter), "\n",
-					"WrapS:", gravitygl.Enum(data.WrapS), "\n",
-					"WrapT:", gravitygl.Enum(data.WrapT), "\n",
-					"---------------------------",
-				)
-				ShowUniform = false
-			}
 			gravitygl.ActiveTexture(data.Unit)
 			gravitygl.BindTexture(data.Target, data.Textureid)
 			gravitygl.Uniform1i(u.Loc, int32(data.Unit))
 		}
 	}
 }
-
-var ShowUniform bool

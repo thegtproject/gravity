@@ -7,7 +7,7 @@ import (
 
 	"github.com/thegtproject/gravity"
 	gl "github.com/thegtproject/gravity/internal/gravitygl"
-	imgui "github.com/thegtproject/gravity/internal/imgui-go"
+	imgui "github.com/inkyblackness/imgui-go"
 	"github.com/thegtproject/gravity/pkg/math/mgl32"
 )
 
@@ -19,13 +19,15 @@ var (
 )
 
 func run() {
+
 	context := imgui.CreateContext(nil)
+	imgui.CurrentIO().SetIniFilename("")
 	defer context.Destroy()
 	impl := imguiGlfw3Init(
 		gravity.GetWindow().GlfwWin,
 	)
 	defer impl.Shutdown()
-	imgui.CurrentIO().Fonts().AddFontFromFileTTF("assets/fonts/SourceCodePro-Regular.ttf", 14)
+	imgui.CurrentIO().Fonts().AddFontFromFileTTF("assets/fonts/SourceCodePro-Black.ttf", 16)
 
 	last := time.Now()
 	start := time.Now()

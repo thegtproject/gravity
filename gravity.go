@@ -118,13 +118,7 @@ func initCallbacks() {
 
 }
 func createWindow(title string, width int, height int) {
-	win, err := glfw.CreateWindow(
-		width,
-		height,
-		title,
-		nil,
-		nil,
-	)
+	win, err := glfw.CreateWindow(width, height, title, nil, nil)
 	if err != nil {
 		panic(err)
 	}

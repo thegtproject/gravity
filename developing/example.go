@@ -17,7 +17,7 @@ func main() {
 	cfg := gravity.Config{
 		Title: "Gravity Developing Application",
 		Width: 1366, Height: 768,
-		VSync: true,
+		VSync: false,
 	}
 
 	gravity.Log.SetPrint(GUIOutput.Print)

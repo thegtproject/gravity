@@ -6,7 +6,7 @@ import (
 	"errors"
 
 	"github.com/go-gl/gl/v4.3-compatibility/gl"
-	"github.com/thegtproject/gravity/pkg/math/mgl32"
+	"github.com/go-gl/mathgl/mgl32"
 )
 
 // ClearColor ...

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/thegtproject/gravity/pkg/math/mgl32"
+	"github.com/go-gl/mathgl/mgl32"
 
 	"github.com/thegtproject/gravity/internal/gravitygl"
 )

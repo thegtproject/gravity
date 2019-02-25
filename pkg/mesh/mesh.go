@@ -1,7 +1,7 @@
 package mesh
 
 import (
-	"github.com/thegtproject/gravity/pkg/math/mgl32"
+	"github.com/go-gl/mathgl/mgl32"
 )
 
 // Mesh ...

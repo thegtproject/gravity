@@ -8,7 +8,7 @@ import (
 	imgui "github.com/inkyblackness/imgui-go"
 	"github.com/thegtproject/gravity"
 	gl "github.com/thegtproject/gravity/internal/gravitygl"
-	"github.com/thegtproject/gravity/pkg/math/mgl32"
+	"github.com/go-gl/mathgl/mgl32"
 )
 
 var (

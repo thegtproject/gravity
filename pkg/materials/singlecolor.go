@@ -3,7 +3,7 @@ package materials
 import (
 	"github.com/thegtproject/gravity"
 	"github.com/thegtproject/gravity/internal/gravitygl"
-	"github.com/thegtproject/gravity/pkg/math/mgl32"
+	"github.com/go-gl/mathgl/mgl32"
 )
 
 // SingleColor ...

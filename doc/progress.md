@@ -3,6 +3,9 @@ Simple history of screenshots as I complete large changes to the code.
 
 (latest to oldest):
 
+![](images/gravityss6.png)
+---
+
 ![](images/gravityss5-2.png)
 ---
 

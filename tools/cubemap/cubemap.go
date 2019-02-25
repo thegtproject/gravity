@@ -7,7 +7,7 @@ import (
 	gl "github.com/thegtproject/gravity/internal/gravitygl"
 	imgui "github.com/inkyblackness/imgui-go"
 	"github.com/thegtproject/gravity"
-	"github.com/thegtproject/gravity/pkg/math/mgl32"
+	"github.com/go-gl/mathgl/mgl32"
 )
 
 var Log = gravity.Log

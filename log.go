@@ -1,11 +1,11 @@
-package log
+package gravity
 
 import "fmt"
 
 var log = newLogRedirector()
 
-// GetRedirector ...
-func GetRedirector() *Redirector {
+// GetLogRedirector ...
+func GetLogRedirector() *Redirector {
 	return log
 }
 

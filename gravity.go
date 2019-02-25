@@ -3,13 +3,12 @@ package gravity
 import (
 	"github.com/go-gl/glfw/v3.2/glfw"
 	"github.com/thegtproject/gravity/internal/gravitygl"
-	"github.com/thegtproject/gravity/pkg/log"
 )
 
 // Window ...
 var window *Window
 var running bool
-var Log = log.GetRedirector()
+var Log = GetLogRedirector()
 
 // Config ...
 type Config struct {

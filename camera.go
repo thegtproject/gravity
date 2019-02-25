@@ -1,7 +1,6 @@
 package gravity
 
 import (
-	"github.com/thegtproject/gravity/pkg/core/components"
 	"github.com/thegtproject/gravity/pkg/math/mgl32"
 )
 
@@ -28,7 +27,7 @@ func (cam *Camera) GetYawPitch() (float32, float32) {
 func NewCamera(options ...CameraOption) *Camera {
 	cam := &Camera{
 		ProjectionMatrix: mgl32.Perspective(D2R(55), 1920/1080, 0.1, 10000),
-		Transformer:      components.NewTransformer(),
+		Transformer:      NewTransformer(),
 		up:               mgl32.Vec3{0, 1, 0},
 		worldUp:          mgl32.Vec3{0, 0, 1},
 	}
